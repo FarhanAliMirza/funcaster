@@ -1,0 +1,78 @@
+{
+  "id": "alien-attack",
+  "title": "Alien Attack",
+  "verb": "Tilt to dodge. Tap to fire.",
+  "detail": "Dodge the invaders and blast your way through.",
+  "color": "#6661b8",
+  "bg": "#e9e6ff",
+  "icon": "✧",
+  "mode": "side",
+  "classic": true,
+  "players": "1–4 players",
+  "tag": "SPACE FOR A HERO",
+  "duration": "Arcade run",
+  "action": "Fire",
+  "schemaVersion": 2,
+  "gameId": "funcaster.alien-attack",
+  "version": "1.1.0",
+  "order": 11,
+  "maxPlayers": 4,
+  "controller": "side",
+  "view": "split",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.alien-attack"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "independent",
+  "remote": "views",
+  "roundPolicy": {
+    "kind": "untilDone",
+    "hardCapMs": 300000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
