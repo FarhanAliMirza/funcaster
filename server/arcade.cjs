@@ -14,6 +14,9 @@ function createArcade({
   persist,
   eventStats,
   remoteReason = () => null,
+  web3Reason = () => null,
+  playerName = (p) => SEATS[p.slot]?.name,
+  releasePlayer = () => {},
   pairPromoted = () => {},
 }) {
   const budgets = new Map();
@@ -64,7 +67,7 @@ function createArcade({
           name: "Next up",
           color: "#f7c600",
         }
-      : { slot: p.slot, token: p.token, ...SEATS[p.slot] };
+      : { slot: p.slot, token: p.token, ...SEATS[p.slot], name: playerName(p) };
   function publishQueue(room) {
     const a = room.arcade;
     if (a)
@@ -114,6 +117,8 @@ function createArcade({
     if (!room.host) return "Waiting for the main screen";
     const screenReason = remoteReason(room);
     if (screenReason) return screenReason;
+    const partnerReason = web3Reason(room);
+    if (partnerReason) return partnerReason;
     const n = room.players.filter((p) => p?.socket && p.ready).length;
     const min = matchSetup(gameById(room.game), room.setup || {}, n).minHumans;
     return n < min
@@ -245,6 +250,7 @@ function createArcade({
     for (const slot of slots) {
       const p = room.players[slot];
       if (!p) continue;
+      releasePlayer(p);
       const socket = ns.sockets.get(p.socket),
         m = socket?.data.arcadeMember;
       if (m) {

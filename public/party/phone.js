@@ -57,6 +57,33 @@ let code =
   sensorTimeout = null,
   gravity = null,
   latency = null;
+let pendingWeb3Challenge = null,
+  web3Phone = null,
+  web3Loading = null;
+socket.on("web3.challenge", (challenge) => {
+  pendingWeb3Challenge = challenge;
+  if (state?.web3 && web3Phone) void web3Phone.challenge(challenge);
+});
+socket.on("disconnect", () => {
+  pendingWeb3Challenge = null;
+});
+function syncWeb3Identity() {
+  if (!state?.web3 || !identity || identity.queued || web3Phone || web3Loading)
+    return;
+  web3Loading = import("../web3/phone-identity.js")
+    .then(({ createPhoneIdentity }) => {
+      web3Phone = createPhoneIdentity(socket, () =>
+        state?.web3 && identity && !identity.queued
+          ? { room: code, slot: identity.slot, token: identity.token }
+          : null,
+      );
+      if (pendingWeb3Challenge) void web3Phone.challenge(pendingWeb3Challenge);
+    })
+    .catch(() => {})
+    .finally(() => {
+      web3Loading = null;
+    });
+}
 let preferenceStorage;
 try {
   preferenceStorage = localStorage;
@@ -256,6 +283,9 @@ function acceptIdentity(answer) {
     );
   identity = answer;
   remember(`funcaster.player.${code}`, answer);
+  // Queue promotion can deliver its challenge before the promoted acknowledgement.
+  if (!answer.queued && web3Phone && pendingWeb3Challenge)
+    void web3Phone.challenge(pendingWeb3Challenge);
   $("waiting-view").hidden = !answer.queued;
   if (answer.queued) {
     releasePedals();
@@ -997,6 +1027,7 @@ socket.on("state", (next) => {
     oldRound = state?.roundId,
     oldActive = state?.active.includes(identity?.slot);
   state = next;
+  syncWeb3Identity();
   if (remoteInputInterrupted(previous, next, identity?.slot)) releasePedals();
   if (oldGame !== next.game) syncSettings();
   if (

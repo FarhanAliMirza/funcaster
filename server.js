@@ -33,6 +33,25 @@ const app = express();
 app.set("trust proxy", "loopback");
 app.disable("x-powered-by");
 app.use(compression());
+// Partners off does not import or instantiate the integration module.
+const web3 =
+  process.env.PARTNERS && process.env.PARTNERS !== "off"
+    ? require("./server/web3/index.cjs").createWeb3()
+    : null;
+if (web3) {
+  app.use("/api/web3", web3.router);
+  app.use("/pot", web3.potRouter);
+  process.once("exit", () => web3.close());
+  let stoppingWeb3 = false;
+  for (const signal of ["SIGTERM", "SIGINT"])
+    process.once(signal, async () => {
+      if (stoppingWeb3) return;
+      stoppingWeb3 = true;
+      await web3.close();
+      process.exit(0);
+    });
+}
+
 app.use((_req, res, next) => {
   res.set("Referrer-Policy", "same-origin");
   res.set("X-Content-Type-Options", "nosniff");
@@ -241,6 +260,7 @@ const eventStore = createEventStore(
 );
 process.once("exit", () => eventStore.close());
 const party = attachParty(io, {
+  web3,
   buildId: BUILD_ID,
   persist: (event) => eventStore.record(event),
   eventStats: () => eventStore.snapshot(),

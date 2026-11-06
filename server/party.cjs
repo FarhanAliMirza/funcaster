@@ -52,6 +52,7 @@ function attachParty(
     persist = null,
     eventStats = null,
     remoteViews = false,
+    web3 = null,
   } = {},
 ) {
   const ns = io.of("/party"),
@@ -64,6 +65,7 @@ function attachParty(
   const view = (room, hostDetails = false) => ({
     ...arcade.state(room),
     ...remote.state(room),
+    ...(web3?.view(room, hostDetails) || {}),
     code: room.code,
     ...(hostDetails
       ? {
@@ -125,7 +127,7 @@ function attachParty(
                     : "joined"),
           }
         : {}),
-      name: NAMES[p.slot],
+      name: (web3 && p.displayName) || NAMES[p.slot],
       color: COLORS[p.slot],
       connected: !!p.socket,
       ready: p.ready,
@@ -156,7 +158,7 @@ function attachParty(
     slots: room.active
       .map((s, i) => ({
         slot: i,
-        name: NAMES[s],
+        name: (web3 && room.players[s]?.displayName) || NAMES[s],
         color: COLORS[s],
         occupied: !!(
           room.host &&
@@ -328,6 +330,7 @@ function attachParty(
               : null;
     }
     arcade.finish(room);
+    web3?.finish(room, record);
     ns.to(room.code).emit("match.finish", room.result);
     phase(room, "results", room.arcade?.mode === "kiosk" ? 10 : 12);
   }
@@ -344,6 +347,7 @@ function attachParty(
         true,
       );
     ns.to(room.code).emit("ended");
+    web3?.end(room);
     rooms.delete(room.code);
     ns.in(room.code).disconnectSockets();
   }
@@ -374,7 +378,7 @@ function attachParty(
   function start(room, firstSlot = null) {
     room.extensions = 0;
     room.ghostRuns = new Map();
-    if (remote.reason(room)) {
+    if (web3?.startReason(room) || remote.reason(room)) {
       room.auto = false;
       broadcast(room);
       return;
@@ -531,9 +535,17 @@ function attachParty(
     persist,
     eventStats,
     remoteReason: remote.reason,
+    web3Reason: (room) => web3?.startReason(room),
+    playerName: (p) => (web3 && p.displayName) || NAMES[p.slot],
+    releasePlayer: (p) => web3?.release(p),
     pairPromoted: (room, p) => {
       if (p.screenRef) remote.pair(room, p.slot, p.screenRef);
       delete p.screenRef;
+      web3?.joined(ns.sockets.get(p.socket), {
+        room,
+        role: "player",
+        player: p,
+      });
     },
   });
   ns.on("connection", (socket) => {
@@ -573,6 +585,7 @@ function attachParty(
     }
     arcade.bind(socket, () => membership, adminHandlers);
     remote.bind(socket, () => membership);
+    web3?.bind(socket, () => membership, broadcast);
     socket.on("host", (data, ack = () => {}) => {
       if (typeof ack !== "function") return;
       if (buildId && data?.buildId !== buildId)
@@ -1368,9 +1381,10 @@ function attachParty(
       ack({
         slot: p.slot,
         token: p.token,
-        name: NAMES[p.slot],
+        name: (web3 && p.displayName) || NAMES[p.slot],
         color: COLORS[p.slot],
       });
+      web3?.joined(socket, membership);
       broadcast(room);
     });
     socket.on("ready", (data) => {
@@ -1751,6 +1765,7 @@ function attachParty(
         s.emit("removed");
         s.disconnect(true);
       }
+      web3?.release(p);
       room.players[p.slot] = null;
       if (room.active.includes(p.slot) && !room.arcade) {
         room.auto = false;
@@ -1779,6 +1794,7 @@ function attachParty(
       p.socket = null;
       p.lost = now() - 30001;
       p.ready = false;
+      web3?.release(p);
       p.token = token();
       if (!room.active.includes(p.slot)) room.players[p.slot] = null;
       membership = null;
@@ -1892,6 +1908,7 @@ function attachParty(
         }
         if (!waiting) room.sharedStarted = true;
       }
+      web3?.tick(room, time, broadcast);
       remote.tick(room, elapsed);
       arcade.tick(room, elapsed);
       if (!room.host || room.paused || room.remote?.gate) {
@@ -1952,8 +1969,10 @@ function attachParty(
           !p.socket &&
           time - p.lost > (room.arcade ? 30000 : 20000) &&
           !room.active.includes(i)
-        )
+        ) {
+          web3?.release(p);
           room.players[i] = null;
+        }
       });
       const connected = room.players.filter((p) => p?.socket);
       if (
