@@ -1,0 +1,82 @@
+{
+  "id": "fruit-ninja",
+  "title": "Slice Dojo",
+  "verb": "Tilt. Slice. Repeat.",
+  "detail": "Slice the fruit together. Watch out for bombs.",
+  "color": "#377d49",
+  "bg": "#e4f2d4",
+  "icon": "✳",
+  "mode": "aim",
+  "classic": true,
+  "players": "1–4 players",
+  "tag": "SLICE TOGETHER",
+  "duration": "Arcade rounds",
+  "action": "Start slicing",
+  "schemaVersion": 2,
+  "gameId": "funcaster.slice-dojo",
+  "version": "1.1.0",
+  "order": 2,
+  "maxPlayers": 4,
+  "controller": "aim",
+  "view": "shared",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.fruit-ninja"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "shared",
+  "remote": "snapshot",
+  "roundPolicy": {
+    "kind": "timed",
+    "hardCapMs": 120000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": [
+    "fruit",
+    "bestCombo",
+    "bombs"
+  ]
+}
