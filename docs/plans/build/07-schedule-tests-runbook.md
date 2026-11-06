@@ -73,24 +73,26 @@ Total estimate (hours): about 220; with three parallel lanes of work and testing
 
 Completed code does not complete an acceptance gate that requires physical devices, cellular access, a real TV or a hosted deployment. The next action is the owner-deferred physical device matrix, then venue acceptance and hosting work. The in-game phone hold-A contract conflict and intentional timer exceptions remain documented in the progress log. Custom cat/backdrop art and the installable remote stay in the after-event tier.
 
-## 3. Day by day
+## 3. Work sequence
 
-| Date | Day | Lane work | Gate at end of day |
-| --- | --- | --- | --- |
-| Wed 21 Oct | D0 | This specification; the owner reviews the open items in the README | Specification accepted |
-| Thu 22 Oct | D1 | AS1 then AS2; BR1; SV1, SV2 (with tests); SH0; PH1; VP1; HO1 begins | A wallpaper desktop at `/?shell=os&demo=1` showing the Luna theme; `npm run check` green |
-| Fri 23 Oct | D2 | SH1, SH3; PH2; VP2; SV3; AS3 | Windows open and close; the session connects to a live room and a state feed prints |
-| Sat 24 Oct | D3 | SH2; SH4 spike (Kart Rush and Star Catch); PH3 begins | **Checkpoint 1:** desktop with icons, taskbar, tray and Start menu on a live room; one Game Properties window starts a game; the chassis visible on a phone |
-| Sun 25 Oct | D4 | SH4 for all 13 and tests; PH3 captions | All 13 option windows pass the coverage and parity tests |
-| Mon 26 Oct | D5 | SH5 focus navigation and `pointers.js`; PH4 gate and probe; PH6 | A phone steers a cursor on the TV; D-pad navigation works without it |
-| Tue 27 Oct | D6 | SH6 game host, game window, loading, results; VP3; PH8 | A full round plays inside the shell window |
-| Wed 28 Oct | D7 | SH7 MVE windows; VP4 harness; QA2 first pass | **Checkpoint 2:** join, properties, start, game, results, desktop on one laptop and two real phones, plus the pointer |
-| Thu 29 Oct | D8 | SH8 boot, who, attract; HO1 staging live; HO2; HO3 | The hosted staging URL loads over cellular |
-| Fri 6 Nov | D9 | SH9 mascot and audio; SH10; VP5; QA2 second pass; fixes | Full build feature-complete |
-| Sat 31 Oct | D10 | **Rehearsal 1** on a real TV with friends; a one-hour soak; bug triage | **Checkpoint 3:** the P0 bug list is empty or owned |
-| 6 Nov | D11 | **Freeze**: P0 fixes only; **Rehearsal 2** using the runbook and both fallbacks; deploy to the hosted instance; tag the release | Build tagged; hosted instance verified over cellular; LAN fallback verified; classic dashboard verified |
-| 6 Nov | D12 | No code. Pack the kit, charge everything, issue the offline certificate, print signage, dry-run the runbook | Kit ready |
-| 6 Nov | Event | Devcon 8 India begins; the booth runs; the team does not merge code | |
+Calendar dates have been removed because the original schedule was unsupported. The D identifiers preserve the planned order, not elapsed days or completion dates; this is not a record of work performed.
+
+| Stage (legacy ID) | Lane work | Gate |
+| --- | --- | --- |
+| D0 | This specification; the owner reviews the open items in the README | Specification accepted |
+| D1 | AS1 then AS2; BR1; SV1, SV2 (with tests); SH0; PH1; VP1; HO1 begins | A wallpaper desktop at `/?shell=os&demo=1` showing the Luna theme; `npm run check` green |
+| D2 | SH1, SH3; PH2; VP2; SV3; AS3 | Windows open and close; the session connects to a live room and a state feed prints |
+| D3 | SH2; SH4 spike (Kart Rush and Star Catch); PH3 begins | **Checkpoint 1:** desktop with icons, taskbar, tray and Start menu on a live room; one Game Properties window starts a game; the chassis visible on a phone |
+| D4 | SH4 for all 13 and tests; PH3 captions | All 13 option windows pass the coverage and parity tests |
+| D5 | SH5 focus navigation and `pointers.js`; PH4 gate and probe; PH6 | A phone steers a cursor on the TV; D-pad navigation works without it |
+| D6 | SH6 game host, game window, loading, results; VP3; PH8 | A full round plays inside the shell window |
+| D7 | SH7 MVE windows; VP4 harness; QA2 first pass | **Checkpoint 2:** join, properties, start, game, results, desktop on one laptop and two real phones, plus the pointer |
+| D8 | SH8 boot, who, attract; HO1 staging live; HO2; HO3 | The hosted staging URL loads over cellular |
+| D9 | SH9 mascot and audio; SH10; VP5; QA2 second pass; fixes | Full build feature-complete |
+| D10 | **Rehearsal 1** on a real TV with friends; a one-hour soak; bug triage | **Checkpoint 3:** the P0 bug list is empty or owned |
+| D11 | **Freeze**: P0 fixes only; **Rehearsal 2** using the runbook and both fallbacks; deploy to the hosted instance; tag the release | Build tagged; hosted instance verified over cellular; LAN fallback verified; classic dashboard verified |
+| D12 | No code. Pack the kit, charge everything, issue the offline certificate, print signage, dry-run the runbook | Kit ready |
+| Event | Devcon 8 India begins; the booth runs; the team does not merge code | |
 
 (ETHGlobal Mumbai's hacking period is 5 to 6 November; its schedule is in the earlier plans.)
 

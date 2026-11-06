@@ -2,7 +2,7 @@
 
 Status: plan, 6 November 2026. **Approved by the owner on 6 November** ("Sure, add detailed plans on how this will be achieved"). Read-only analysis; nothing was run in a browser. Latency and asset figures marked "estimate" are unmeasured.
 
-**Update (6 November, later):** the default way to bind a seat to a remote screen is now **pairing by QR on the remote screen** ([plan.md §5h.5](../../plan-history.md#5h5-pairing-how-a-remote-friend-joins)): the friend opens the display link, scans the QR that page shows, and the phone's join carries `screen=<ref>`. The host's `assign-seat` dropdown in section 4.2 stays as the reassign fallback. The integrated plan for all engines is [plan.md §5h](../../plan-history.md#5h-how-multiplayer-and-remote-play-get-built-13-october-2026).
+**Update (6 November, later):** the default way to bind a seat to a remote screen is now **pairing by QR on the remote screen** ([plan.md §5h.5](../../plan-history.md#5h5-pairing-how-a-remote-friend-joins)): the friend opens the display link, scans the QR that page shows, and the phone's join carries `screen=<ref>`. The host's `assign-seat` dropdown in section 4.2 stays as the reassign fallback. The integrated plan for all engines is [plan.md §5h](../../plan-history.md#5h-how-multiplayer-and-remote-play-get-built-6-november-2026).
 
 **Goal.** A friend on another screen (a laptop elsewhere) opens the room's display link, is offered a seat, and plays that seat's game **on their own screen**, while the host's TV keeps full control of the room. Today displays are read-only watchers.
 
@@ -183,8 +183,8 @@ Not hackathon-critical: Kiosk mode (host plan K1-K3) and room hardening (H5a) co
 
 ## 11. Open questions for the owner
 
-1. ~~**Kart Rush**~~ **Decided 6 November:** excluded from *this* design (view tokens). Remote Kart Rush uses server-sequenced lockstep instead, in [plan.md §5h.6a](../../plan-history.md#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october).
-2. ~~**Mid-round disconnect**~~ **Decided 6 November:** a forfeit with a penalty after the grace period (last place, or a loss in a two-seat match), per [plan.md §5h.7a](../../plan-history.md#5h7a-leaving-a-match-the-standard-rule-decided-13-october). Restart on the host screen is not offered.
+1. ~~**Kart Rush**~~ **Decided 6 November:** excluded from *this* design (view tokens). Remote Kart Rush uses server-sequenced lockstep instead, in [plan.md §5h.6a](../../plan-history.md#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-6-november).
+2. ~~**Mid-round disconnect**~~ **Decided 6 November:** a forfeit with a penalty after the grace period (last place, or a loss in a two-seat match), per [plan.md §5h.7a](../../plan-history.md#5h7a-leaving-a-match-the-standard-rule-decided-6-november). Restart on the host screen is not offered.
 3. A declined or revoked seat: fall back to a host iframe automatically (recommended), or ask the host?
 4. Is a fixed 16:9 letterbox on the remote acceptable?
 5. Label rounds that include remote seats in the results UI and records (`result.views`)?

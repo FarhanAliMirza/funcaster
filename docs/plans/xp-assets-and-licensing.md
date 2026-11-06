@@ -2,7 +2,7 @@
 
 > **Superseded in part, 6 November 2026 (later).** The owner decided to **use the supplied Windows pack as supplied, without further questions**, and **keeps the name Funcaster with a cat mascot, Caster**. Section 1's licence gate, the two-build rule and the guard test are **no longer required**; the facts in that section (what the pack contains and who made it) remain true. The implementation of the asset work, with exact coordinates and scripts, is now in the [build specification](build/README.md), especially [build/02](build/02-theme-and-assets.md) and [build/01](build/01-brand-and-rename.md). This document remains the brief for **later production art**: custom mascot sheets and the 13 game backdrops.
 
-Status: plan, 6 November 2026. Companion to [xp-console-ui.md](xp-console-ui.md) (the interface), [phone-controller-v2.md](phone-controller-v2.md) (the phone) and the [North star in plan.md](../../plan.md#north-star-and-direction-21-october-2026). This file answers three questions for the person adding assets: **what is in `assets/source/` and what may we ship**, **what do we still need to make**, and **what are the mascot and the 13 game backdrops**.
+Status: plan, 6 November 2026. Companion to [xp-console-ui.md](xp-console-ui.md) (the interface), [phone-controller-v2.md](phone-controller-v2.md) (the phone) and the [North star in plan.md](../../plan.md#north-star-and-direction-6-november-2026). This file answers three questions for the person adding assets: **what is in `assets/source/` and what may we ship**, **what do we still need to make**, and **what are the mascot and the 13 game backdrops**.
 
 ## 1. The finding that shapes everything: most of `assets/source/winxp` is Microsoft's work
 

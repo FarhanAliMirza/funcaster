@@ -78,7 +78,7 @@ Format: **ID, task, spec, depends on, hours, acceptance**. Acceptance is checkab
 
 ### M: Spectator prediction market ([10](10-prediction-market.md), [11](11-prediction-market-ui.md))
 
-**The largest lane (about 190 hours; Tier 1 about 125).** Start it only after the pot (A lane) and host enforcement (E5) work. Tasks M0 to M11 are in [10](10-prediction-market.md) section 11 and the UI tasks P1 to P9 in [11](11-prediction-market-ui.md) section 11. **Tier 1:** M0 to M6 with the Winner template only, a minimal phone page (P1 to P3), the Predictions window (P5, P6) and the Game Properties row (P8). **Schedule:** M0 to M2 can start on D4 (Fri 6 Nov) beside A4; M3 to M6 on D5 to D7; the phone page and window on D6 to D8 (the booth opens D8, so a Tier 1 slice should be demo-able on 6 Nov); tier 2 and 3 after. **Cut order:** layer C, the play token, the odds chart, Beat-the-line, the seed commit, the wizard. **Never cut:** the invariants, the close rule, agree-or-void, the exclusion of seated players, pull claims.
+**The largest lane (about 190 hours; Tier 1 about 125).** Start it only after the pot (A lane) and host enforcement (E5) work. Tasks M0 to M11 are in [10](10-prediction-market.md) section 11 and the UI tasks P1 to P9 in [11](11-prediction-market-ui.md) section 11. **Tier 1:** M0 to M6 with the Winner template only, a minimal phone page (P1 to P3), the Predictions window (P5, P6) and the Game Properties row (P8). **Schedule:** M0 to M2 can start on D4 beside A4; M3 to M6 on D5 to D7; the phone page and window on D6 to D8 (target a demo-able Tier 1 slice by the booth stage); tier 2 and 3 after. **Cut order:** layer C, the play token, the odds chart, Beat-the-line, the seed commit, the wizard. **Never cut:** the invariants, the close rule, agree-or-void, the exclusion of seated players, pull claims.
 
 
 ### Q: QA and evidence
@@ -95,20 +95,22 @@ Format: **ID, task, spec, depends on, hours, acceptance**. Acceptance is checkab
 
 > **Review note (6 November).** The task list and the later lanes (S, E, A, U, K, M, P, X, R, I, N, and the expansions FX, UX, K13 to K24 in [20](20-feature-expansion.md) and [21](21-ux-laws-and-os-ux.md)) add up to **more than the hours before 6 November 09:00 IST**, even with several parallel agents. [22](22-integration-review.md) section 5 gives the **value-ordered gates and the freeze order**: read it before assigning tasks. The ID spaces are now disjoint (FX, UX, KS, and CP for the creator platform in [23](23-creator-platform-and-economy.md); CP1 to CP5, CP15 and CP16 are in gate G2; the business model behind them is in [24](24-business-model-and-revenue.md); the streamer lane SL1 to SL17 for Twitch, YouTube and Kick is in [25](25-streamer-network-and-after-hours-economy.md)).
 
-## 3. The schedule
+## 3. Work sequence
 
-| Date | Day | Work | Gate |
-| --- | --- | --- | --- |
-| Tue 27 Oct | D1 | S0, S1; E0, A0 spikes; A1 (Studio setup, a human logs in) | Spike results recorded; Studio app exists; baseline saved |
-| Wed 28 Oct | D2 | S2 (module, mock, parity tests); E1, E2; A2 begins (Studio turns run in the background); U1 | Mock mode shows a named party and a staked flow in demo scenarios |
-| Thu 29 Oct | D3 | S3, S4, S5; E3; A2 continues, A3; U2 | A real party name resolves; the worker runs; a phone binds |
-| Fri 6 Nov | D4 | E4; A4, A5; U3, U4; **merge `main` into the branch** | A seat is minted for a phone; a testnet pot completes by script |
-| Sat 31 Oct | D5 | E5; A6; U5, U7; Funcaster OS rehearsal 1 happens on `main` | Host delegation enforced on chain; cooperative settlement works |
-| 6 Nov | D6 | `main` freezes; **merge `main` into the branch again**; E6; A7; U8; fix parity if main moved | Full stake flow on mock and on testnet; parity green |
-| 6 Nov | D7 | E8; A10 start; U6, U9; **K0 spike and `/arkiv/friction.md` started in a scratch repo (no project code before 6 Nov)**; hosted instance deploy of the branch | Tests green on the hosted instance |
-| 6 Nov | D8 | Booth opens (staff the booth first); Q3, Q4; E9 if staffed; check ENS mainnet status and the DAO timelock | Fault injection green |
-| 6 Nov | D9 | Hardening, evidence, `PARTNERS=mock` kiosk fallback verified; Arkiv: funded wallets, pinned SDK, Swarm gateway round trip re-checked | Release candidate tagged on the branch |
-| Thu 5 to 6 Nov | Event | Polish, evidence hashes, README per partner, demo recording, submission by 09:00 IST on 6 Nov; **Arkiv and Swarm Tier 1 (K1 to K7, K12) are built here, in small commits from 6 Nov (the track is "from scratch")**, Tier 2 after | Submitted |
+Calendar dates have been removed because the original schedule was unsupported. The D identifiers preserve the planned order, not elapsed days or completion dates; this is not a record of work performed.
+
+| Stage (legacy ID) | Work | Gate |
+| --- | --- | --- |
+| D1 | S0, S1; E0, A0 spikes; A1 (Studio setup, a human logs in) | Spike results recorded; Studio app exists; baseline saved |
+| D2 | S2 (module, mock, parity tests); E1, E2; A2 begins (Studio turns run in the background); U1 | Mock mode shows a named party and a staked flow in demo scenarios |
+| D3 | S3, S4, S5; E3; A2 continues, A3; U2 | A real party name resolves; the worker runs; a phone binds |
+| D4 | E4; A4, A5; U3, U4; **merge `main` into the branch** | A seat is minted for a phone; a testnet pot completes by script |
+| D5 | E5; A6; U5, U7; Funcaster OS rehearsal 1 happens on `main` | Host delegation enforced on chain; cooperative settlement works |
+| D6 | `main` freezes; **merge `main` into the branch again**; E6; A7; U8; fix parity if main moved | Full stake flow on mock and on testnet; parity green |
+| D7 | E8; A10 start; U6, U9; **K0 spike and `/arkiv/friction.md` started in a scratch repo (no project code before 6 Nov)**; hosted instance deploy of the branch | Tests green on the hosted instance |
+| D8 | Booth opens (staff the booth first); Q3, Q4; E9 if staffed; check ENS mainnet status and the DAO timelock | Fault injection green |
+| D9 | Hardening, evidence, `PARTNERS=mock` kiosk fallback verified; Arkiv: funded wallets, pinned SDK, Swarm gateway round trip re-checked | Release candidate tagged on the branch |
+| Event | Polish, evidence hashes, README per partner, demo recording, submission by 09:00 IST on 6 Nov; **Arkiv and Swarm Tier 1 (K1 to K7, K12) are built here, in small commits from 6 Nov (the track is "from scratch")**, Tier 2 after | Submitted |
 
 If time runs short, **cut in this order**: stretch items (E10, A8, A9) first, then E9, then U6 and the Leaderboard window, then the Records history verify button; **never cut** the parity tests, host enforcement (E5), the stakes start gate, or gasless funding (A3, A4).
 

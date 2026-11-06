@@ -23,7 +23,7 @@ Pieces worth keeping: the original inline-SVG game covers (`public/party/art.js`
 
 ### 2.1 Devcon 8 India (devcon.org/en)
 
-Verified from the page and its CSS (research agent, 13 Oct 2026):
+Verified from the page and its CSS (research agent; date not recorded):
 - **Hero art:** a night-time illustrated collage of the Gateway of India in front of a huge glowing cyan moon, a teal mandala and a Mughal-style border frame, a sky gradient from orange through magenta and violet to indigo, floating Ethereum diamonds, and two anime-style characters with a fox and a cat. Mood: "Infinite Garden", mystical, dreamy, bioluminescent. **It is not street-level Mumbai**: only the Gateway and a bridge and skyline silhouette appear; no vehicles.
 - **Fonts:** Poppins (body, OFL), a self-hosted display serif "Chloe" (licence unverified, assume commercial), Inter as fallback.
 - **Colours from its CSS:** `#160b2b` (header dark), `#221144` and `#1a0d33` (deep purples), `#7235ed` (primary violet), `#e55066` (coral), `#0fadcf` (cyan), `#fee506` (yellow), `#00b3a4` (teal), `#88c43f` (green), a pastel gradient `#ffdc8b → #f7d9d4 → #ffb8e3`.
@@ -322,7 +322,7 @@ A01, A02-A09 (fonts), A10 (wordmark), B01, B02, B03, B04, C01, C02, C06. Everyth
 
 | ID | Question | Recommendation |
 | --- | --- | --- |
-| V-1 | ~~**Controller look:** original "classic-remote-inspired" or a literal classic motion remote~~ **Decided (13 Oct): original design resembling a classic remote, our own, matching the design system** | See [controller-design.md](controller-design.md) |
+| V-1 | ~~**Controller look:** original "classic-remote-inspired" or a literal classic motion remote~~ **Decided: original design resembling a classic remote, our own, matching the design system** | See [controller-design.md](controller-design.md) |
 | V-2 | **Pixel art or smooth vector** for the shell | Pixel for UI and sprites; low-poly pixelated 3D; vector only for the logo |
 | V-3 | **A mascot?** The name suggests chunky characters; none exists yet | Optional; decide after V1 |
 | V-4 | **Languages** | English plus Hinglish labels now; Hindi and Marathi strings behind a string table later |

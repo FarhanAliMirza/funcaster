@@ -2,7 +2,7 @@
 
 Status: scheduled software implemented through SH11, VP5 and HO3, 6 November 2026; automated and browser evidence is recorded. Physical QA2/QA3 and HO1/HO2 hosting remain pending. The owner requested PR delivery and merge on 6 November after verification; deployment remains pending. [Progress, remaining tasks and measured evidence](../../OS-BUILD-PROGRESS.md). This folder is the **implementation spec** for the new direction: a Windows-XP-style desktop console (Funcaster OS) over a pixel-art Mumbai wallpaper, with a universal phone remote, a mascot, the unchanged Funcaster brand, and the fit of 13 games to any screen. It is written so that another person or agent can build it without asking questions, and improve it by replacing guesses with measurements.
 
-The goals, the guardrails and the whole document map are in the **North star** section of [plan.md](../../../plan.md#north-star-and-direction-21-october-2026). The earlier direction documents ([xp-console-ui.md](../xp-console-ui.md), [phone-controller-v2.md](../phone-controller-v2.md), [xp-assets-and-licensing.md](../xp-assets-and-licensing.md)) give the reasoning; **where they disagree with this folder, this folder wins** (the differences are listed in section 3).
+The goals, the guardrails and the whole document map are in the **North star** section of [plan.md](../../../plan.md#north-star-and-direction-6-november-2026). The earlier direction documents ([xp-console-ui.md](../xp-console-ui.md), [phone-controller-v2.md](../phone-controller-v2.md), [xp-assets-and-licensing.md](../xp-assets-and-licensing.md)) give the reasoning; **where they disagree with this folder, this folder wins** (the differences are listed in section 3).
 
 ## 1. Reading order
 
