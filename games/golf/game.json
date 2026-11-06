@@ -1,0 +1,82 @@
+{
+  "id": "golf",
+  "title": "Pocket Greens",
+  "verb": "Aim. Tap. Take your shot.",
+  "detail": "Tilt to aim. Hold to build power, release to putt. Lowest score wins.",
+  "color": "#377d49",
+  "bg": "#e4f2d4",
+  "icon": "⚑",
+  "mode": "aim",
+  "classic": true,
+  "tag": "TAKE YOUR TIME",
+  "duration": "3 holes",
+  "action": "Take shot",
+  "schemaVersion": 2,
+  "gameId": "funcaster.pocket-greens",
+  "version": "1.1.0",
+  "order": 1,
+  "maxPlayers": 4,
+  "controller": "aim",
+  "view": "shared",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "lower",
+    "unit": "strokes",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "players": "1–4 players",
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.golf"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "shared",
+  "remote": "snapshot",
+  "roundPolicy": {
+    "kind": "turnBased",
+    "hardCapMs": 1800000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": [
+    "strokes",
+    "holes",
+    "points"
+  ]
+}
