@@ -51,8 +51,15 @@ app.get("/api/health", (_req, res) =>
     version: require("./package.json").version,
   }),
 );
-// Source packs and extracted game artwork are never part of the public subset.
-app.use(require("./server/public-assets.cjs").blockPrivateAssets);
+// Legacy extracted artwork remains in Git history for provenance, never in the public release.
+app.use(
+  [
+    "/assets/mario-kart",
+    "/games/mario-kart/item-art",
+    "/games/mario-kart/pipeline",
+  ],
+  (_req, res) => res.status(404).end(),
+);
 app.get("/vendor/three/three.module.js", (_req, res) =>
   res.sendFile(
     require("path").join(
@@ -83,7 +90,6 @@ app.use(
 // code — while unchanged files still come back as cheap 304s. Heuristic
 // freshness on module scripts otherwise happily serves a stale game.js.
 const NO_CACHE = { setHeaders: (res) => res.set("Cache-Control", "no-cache") };
-require("./server/shell-routes.cjs").attachShellRoutes(app, __dirname);
 app.use(
   express.static(path.join(__dirname, "public"), {
     extensions: ["html"],

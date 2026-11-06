@@ -40,7 +40,6 @@ function createArcade({
       locked: false,
       queue: [],
       bans: new Map(),
-      removed: new Map(),
       hostToken: null,
       pending: null,
       denied: new Set(),
@@ -263,8 +262,6 @@ function createArcade({
     const a = room.arcade;
     if (!a) return;
     for (const [key, until] of a.bans) if (until <= now()) a.bans.delete(key);
-    for (const [id, removed] of a.removed)
-      if (removed.expiresAt <= now()) a.removed.delete(id);
     if (room.paused || !room.host) {
       if (a.countdown) a.countdown += elapsed;
       if (a.pending) a.pending.until += elapsed;

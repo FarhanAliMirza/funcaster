@@ -11,12 +11,6 @@ const {
 const { SharedRound, SHARED_GAMES } = require("./shared-round.cjs");
 const { createRemote } = require("./remote.cjs");
 const { createArcade } = require("./arcade.cjs");
-const {
-  pointerMode,
-  pointerSample,
-  shellButton,
-  deviceInfo,
-} = require("./shell-input.cjs");
 const { SketchVote } = require("./sketch-vote.cjs");
 const { SketchRound } = require("./sketch-round.cjs");
 const { LogicReplay, SUPPORTED: REPLAY_GAMES } = require("./logic-replay.cjs");
@@ -61,27 +55,10 @@ function attachParty(
       { length: 6 },
       () => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[randomInt(32)],
     ).join("");
-  const view = (room, hostDetails = false) => ({
+  const view = (room) => ({
     ...arcade.state(room),
     ...remote.state(room),
     code: room.code,
-    ...(hostDetails
-      ? {
-          createdAt: room.created,
-          ...(room.arcade
-            ? {
-                removedPlayers: [...room.arcade.removed]
-                  .filter(([, p]) => p.expiresAt > now())
-                  .map(([restoreId, p]) => ({
-                    restoreId,
-                    slot: p.slot,
-                    name: NAMES[p.slot],
-                    expiresAt: p.expiresAt,
-                  })),
-              }
-            : {}),
-        }
-      : {}),
     buildId: room.buildId,
     game: room.game,
     autoStart: room.auto,
@@ -89,11 +66,8 @@ function attachParty(
     match: room.match || null,
     phase: room.phase,
     endsAt: room.endsAt,
-    resultsHeld: !!room.resultsHeld,
-    resultsRemainingMs: room.resultsHeld ? room.resultsRemainingMs : null,
     serverTime: now(),
     hostConnected: !!room.host,
-    pointerMode: pointerMode(room),
     screenConnected: !!room.screen,
     sharedWaiting: room.sharedWaiting || null,
     displays: room.displays?.size || 0,
@@ -130,7 +104,6 @@ function attachParty(
       connected: !!p.socket,
       ready: p.ready,
       mode: p.mode,
-      ...(hostDetails && p.device ? { device: p.device } : {}),
       boostIn:
         room.round?.players.find((r) => r.slot === p.slot)?.cooldown || 0,
       boostsLeft:
@@ -168,12 +141,7 @@ function attachParty(
       .map((s) => ({ ...s, slot: view < 0 ? s.slot : 0 })),
   });
   const broadcast = (room) => {
-    let publicRecipients = ns.to(room.code);
-    if (room.host) publicRecipients = publicRecipients.except(room.host);
-    publicRecipients.emit("state", view(room));
-    // Only the main shell needs device diagnostics. Never include them in the
-    // shared room broadcast received by other players, queued phones or displays.
-    if (room.host) ns.to(room.host).emit("state", view(room, true));
+    ns.to(room.code).emit("state", view(room));
     arcade.publishQueue(room);
     remote.publish(room);
     if (room.sketch && room.phase === "classic")
@@ -240,8 +208,6 @@ function attachParty(
   }
   function phase(room, next, seconds = 0) {
     room.phase = next;
-    room.resultsHeld = false;
-    room.resultsRemainingMs = null;
     room.endsAt = room.remote?.gate ? 0 : seconds ? now() + seconds * 1000 : 0;
     broadcast(room);
   }
@@ -331,22 +297,6 @@ function attachParty(
     ns.to(room.code).emit("match.finish", room.result);
     phase(room, "results", room.arcade?.mode === "kiosk" ? 10 : 12);
   }
-  function endRoom(room) {
-    if (rooms.get(room.code) !== room) return;
-    // Explicit shutdown and expiry use the same no-contest record and teardown.
-    if (room.arcade && room.active.length && !room.result)
-      finish(
-        room,
-        room.active.map((slot) => ({
-          slot,
-          score: room.progress?.[slot] || 0,
-        })),
-        true,
-      );
-    ns.to(room.code).emit("ended");
-    rooms.delete(room.code);
-    ns.in(room.code).disconnectSockets();
-  }
   function enterLobby(room) {
     if (room.active.length && !room.result && room.match)
       finish(
@@ -434,7 +384,6 @@ function attachParty(
           (pair.includes(b.slot) ? pair.indexOf(b.slot) : 10 + b.slot),
       );
     }
-    room.pointerMode = false;
     room.match = { ...setup, seed: randomInt(2147483647) };
     room.result = null;
     room.outcomes = {};
@@ -451,10 +400,6 @@ function attachParty(
     room.active = eligible
       .slice(0, Math.min(CLASSICS[room.game] || 4, setup.maxHumans))
       .map((p) => p.slot);
-    room.lastSoloSlot =
-      room.setup?.mode === "solo" && room.active.length === 1
-        ? room.active[0]
-        : null;
     room.voting =
       room.game === "drawing" && setup.drawing === "vote"
         ? new SketchVote(room.active)
@@ -607,7 +552,6 @@ function attachParty(
           snapshots: new Map(),
           host: null,
           hostLost: 0,
-          pointerMode: false,
           players: Array(4).fill(null),
           phase: "lobby",
           auto: true,
@@ -1048,46 +992,6 @@ function attachParty(
         for (const s of scores)
           room.progress[room.active[view < 0 ? s.slot : view]] = s.score;
     });
-    // The owner can end a removal timeout; the opaque handle never identifies
-    // a phone credential and this authority is not delegated through host.cmd.
-    socket.on("restore-player", (data, ack = () => {}) => {
-      if (typeof ack !== "function") return;
-      const room = membership?.room;
-      if (
-        membership?.role !== "host" ||
-        !room ||
-        room.host !== socket.id ||
-        rooms.get(room.code) !== room
-      )
-        return ack({
-          error: "Only the main screen can restore a removed phone.",
-        });
-      if (
-        !data ||
-        typeof data !== "object" ||
-        Array.isArray(data) ||
-        Object.keys(data).length !== 2 ||
-        data.confirmed !== true ||
-        typeof data.restoreId !== "string" ||
-        !/^[A-Za-z0-9_-]{32}$/.test(data.restoreId)
-      )
-        return ack({ error: "Confirm which phone to restore." });
-      const removed = room.arcade?.removed.get(data.restoreId);
-      if (
-        !removed ||
-        removed.expiresAt <= now() ||
-        room.arcade.bans.get(removed.token) !== removed.expiresAt
-      )
-        return ack({
-          error: "This removal timeout has ended or is no longer available.",
-        });
-      if (!arcade.limit(`restore:${room.code}`, 10, 10000))
-        return ack({ error: "Give it a moment." });
-      room.arcade.bans.delete(removed.token);
-      room.arcade.removed.delete(data.restoreId);
-      broadcast(room);
-      ack({ ok: true });
-    });
     socket.on("record", (data, ack = () => {}) => {
       if (typeof ack !== "function" || membership?.role !== "host") return;
       const record = membership.room.history?.find(
@@ -1239,7 +1143,7 @@ function attachParty(
         ["lobby", "results", "classic"].includes(room.phase) &&
         room.setup?.mode === "solo"
       ) {
-        const next = ((room.active[0] ?? room.lastSoloSlot ?? 0) + 1) % 4;
+        const next = ((room.active[0] ?? 0) + 1) % 4;
         if (room.phase === "classic") enterLobby(room);
         start(room, next);
       }
@@ -1343,10 +1247,6 @@ function attachParty(
       p.awayAt = 0;
       p.lastInput = 0;
       p.inputSeq = -1;
-      p.pointerSeq = -1;
-      p.lastPointer = null;
-      p.lastShellButton = null;
-      p.lastDevice = null;
       p.ready = false;
       p.unreadyAt = now();
       membership = { room, role: "player", player: p };
@@ -1405,211 +1305,6 @@ function attachParty(
         p.awayAt ||= now();
         p.input = { x: 0, y: 0 };
       } else p.awayAt = 0;
-      broadcast(membership.room);
-    });
-    // Intentionally outside adminHandlers: staff/delegated phones cannot end a room.
-    socket.on("end-room", (data, ack = () => {}) => {
-      if (typeof ack !== "function") return;
-      const room = membership?.room;
-      if (
-        membership?.role !== "host" ||
-        room.host !== socket.id ||
-        rooms.get(room.code) !== room
-      )
-        return ack({ error: "Only the main screen can end this room." });
-      if (
-        !data ||
-        typeof data !== "object" ||
-        Array.isArray(data) ||
-        Object.keys(data).length !== 1 ||
-        data.confirmed !== true
-      )
-        return ack({ error: "Confirm before ending the room for everyone." });
-      ack({ ok: true });
-      endRoom(room);
-    });
-    let phoneTextPending = false;
-    // This is a TV-to-phone UI prompt, never a delegated administration command.
-    socket.on("phone-text", (data, ack = () => {}) => {
-      if (typeof ack !== "function") return;
-      const room = membership?.room;
-      if (
-        membership?.role !== "host" ||
-        room.host !== socket.id ||
-        rooms.get(room.code) !== room
-      )
-        return ack({
-          error: "Only the main screen can open the phone editor.",
-        });
-      if (
-        !data ||
-        typeof data !== "object" ||
-        Array.isArray(data) ||
-        Object.keys(data).length !== 1 ||
-        data.field !== "customWords"
-      )
-        return ack({ error: "Choose the custom word editor." });
-      if (
-        room.arcade?.mode !== "party" ||
-        room.game !== "drawing" ||
-        !["lobby", "results"].includes(room.phase)
-      )
-        return ack({
-          error: "Open custom words before a Drawing round in Party mode.",
-        });
-      const grant = room.arcade.hostToken;
-      const player = room.players.find((p) => p && p.token === grant);
-      const target = player?.socket && ns.sockets.get(player.socket);
-      if (!player?.ready || player.away || !target?.connected)
-        return ack({ error: "Choose a connected, ready host phone first." });
-      if (
-        phoneTextPending ||
-        !arcade.limit(`phone-text:${room.code}`, 4, 10000)
-      )
-        return ack({
-          error: "Give the host phone a moment before trying again.",
-        });
-      phoneTextPending = true;
-      const stillAuthorized = () =>
-        socket.connected &&
-        room.host === socket.id &&
-        rooms.get(room.code) === room &&
-        room.arcade?.mode === "party" &&
-        room.arcade.hostToken === grant &&
-        room.players[player.slot] === player &&
-        player.token === grant &&
-        player.socket === target.id &&
-        target.connected &&
-        player.ready &&
-        !player.away &&
-        room.game === "drawing" &&
-        ["lobby", "results"].includes(room.phase);
-      target
-        .timeout(2000)
-        .emit("phone-text", { field: "customWords" }, (error, response) => {
-          phoneTextPending = false;
-          if (!stillAuthorized())
-            return ack({
-              error: "The host phone or room changed. Open the editor again.",
-            });
-          if (error)
-            return ack({
-              error: "The host phone did not respond. Wake it and try again.",
-            });
-          // Only the confirmation crosses back. Never echo phone text or credentials.
-          ack(
-            response?.ok === true && !response.error
-              ? { ok: true }
-              : { error: "The host phone could not open the word editor." },
-          );
-        });
-    });
-    onAdmin("results-hold", (data, ack = () => {}) => {
-      if (typeof ack !== "function") return;
-      const room = membership?.room;
-      if (membership?.role !== "host" || room?.host !== socket.id)
-        return ack({
-          error: "Only the main screen controls the results countdown.",
-        });
-      if (typeof data?.on !== "boolean" || !Number.isInteger(data?.roundId))
-        return ack({
-          error: "Results hold needs an on/off value and current round.",
-        });
-      if (room.phase !== "results" || data.roundId !== room.roundId)
-        return ack({ error: "That results screen is no longer current." });
-      if (room.arcade?.mode === "kiosk")
-        return ack({
-          ok: true,
-          on: false,
-          remainingMs: Math.max(0, room.endsAt - now()),
-        });
-      if (data.on && !room.resultsHeld) {
-        room.resultsRemainingMs = Math.max(0, room.endsAt - now());
-        room.resultsHeld = true;
-        room.endsAt = 0;
-      } else if (!data.on && room.resultsHeld) {
-        room.endsAt = now() + room.resultsRemainingMs;
-        room.resultsHeld = false;
-        room.resultsRemainingMs = null;
-      }
-      broadcast(room);
-      ack({
-        ok: true,
-        on: !!room.resultsHeld,
-        remainingMs: room.resultsHeld
-          ? room.resultsRemainingMs
-          : Math.max(0, room.endsAt - now()),
-      });
-    });
-    onAdmin("pointer-mode", (data, ack = () => {}) => {
-      // host.cmd also dispatches admin handlers; a delegated phone must not
-      // be able to change the shell's input mode through that path.
-      if (membership?.role !== "host") {
-        if (typeof ack === "function")
-          ack({ error: "Only the main screen controls pointer mode." });
-        return;
-      }
-      if (typeof data?.on !== "boolean") {
-        if (typeof ack === "function")
-          ack({ error: "Pointer mode must be on or off." });
-        return;
-      }
-      const room = membership.room;
-      room.pointerMode = data.on && ["lobby", "results"].includes(room.phase);
-      broadcast(room);
-      if (typeof ack === "function") ack({ ok: true, on: pointerMode(room) });
-    });
-    const shellPlayer = () => {
-      if (membership?.role !== "player") return null;
-      const { room, player } = membership;
-      return pointerMode(room) && player.socket === socket.id && !player.away
-        ? membership
-        : null;
-    };
-    socket.on("pointer", (data) => {
-      const m = shellPlayer();
-      if (!m) return;
-      const sample = pointerSample(data);
-      if (!sample) return;
-      const p = m.player,
-        time = now();
-      if (data.seq !== undefined) {
-        if (
-          !Number.isSafeInteger(data.seq) ||
-          data.seq < 0 ||
-          data.seq <= (p.pointerSeq ?? -1)
-        )
-          return;
-        p.pointerSeq = data.seq;
-      }
-      if (p.lastPointer != null && time - p.lastPointer < 8) return;
-      p.lastPointer = time;
-      ns.to(m.room.host).emit("pointer", { slot: p.slot, ...sample, t: time });
-    });
-    socket.on("shell-button", (data) => {
-      const m = shellPlayer();
-      if (!m) return;
-      const button = shellButton(data);
-      if (!button) return;
-      const p = m.player,
-        time = now();
-      if (p.lastShellButton != null && time - p.lastShellButton < 30) return;
-      p.lastShellButton = time;
-      ns.to(m.room.host).emit("shell-button", { slot: p.slot, ...button });
-    });
-    socket.on("device", (data) => {
-      if (!["player", "waiting"].includes(membership?.role)) return;
-      const p = membership.player,
-        info = deviceInfo(data),
-        time = now();
-      if (
-        !info ||
-        p.socket !== socket.id ||
-        (p.lastDevice != null && time - p.lastDevice < 1000)
-      )
-        return;
-      p.device = info;
-      p.lastDevice = time;
       broadcast(membership.room);
     });
     socket.on("input", (data) => {
@@ -1676,7 +1371,6 @@ function attachParty(
           ? data.variant
           : "co-op",
       };
-      if (room.setup.mode !== "solo") room.lastSoloSlot = null;
       room.playlist = Array.isArray(data?.playlist)
         ? [
             ...new Set(data.playlist.filter((id) => SUPPORTED.includes(id))),
@@ -1692,7 +1386,6 @@ function attachParty(
       const room = membership.room;
       if (room.phase !== "lobby" && room.phase !== "results") return;
       room.game = data.game;
-      room.lastSoloSlot = null;
       room.bracket = null;
       room.nextSeats = null;
       room.auto = !room.arcade && !CLASSICS[room.game];
@@ -1736,13 +1429,7 @@ function attachParty(
       const p = room.players[data.slot];
       if (!p) return;
       if (room.arcade) {
-        const expiresAt = now() + 600000;
-        room.arcade.bans.set(p.token, expiresAt);
-        room.arcade.removed.set(token(), {
-          token: p.token,
-          slot: p.slot,
-          expiresAt,
-        });
+        room.arcade.bans.set(p.token, now() + 600000);
         room.arcade.staff.delete(p.token);
         if (room.active.includes(p.slot)) room.outcomes[p.slot] = "removed";
       }
@@ -1794,12 +1481,6 @@ function attachParty(
       remote.disconnect(room, role, socket, membership.view);
       if (role === "host" && room.host === socket.id) {
         room.host = null;
-        if (room.resultsHeld) {
-          room.endsAt = now() + room.resultsRemainingMs;
-          room.resultsHeld = false;
-          room.resultsRemainingMs = null;
-        }
-        room.pointerMode = false;
         room.hostLost = now();
       }
       if (role === "screen") {
@@ -1836,7 +1517,18 @@ function attachParty(
         (!room.host && time - room.hostLost > 120000) ||
         time - room.created > 14400000
       ) {
-        endRoom(room);
+        if (room.arcade && room.active.length && !room.result)
+          finish(
+            room,
+            room.active.map((slot) => ({
+              slot,
+              score: room.progress?.[slot] || 0,
+            })),
+            true,
+          );
+        ns.to(room.code).emit("ended");
+        ns.in(room.code).disconnectSockets();
+        rooms.delete(room.code);
         continue;
       }
       if (room.shared && room.phase === "classic") {
