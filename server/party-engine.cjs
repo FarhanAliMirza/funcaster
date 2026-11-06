@@ -10,7 +10,7 @@ function random(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-function createRound(game, slots, seed = Date.now(), setup = {}) {
+function createRound(game, slots, seed = Date.now()) {
   if (!GAMES.includes(game)) throw new Error("Unknown game");
   if (
     !slots.length ||
@@ -21,7 +21,6 @@ function createRound(game, slots, seed = Date.now(), setup = {}) {
     throw new Error("Invalid players");
   return {
     game,
-    interaction: setup.interaction === true,
     elapsed: 0,
     duration: 60,
     nextSpawn: 0,
@@ -40,7 +39,6 @@ function createRound(game, slots, seed = Date.now(), setup = {}) {
       speed: 0,
       distance: 0,
       boosting: 0,
-      drafting: false,
       boostHeld: false,
       boostsLeft: 3,
       feedback: 0,
@@ -83,17 +81,6 @@ function stepRound(round, inputs, dt) {
         ? 0.63
         : Math.max(0.28, 0.67 - round.elapsed / 180));
   }
-  const claims = [];
-  const previous = round.players.map((p) => ({
-    slot: p.slot,
-    x: p.x,
-    distance: p.distance,
-    speed: p.speed,
-  }));
-  const claim = (p, o, fraction) => {
-    if (!round.interaction || round.game === "neon-drift") reward(p, 10);
-    else claims.push({ p, id: o.id, fraction });
-  };
   for (const p of round.players) {
     const input = inputs[p.slot] || { x: 0, y: 0, active: false };
     const x = Number.isFinite(input.x) ? clamp(input.x, -1, 1) : 0,
@@ -135,23 +122,9 @@ function stepRound(round, inputs, dt) {
       p.speed +=
         (target - p.speed) *
         (1 - Math.exp(-dt * (input.brake ? 14 : target ? 3 : 2)));
-      p.drafting =
-        round.interaction &&
-        input.active !== false &&
-        input.gas &&
-        !input.brake &&
-        previous.some(
-          (q) =>
-            q.slot !== p.slot &&
-            q.distance > p.distance + 0.08 &&
-            q.distance < p.distance + 1.5 &&
-            Math.abs(q.x - p.x) < 0.12 &&
-            q.speed > 0.5,
-        );
-      const slip = p.drafting ? 1.12 : 1;
-      p.distance += dt * p.speed * (p.boosting ? 1.7 : 1) * slip;
+      p.distance += dt * p.speed * (p.boosting ? 1.7 : 1);
       if (input.active !== false)
-        p.score += dt * 3 * p.speed * (p.boosting ? 1.7 : 1) * slip;
+        p.score += dt * 3 * p.speed * (p.boosting ? 1.7 : 1);
     }
     const speed =
       round.game === "neon-drift"
@@ -167,11 +140,7 @@ function stepRound(round, inputs, dt) {
           input.active !== false &&
           (o.dwell >= 0.13 || (pulse && d < 0.26))
         ) {
-          claim(
-            p,
-            o,
-            pulse && d < 0.26 ? 0 : clamp((0.13 - (o.dwell - dt)) / dt, 0, 1),
-          );
+          reward(p, 10);
           return false;
         }
         return o.age < 5;
@@ -189,41 +158,17 @@ function stepRound(round, inputs, dt) {
           p.combo = 0;
           p.hit = 0.45;
           p.feedback++;
-        } else
-          claim(
-            p,
-            o,
-            clamp(
-              (p.y - 0.045 - before) / Math.max(0.000001, o.y - before),
-              0,
-              1,
-            ),
-          );
+        } else reward(p, 10);
         return false;
       }
       return o.y < 1.12 && o.age < 6;
     });
   }
-  const won = new Set();
-  claims.sort(
-    (a, b) =>
-      a.fraction - b.fraction ||
-      ((a.p.slot - (a.id % 4) + 4) % 4) - ((b.p.slot - (b.id % 4) + 4) % 4),
-  );
-  for (const c of claims)
-    if (!won.has(c.id)) {
-      won.add(c.id);
-      reward(c.p, 10);
-    }
-  if (won.size)
-    for (const p of round.players)
-      p.objects = p.objects.filter((o) => !won.has(o.id));
   return round;
 }
 function snapshot(round) {
   return {
     game: round.game,
-    interaction: round.interaction,
     elapsed: round.elapsed,
     duration: round.duration,
     players: round.players,

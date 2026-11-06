@@ -1,19 +1,13 @@
 const { FruitNinja } = require("../games/fruit-ninja/logic.js");
 const { seededRandom } = require("../core/random.js");
 class SliceReplay {
-  constructor(seed, setup = {}) {
+  constructor(seed) {
     this.game = new FruitNinja({
       aspect: 16 / 9,
       infiniteLives: true,
       rng: seededRandom(seed),
     });
     this.game.spawnRng = seededRandom(seed);
-    if (setup.variant)
-      this.game.configure({
-        variant: setup.variant,
-        seats: setup.seats || 1,
-        bot: setup.bot,
-      });
     this.sequence = 0;
     this.calls = [];
     this.bytes = 0;
@@ -91,10 +85,7 @@ function verifySlice(replay, scores) {
   if (!boards.length) return false;
   const actual = new Map();
   for (const board of boards) {
-    const checker = new SliceReplay(replay.seed, {
-      ...replay.setup,
-      seats: board.view >= 0 ? 1 : replay.slots.length,
-    });
+    const checker = new SliceReplay(replay.seed);
     for (let i = 0; i < board.calls.length; i += 1000)
       if (!checker.accept(checker.sequence, board.calls.slice(i, i + 1000)))
         return false;

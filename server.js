@@ -8,8 +8,8 @@
  *   /controller           → phone controller (the "remote", shared by all games)
  *   /games/<slug>/        → a game's PC client
  *
- * The party namespace owns room state and server-simulated online rounds;
- * the legacy namespace retains its orientation relay for standalone games.
+ * The server holds no game state. It is a dumb, low-latency switchboard so the
+ * phone's orientation stream reaches the PC with as few hops as possible.
  */
 
 const { exec } = require("child_process");
@@ -51,8 +51,15 @@ app.get("/api/health", (_req, res) =>
     version: require("./package.json").version,
   }),
 );
-// Source packs and extracted game artwork are never part of the public subset.
-app.use(require("./server/public-assets.cjs").blockPrivateAssets);
+// Legacy extracted artwork remains in Git history for provenance, never in the public release.
+app.use(
+  [
+    "/assets/mario-kart",
+    "/games/mario-kart/item-art",
+    "/games/mario-kart/pipeline",
+  ],
+  (_req, res) => res.status(404).end(),
+);
 app.get("/vendor/three/three.module.js", (_req, res) =>
   res.sendFile(
     require("path").join(
@@ -70,20 +77,11 @@ app.get("/vendor/three/three.core.js", (_req, res) =>
   ),
 );
 
-app.use(
-  "/community",
-  require("./server/creator-gallery.cjs").creatorGallery(
-    process.env.CREATOR_STORE ||
-      path.join(__dirname, ".local", "creator-registry"),
-  ),
-);
-
 // no-cache (NOT no-store): browsers must revalidate every file against its
 // ETag on each load, so a plain reload after a git pull always runs current
 // code — while unchanged files still come back as cheap 304s. Heuristic
 // freshness on module scripts otherwise happily serves a stale game.js.
 const NO_CACHE = { setHeaders: (res) => res.set("Cache-Control", "no-cache") };
-require("./server/shell-routes.cjs").attachShellRoutes(app, __dirname);
 app.use(
   express.static(path.join(__dirname, "public"), {
     extensions: ["html"],
@@ -173,13 +171,7 @@ const tls = FORCE_HTTP ? null : ensureCert();
 const server = tls ? https.createServer(tls, app) : http.createServer(app);
 const scheme = tls ? "https" : "http";
 
-const addresses = localAddresses();
-if (process.env.LAN_IP && !addresses.includes(process.env.LAN_IP))
-  throw Error(
-    "LAN_IP must be one of this computer’s active IPv4 addresses: " +
-      addresses.join(", "),
-  );
-const lanIp = process.env.LAN_IP || addresses[0] || "localhost";
+const lanIp = localAddresses()[0] || "localhost";
 const controllerUrl = `${scheme}://${lanIp}:${PORT}/classic-controller`;
 
 function inviteOrigin(req) {
@@ -218,44 +210,16 @@ const io = new Server(server, {
   transports: ["websocket", "polling"],
   pingInterval: 10000,
   pingTimeout: 5000,
-  maxHttpBufferSize: 300000,
-  cors: { origin: true },
-  allowRequest: (req, done) => {
-    const origin = req.headers.origin;
-    if (!origin) return done(null, true);
-    try {
-      done(
-        null,
-        new URL(origin).host === req.headers.host ||
-          origin === process.env.PUBLIC_ORIGIN,
-      );
-    } catch {
-      done(null, false);
-    }
-  },
+  cors: { origin: "*" },
 });
 
-const { createEventStore } = require("./server/event-store.cjs");
-const eventStore = createEventStore(
-  process.env.EVENT_STORE || path.join(__dirname, ".local", "event-stats.json"),
-);
-process.once("exit", () => eventStore.close());
-const party = attachParty(io, {
-  buildId: BUILD_ID,
-  persist: (event) => eventStore.record(event),
-  eventStats: () => eventStore.snapshot(),
-  remoteViews: process.env.FUNCASTER_REMOTE_VIEWS === "1",
-});
+const party = attachParty(io, { buildId: BUILD_ID });
 app.get("/api/party/pairing/:code", async (req, res) => {
   if (!party.rooms.has(req.params.code))
     return res.status(404).json({ error: "Party not found" });
   try {
     const origin = inviteOrigin(req);
-    const screen = String(req.query.screen || "");
-    const remote = party.rooms.get(req.params.code).remote;
-    if (screen && (!remote?.enabled || !remote.records.has(screen)))
-      return res.status(400).json({ error: "Pairing screen unavailable" });
-    const url = `${origin}/controller?room=${req.params.code}${screen ? "&screen=" + encodeURIComponent(screen) : ""}`;
+    const url = `${origin}/controller?room=${req.params.code}`;
     const qr = await QRCode.toDataURL(url, {
       margin: 2,
       width: 400,
@@ -419,15 +383,14 @@ server.listen(PORT, "0.0.0.0", () => {
   // own Chrome profile so the autoplay flag genuinely applies (handing the
   // URL to an already-running Chrome silently drops process flags).
   // HTTP dev mode and NO_OPEN=1 skip this.
-  if (tls && !process.env.NO_OPEN) {
-    require("./scripts/open-browser.cjs").openBrowser(
-      `https://localhost:${PORT}/`,
+  if (tls && process.platform === "darwin" && !process.env.NO_OPEN) {
+    exec(
+      'open -na "Google Chrome" --args' +
+        ' --user-data-dir="$HOME/.openwii-chrome" --no-first-run --no-default-browser-check' +
+        ` --autoplay-policy=no-user-gesture-required --new-window https://localhost:${PORT}/`,
     );
-    console.log("\n  📺 Opening the console. Skip with NO_OPEN=1 npm start.");
+    console.log("\n  📺 Opening the console in Chrome (autoplay enabled)…");
+    console.log("     Skip with NO_OPEN=1 npm start.");
   }
-  if (addresses.length > 1)
-    console.log(
-      `  LAN adapters: ${addresses.join(", ")}. Set LAN_IP to choose one.`,
-    );
   console.log(`${line}\n`);
 });
