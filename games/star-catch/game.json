@@ -1,0 +1,76 @@
+{
+  "id": "star-catch",
+  "title": "Star Catch",
+  "verb": "Tilt to catch.",
+  "detail": "Catch the stars. Dodge the pink comets.",
+  "color": "#7357f5",
+  "bg": "#eeeaff",
+  "icon": "✦",
+  "target": 180,
+  "mode": "side",
+  "tag": "EASY TO LOVE",
+  "schemaVersion": 2,
+  "gameId": "funcaster.star-catch",
+  "version": "1.1.0",
+  "order": 3,
+  "maxPlayers": 4,
+  "controller": "side",
+  "view": "shared",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "players": "1–4 players",
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.star-catch"
+  ],
+  "seats": 4,
+  "engine": "server",
+  "seatView": "shared",
+  "remote": "frames",
+  "roundPolicy": {
+    "kind": "timed",
+    "hardCapMs": 60000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
