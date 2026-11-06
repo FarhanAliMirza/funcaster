@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "communityPublishing": false,
+  "reason": "Outside creator acceptance pending",
+  "policy": {
+    "requires": [
+      "valid manifest v2",
+      "original or licensed assets",
+      "sandbox review",
+      "human approval"
+    ],
+    "verificationDefault": "casual"
+  },
+  "workflow": "operator CLI: npm run game:registry; docs/CREATOR-PUBLISHING.md",
+  "gallery": "/community/"
+}
