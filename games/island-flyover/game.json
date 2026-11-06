@@ -1,0 +1,78 @@
+{
+  "id": "island-flyover",
+  "title": "Cloud Cruise",
+  "verb": "Tilt into the blue.",
+  "detail": "Tilt left and right to bank. Tilt forward and back to climb and dive.",
+  "color": "#3884b0",
+  "bg": "#dff1fa",
+  "icon": "✈",
+  "mode": "flight",
+  "classic": true,
+  "tag": "ROOM TO ROAM",
+  "duration": "20 checkpoints",
+  "action": "Take off",
+  "schemaVersion": 2,
+  "gameId": "funcaster.cloud-cruise",
+  "version": "1.1.0",
+  "order": 9,
+  "maxPlayers": 4,
+  "controller": "flight",
+  "view": "split",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "players": "1–4 players",
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.island-flyover"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "independent",
+  "remote": "views",
+  "roundPolicy": {
+    "kind": "untilDone",
+    "hardCapMs": 300000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
