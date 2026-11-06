@@ -1,6 +1,6 @@
 # Funcaster — implementation and release plan
 
-Updated **6 November 2026**. Work is on `codex/arcade-launch-plan`, delivered through [PR #2](https://github.com/raihankhan-rk/funcaster/pull/2). **No merge or deployment has been performed.**
+Updated **6 November 2026**. Work is on `codex/arcade-launch-plan`. **No merge or deployment has been performed.**
 
 This is the current checklist. The previous scenario book and dated audits are preserved in [plan-history.md](plan-history.md); their unchecked boxes and approval-blocked notes are historical, not outstanding implementation tasks. Detailed behavior is recorded in [IMPLEMENTATION.md](docs/IMPLEMENTATION.md), with [engineering evidence](docs/RELEASE-2026-11-06.md) and the [UI review](docs/UI-REVIEW-2026-11-06.md).
 

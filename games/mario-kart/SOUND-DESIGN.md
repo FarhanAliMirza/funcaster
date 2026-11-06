@@ -82,6 +82,6 @@ Reference: [Nintendo's MK8 Deluxe driving guide](https://www.nintendo.com/jp/ich
 4. Compare our pickup and drift recordings with the native references at normal speed and frame by frame. Check emission origin, phase order, visual density, relative cue timing and decay.
 5. Existing browser `recordVideo` evidence is silent. Capture a Web Audio destination mixed with the gameplay canvas stream (or verified tab audio capture), and confirm the resulting recording contains an audible audio track. Do not present a silent clip as sound-design verification.
 6. Inspect/listen to the recording, fix observed defects, then run one complete race with audio. Check pause/mute/restart and finish cleanup, no duplicate loops or clipping, and representative frame-time impact.
-7. Publish local review links to the short audiovisual comparison, complete race, cue/source manifest and checks. Stop for Patrick's review once these scoped requirements pass. Do not commit without a request.
+7. Publish local review links to the short audiovisual comparison, complete race, cue/source manifest and checks. Stop for review once these scoped requirements pass. Do not commit without a request.
 
 Completion means the combined experience has been heard and watched in captured gameplay. File availability, passing unit checks, or a visually plausible still image alone are insufficient.
