@@ -1,7 +1,5 @@
 # Host phone controls: how a phone runs the party
 
-> **Note, 6 November 2026.** The TV screens in this plan (Kiosk attract screen, "next up", leaderboard, staff windows) are now designed as windows of the Windows-XP-style shell: see [xp-console-ui.md](xp-console-ui.md) sections 4.5 and 6. The delegation protocol and the Party and Kiosk rules here are unchanged.
-
 Status: plan, 6 November 2026, **decision D-H1 approved the same day**. Nothing here is built. It is grounded in a read of `server/party.cjs`, `public/party/host.js`, `public/party/phone.js`, `docs/NETWORKING.md` and `docs/RELEASE.md` at commit 3607d9a.
 
 ## 1. The problem in one paragraph
@@ -66,7 +64,7 @@ The right answer to "who runs the room" is different when five friends share a s
 | Kick, lock, end match | VIP (hold to confirm) | **Staff only** (PIN) |
 | Waiting players | Spectator seats | A visible **"next up"** queue; promoted automatically |
 | Idle | The room stays until the host tab closes | Attract mode returns after 60 s with no phones; state resets |
-| Remote screens (`remoteScreens` setting) | `invite` by default: the host can invite a friend on another screen ([plan.md §5h.5](../../plan-history.md#5h5-pairing-how-a-remote-friend-joins)) | `off` by default (decided 6 November). Staff can switch it on per room with the PIN; changing the default later is a one-line change. Switching it on for a public booth first needs H5a (rate limits, invite hygiene) |
+| Remote screens (`remoteScreens` setting) | `invite` by default: the host can invite a friend on another screen ([plan.md §5h.5](./../../plan-history.md#5h5-pairing-how-a-remote-friend-joins)) | `off` by default (decided 6 November). Staff can switch it on per room with the PIN; changing the default later is a one-line change. Switching it on for a public booth first needs H5a (rate limits, invite hygiene) |
 
 **Why Kiosk matters for the hackathon.** The goal is to make people come and play. Every extra step ("who is the host?", "pick a game", "press start") loses a passer-by. In Kiosk mode a person scans, swings and is playing within about 20 seconds with no decision to make. The detailed event plan is [hackathon-floor-plan.md](hackathon-floor-plan.md).
 

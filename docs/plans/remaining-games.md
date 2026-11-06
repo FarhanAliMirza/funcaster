@@ -88,7 +88,7 @@ These change the work for several games. Defaults are my recommendation.
 
 ### X6. Remote playing ("separate screens") for independent-view games (decision D-G1)
 
-- **Correction (6 November):** an earlier version of this note listed Kart Rush here. It is **not** an independent-view game: one shared `Race` sim renders split-screen in one iframe. Kart Rush remote play uses server-sequenced lockstep (decided 6 November), in [plan.md §5h.6a](../../plan-history.md#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october). The full integrated plan (engines, pairing by QR, recipes, build order) is [plan.md §5h](../../plan-history.md#5h-how-multiplayer-and-remote-play-get-built-13-october-2026).
+- **Correction (6 November):** an earlier version of this note listed Kart Rush here. It is **not** an independent-view game: one shared `Race` sim renders split-screen in one iframe. Kart Rush remote play uses server-sequenced lockstep (decided 6 November), in [plan.md §5h.6a](./../../plan-history.md#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october). The full integrated plan (engines, pairing by QR, recipes, build order) is [plan.md §5h](./../../plan-history.md#5h-how-multiplayer-and-remote-play-get-built-13-october-2026).
 - **Why it is feasible:** Time Trial, Cloud Cruise, Shooting Range, Alien Attack and Slice race already run **one independent single-player copy per seat**, each in its own iframe, each with its own per-view screen socket (`room.screens` is a Map of view to socket). Nothing about such a copy requires it to run in the *host's* browser.
 - **Design:** the host tab issues a **view token** for view *i* to an invited display. The display loads `/games/<slug>/?party=&round=&view=i` with that token, registers as the `screen` for that view only, and the server routes seat *i*'s phone input to it. The result merge at `party.cjs:525-534` is unchanged. A display holds only that view; it cannot report any other view's score or touch the room.
 - **Needs:** a "Play on this screen" button on `/screen`; a TV control to assign seats to displays; token issuance and revocation; session tests for spoofing (a display claiming another view); a fallback if the display dies (the host tab can take the view back).
@@ -97,7 +97,7 @@ These change the work for several games. Defaults are my recommendation.
 
 ### X7. Drop, away and idle policy per game
 
-**Penalty rule (decided 6 November):** a player who does not return after the grace period is a **forfeit**: last place in a ranked field, a loss in a two-seat match; a short drop and a host removal carry no penalty. Full rule and per-game table: [plan.md §5h.7a](../../plan-history.md#5h7a-leaving-a-match-the-standard-rule-decided-13-october). The table below gives the grace-period behaviour; "DNF" in its right column means a **forfeit** under that rule when it follows a drop.
+**Penalty rule (decided 6 November):** a player who does not return after the grace period is a **forfeit**: last place in a ranked field, a loss in a two-seat match; a short drop and a host removal carry no penalty. Full rule and per-game table: [plan.md §5h.7a](./../../plan-history.md#5h7a-leaving-a-match-the-standard-rule-decided-13-october). The table below gives the grace-period behaviour; "DNF" in its right column means a **forfeit** under that rule when it follows a drop.
 
 A unified table, implemented as seat states (X2), the phone sending an explicit `away` signal on `visibilitychange`, and per-game rules:
 
@@ -174,7 +174,7 @@ Each block lists: **Today**, **Target**, **Tasks** (with file references), **Dec
 6. **Result:** score is place; add lap times and best lap to per-seat stats; tie-break by finish time.
 7. **Verification** (X5): record the per-seat input stream at 120 Hz steps (quantised) and verify via `Race`.
 8. **Phone:** driver select works; add per-seat colour/shape and the landscape controls fixes from the controller plan (F1, F5).
-9. **Remote play:** *not* view binding (Kart Rush is one shared sim). Decided 6 November: **server-sequenced lockstep**, gated by a spike; see [plan.md §5h.6a](../../plan-history.md#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october), including the three-friends example (two on one TV, one remote). Spectators get a director camera.
+9. **Remote play:** *not* view binding (Kart Rush is one shared sim). Decided 6 November: **server-sequenced lockstep**, gated by a spike; see [plan.md §5h.6a](./../../plan-history.md#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october), including the three-friends example (two on one TV, one remote). Spectators get a director camera.
 10. **Seat cap** per manifest (D-G2) and tests up to 8.
 
 **Decisions.** D-G1, D-G2. Whether to restore the post-processing composer under split view on strong GPUs.

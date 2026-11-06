@@ -1,7 +1,5 @@
 # A retro-futuristic Mumbai: the visual, sound and asset plan
 
-> **Superseded in part, 6 November 2026.** The owner moved the whole console to a Windows-XP-style desktop over a pixel-art Mumbai wallpaper. For the shell, menus, TV screens, mascot and backdrops, see [xp-console-ui.md](xp-console-ui.md) and [xp-assets-and-licensing.md](xp-assets-and-licensing.md). The neon "Funcaster Arcade, 2099" concept in this file no longer governs the shell; its font, sound and licence rules, and the in-game art guidance, still apply where they do not conflict.
-
 Status: plan, 6 November 2026. Based on a read of the current UI code (`public/index.html`, `public/party/*`, `public/controller.html`, per-game HUDs), research into how Devcon 8 and ETHGlobal Mumbai use Mumbai in their branding, what is documented about Mumbattan in *Across the Spider-Verse*, and a licence and technique survey for retro assets. I did not see any rendered screen; descriptions of the current look come from the CSS and markup. Colour suggestions are mine and are labelled as such.
 
 ## 1. Why the current UI feels corporate
@@ -209,7 +207,7 @@ LOBBY                                   RESULTS
 +------------------------+
 ```
 
-**Three starter skins:** Kaali-Peeli (black and yellow checker stripe), City Bus (red and cream), Local (blue and cream). More as cosmetics later (see [the business plan](../../business-plan.md)).
+**Three starter skins:** Kaali-Peeli (black and yellow checker stripe), City Bus (red and cream), Local (blue and cream). More as cosmetics later (see [the business plan](./../../business-plan.md)).
 
 ## 8. Art direction for each game (a skin system, applied tier by tier)
 

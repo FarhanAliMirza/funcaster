@@ -1,7 +1,5 @@
 # The Funcaster Remote: our own controller design
 
-> **Superseded in part, 6 November 2026.** The owner reversed the decision in section 7: the remote now returns to a classic layout (D-pad, A, B, 1, 2, minus, home, plus) as **one universal chassis**, with our branding. See [phone-controller-v2.md](phone-controller-v2.md), especially section 4 (the chassis) and section 12 (the decision record). Sections 1 to 6 here (identity lamp, skins, feedback, targets) remain useful input.
-
 Status: design spec, 6 November 2026. **Decision (owner, 6 November):** not a literal copy of the classic motion remote; an original design that *resembles* a classic remote, matches our design system ([visual-direction.md](visual-direction.md)) and serves our use case. This spec turns that into something a front-end developer can build. It is not legal advice; the "how this differs" checklist in section 7 is a design discipline, not a clearance.
 
 It builds on the audit findings in [controller-stress-tests.md](controller-stress-tests.md) (small targets, weak identity, one layout, no away state) and the host controls in [host-phone-controls.md](host-phone-controls.md).

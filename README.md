@@ -15,12 +15,6 @@ Open the printed **public HTTPS address on the shared screen**. Its QR works fro
 
 For local development, `npm start` serves self-signed HTTPS at `https://localhost:8443`. `HTTP=1 PORT=8556 NO_OPEN=1 npm start` serves a local HTTP preview; a phone on an HTTP LAN address must use touch. Use the trusted share link for visitors.
 
-## Funcaster OS development preview
-
-The new Luna desktop is at `/?shell=os` (or `/os`); use `/?shell=os&demo=1` for a local visual preview without creating a room. The software rebuild is implemented: all 13 Game Properties windows and games, phone pointer/D-pad navigation, pause/results, room tools, boot/attract/staff, skins, helper/audio, street pets and seat avatars. The 234-case viewport matrix and shell flow pass; physical phone/TV acceptance and stable hosting remain pending. The playable fallback stays at `/?shell=classic`. `FUNCASTER_SHELL=os` changes the default root route; the explicit classic query remains available.
-
-Follow [the build specification](docs/plans/build/README.md) and [current progress](docs/OS-BUILD-PROGRESS.md). Generated theme assets live in `assets/os/`; sources under `assets/source/` are never served. Rebuild instructions are in [scripts/os-assets](scripts/os-assets/README.md).
-
 ## Games
 
 | Game | Players and controls |
@@ -54,25 +48,10 @@ Playlists, cumulative standings, common results, replay exports, host pause, rec
 ```sh
 npm run check
 npm run format:check
-npm run test:os
-node tests/os/shell.e2e.mjs
-node tests/os/viewport.e2e.mjs --smoke
-node tests/os/viewport.e2e.mjs
 npm run game:create -- my-game
 npm run game:validate -- creator-games/my-game
 npm run replay:check -- saved-round.json
 ```
-
-The two browser suites use Playwright Chromium (`npx playwright install chromium` if needed), launch their own isolated local server, and write reports/screenshots under `.local/os-evidence/`. `OS_EVIDENCE_DIR` overrides that directory; `HEADED=1` shows the browser and `OS_BROWSER_CHANNEL` selects a channel. The full viewport run covers 234 solo/max-human samples; `--games=mario-kart,drawing` limits it to selected games. Browser checks are separate from `npm run check`, and do not replace physical sensor or simultaneous-touch testing.
-
-For an event screen, start the relay or hosted endpoint, then use the kiosk launcher:
-
-```sh
-npm run kiosk -- --dry-run https://your-console.example/
-npm run kiosk -- https://your-console.example/
-```
-
-The launcher adds `shell=os`, finds Chrome/Edge, and uses a temporary profile with fullscreen/autoplay flags. `FUNCASTER_URL` supplies a default URL; `FUNCASTER_BROWSER` supplies an absolute executable path. The local dry-run found no installed Chrome/Edge, so actual booth fullscreen/audio still needs rehearsal. This command does not deploy or start the server. Asset regeneration and its Python/FFmpeg requirements are documented in [scripts/os-assets](scripts/os-assets/README.md).
 
 Three party games run their rules on the server. Ten browser games run on the host and send bounded snapshots to read-only displays. Slice Dojo additionally streams its seeded cursor log to a Node checker. Results are labelled `verified` only after a replay agrees; other browser scores remain `attested`.
 

@@ -2268,7 +2268,7 @@ An earlier version of this plan had these; they were dropped in a rewrite and ar
 | Decision | Status | What's ready either way |
 | --- | --- | --- |
 | Final three partners | Arkiv, ENS, World leading | Seams in [§12](#12-part-b-track-integrations-at-the-hackathon) |
-| A pot / stakes | **Decided 6 November 2026: wanted** (play money at events, real value gated; see `docs/plans/web3/08-stakes-product-and-legal.md`). Was: Held | `match.finish` is the only settlement hook; a stake module attaches there without touching games. Ladder below |
+| A pot / stakes | Held | `match.finish` is the only settlement hook; a stake module attaches there without touching games. Ladder below |
 | World fallback if no Orb is reachable | Held | Guest/ranked split; staging simulator; Chainlink spare |
 | Ethereum Foundation ($15,000) | Watch the brief | Session-key story fits the phone-held key |
 

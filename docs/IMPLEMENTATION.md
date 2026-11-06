@@ -29,7 +29,7 @@ The server and scoped remote-screen proposals were explicitly approved by the us
 
 ## UI review
 
-The full player-facing flow was reviewed on 6 November: responsive host/phone forms, compact game menus and HUDs, split-view player labels, results, paired remote screens and utility pages. See [UI-REVIEW-2026-11-06.md](UI-REVIEW-2026-11-06.md) for fixes, representative screenshots, coverage and real-device limits. The current checklist is [plan.md](../plan.md); earlier scenario details are archived in [plan-history.md](../plan-history.md).
+The full player-facing flow was reviewed on 6 November: responsive host/phone forms, compact game menus and HUDs, split-view player labels, results, paired remote screens and utility pages. See [UI-REVIEW-2026-11-06.md](UI-REVIEW-2026-11-06.md) for fixes, representative screenshots, coverage and real-device limits. The current checklist is [plan.md](./../plan.md); earlier scenario details are archived in [plan-history.md](./../plan-history.md).
 
 ## Release gates and conditional follow-on work
 

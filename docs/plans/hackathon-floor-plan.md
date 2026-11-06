@@ -1,7 +1,5 @@
 # Making people come and play: the event floor plan
 
-> **Note, 6 November 2026.** The attract screen and the walk-up screens in this plan are now windows of the Windows-XP-style shell ([xp-console-ui.md](xp-console-ui.md) section 4.5), and the phone's first-tap flow is specified in [phone-controller-v2.md](phone-controller-v2.md) section 3. The funnel, kit, staffing and runbook here are unchanged.
-
 Status: plan, 6 November 2026. Owner's goal: run the game at the hackathon and **make people come and play it**. This plan covers the booth or table experience, the technology it needs, the people, the runbook and the numbers to watch. The code it depends on is tracked in the other plans; nothing here is built.
 
 ## 1. What we know and what we do not
@@ -74,7 +72,7 @@ Avoid long formats (a six-hole golf round, a three-lap race) in Kiosk rotation. 
 
 | Need | Plan | Source of truth |
 | --- | --- | --- |
-| **Reliable connectivity** | Primary: a **hosted public instance** with a real HTTPS URL, so phones work on mobile data and judges can try it later. Backup: LAN with a travel router and a SIM hotspot. Third: the temporary tunnel script. Do not depend on the venue Wi-Fi | [plan.md 5b](../../plan.md); the Dockerfile exists but nothing is deployed; hosting is a decision the owner deferred to last, and it must be made before the event |
+| **Reliable connectivity** | Primary: a **hosted public instance** with a real HTTPS URL, so phones work on mobile data and judges can try it later. Backup: LAN with a travel router and a SIM hotspot. Third: the temporary tunnel script. Do not depend on the venue Wi-Fi | [plan.md 5b](./../../plan.md); the Dockerfile exists but nothing is deployed; hosting is a decision the owner deferred to last, and it must be made before the event |
 | **Kiosk mode, attract screen, leaderboard** | Build (section 3) | host plan K1, K2; visual plan V1 |
 | **Spectator seats and "next up"** | Build | host plan H6; remaining-games X2, X8 |
 | **Room safety for a public screen** | Room lock, kick list, join and room-creation rate limits (confirmed gaps in the audit) | host plan H5a |
@@ -86,7 +84,7 @@ Avoid long formats (a six-hole golf round, a three-lap race) in Kiosk rotation. 
 | **Offline resilience** | The game must still run if the internet drops: LAN mode keeps working; assets are local | existing behaviour |
 | **A dress rehearsal** | A full run of the booth with strangers in a similar space before the event | controller stress plan L5 |
 
-**Hosting recommendation (6 November):** a hosted relay on one small VM in a Mumbai-area region with automatic HTTPS and a real domain as the primary; a booth-laptop offline fallback on a real hostname with a real certificate; the tunnel for emergencies only. Full detail, code changes and the region-by-measurement method are in [plan.md §5h.14.1](../../plan-history.md#5h141-hosting). Time check: Devcon starts 6 November, **21 days after 6 November**; stand up a staging instance this week and freeze the build on 6 November.
+**Hosting recommendation (6 November):** a hosted relay on one small VM in a Mumbai-area region with automatic HTTPS and a real domain as the primary; a booth-laptop offline fallback on a real hostname with a real certificate; the tunnel for emergencies only. Full detail, code changes and the region-by-measurement method are in [plan.md §5h.14.1](./../../plan-history.md#5h141-hosting). Time check: Devcon starts 6 November, **21 days after 6 November**; stand up a staging instance this week and freeze the build on 6 November.
 
 **The hosting decision cannot wait.** The audit found the Dockerfile and a share-tunnel script but no deployed instance. A stable URL, a domain and an account are needed well before the event; the temporary tunnel changes address every time and is not a plan for a booth.
 
@@ -123,7 +121,7 @@ The server keeps simple counters and shows them on a staff-only page: scans (roo
 
 ## 11. Before the event: the checklist
 
-1. Email the organisers (section 1 questions). 2. Decide and deploy the hosted instance, domain and certificate. 3. Build Kiosk mode, spectator queue, room hardening, the persistent seat token and the staff controls (host plan: H2, H1, K1, K2, K3, H5a). 4. Build the attract screen, HI-SCORE board and the new controller shell (visual plan V1, V2; controller design C0-C2). 5. Run the controller stress tests on real phones, including a one-hour soak. 6. Run a dress rehearsal with strangers. 7. Print signage; pack the kit; charge everything. 8. Prepare the demo video and the partner write-ups ([plan.md section 12.1](../../plan.md)). 9. Record the funnel counters from the rehearsal so the event targets are realistic.
+1. Email the organisers (section 1 questions). 2. Decide and deploy the hosted instance, domain and certificate. 3. Build Kiosk mode, spectator queue, room hardening, the persistent seat token and the staff controls (host plan: H2, H1, K1, K2, K3, H5a). 4. Build the attract screen, HI-SCORE board and the new controller shell (visual plan V1, V2; controller design C0-C2). 5. Run the controller stress tests on real phones, including a one-hour soak. 6. Run a dress rehearsal with strangers. 7. Print signage; pack the kit; charge everything. 8. Prepare the demo video and the partner write-ups ([plan.md section 12.1](./../../plan.md)). 9. Record the funnel counters from the rehearsal so the event targets are realistic.
 
 ## 12. Risks
 
