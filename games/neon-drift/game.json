@@ -1,0 +1,76 @@
+{
+  "id": "neon-drift",
+  "title": "Neon Drift",
+  "verb": "Tilt to steer.",
+  "detail": "Hold Accelerate. Grab rings, dodge blocks, and tap Boost for a burst.",
+  "color": "#178878",
+  "bg": "#e0f5e9",
+  "icon": "↝",
+  "target": 250,
+  "mode": "wheel",
+  "tag": "A LITTLE COMPETITIVE",
+  "schemaVersion": 2,
+  "gameId": "funcaster.neon-drift",
+  "version": "1.1.0",
+  "order": 4,
+  "maxPlayers": 4,
+  "controller": "wheel",
+  "view": "shared",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "players": "1–4 players",
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.neon-drift"
+  ],
+  "seats": 4,
+  "engine": "server",
+  "seatView": "shared",
+  "remote": "frames",
+  "roundPolicy": {
+    "kind": "timed",
+    "hardCapMs": 60000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
