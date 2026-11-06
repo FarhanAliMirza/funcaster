@@ -1,0 +1,78 @@
+{
+  "id": "drawing",
+  "title": "Drawing",
+  "verb": "Make a little masterpiece.",
+  "detail": "Tilt to draw. Tap to lift or lower your pen.",
+  "color": "#b15986",
+  "bg": "#f9e1ee",
+  "icon": "〰",
+  "mode": "aim",
+  "classic": true,
+  "players": "1–4 artists",
+  "tag": "DRAW A LITTLE. GUESS A LOT.",
+  "duration": "Draw & guess / free draw",
+  "action": "Pen up / down",
+  "schemaVersion": 2,
+  "gameId": "funcaster.drawing",
+  "version": "1.1.0",
+  "order": 12,
+  "maxPlayers": 4,
+  "controller": "aim",
+  "view": "shared",
+  "verification": "attested",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.drawing"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "shared",
+  "remote": "snapshot",
+  "roundPolicy": {
+    "kind": "turnBased",
+    "hardCapMs": 180000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
