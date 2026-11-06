@@ -20,13 +20,13 @@ Two issues were observed:
 
 Reproduce with `node scripts/spikes/foundation-readonly.cjs docs/web3/spikes/discovery-input.json`. No transaction hashes exist. Next: faucet funding, EURC/Memo/Multicall3 discovery, EIP-3009 authorization and drain tests, actual fee measurements, Arc Studio login/app and the dependency-alignment gate. Do not infer live settlement or gasless funding from these reads.
 
-## Refreshed read-only evidence — November 1
+## Refreshed read-only evidence
 
 `node scripts/spikes/arc-readonly.mjs` passes all eleven checks at block **70169139**. Both RPC host families respond under sequential reads. USDC and EURC are unpaused, have six decimals and matching per-asset EIP-712 domains. Both reject a non-payee caller. Multicall3 and Memo have deployed code. The test blocklist address is blocked on USDC and not on EURC. Relayer balances are **20 test USDC, 0 EURC**. This supersedes the earlier pre-funding balance, not its historical evidence. [Raw report](spikes/arc-readonly.json).
 
 Arc Studio authentication is complete; app creation/deployment remains pending. The rate-limited legacy endpoint is reachable in this run but its reliability is not established. The independent EIP-3009 success, receipt/gas and Memo checks run locally with Arc's own simulator; live authorization, below-fee-floor behavior, and per-product-flow VA-12 coverage remain open. [Runbook](g0-runbook.md).
 
-## Native local simulator — November 1
+## Native local simulator
 
 [arc-native.json](spikes/arc-native.json) records successful USDC/EURC sponsored receives, replay denial, insufficient-balance denial, native USDC blocklist denial and a EURC transfer from a signer that remains at zero native balance. Signatures use chain 31337 and ephemeral keys, never the real project signers. USDC exact drain reproduces `Cannot clear balance of empty account`; 0.05 retained succeeds. EURC exact drain only simulated successfully; no live-flow guarantee follows.
 

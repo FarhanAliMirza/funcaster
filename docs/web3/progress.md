@@ -16,7 +16,7 @@ Read this first when resuming. Follow [master prompt](../plans/web3/build-guide/
 | E0 / A0, G0 | PARTIAL | 5a7f85a | ens-evidence.md; arc-evidence.md; spikes/foundation-readonly.json | ENS ownership verified; local fork bootstrap/permissions/expiry pass. Arc public reads and native authorization/floor tests pass with a local plain-transfer fallback for Memo. Live G0 gates remain open; see g0-runbook.md |
 | K0 | PARTIAL / FUNDING PENDING | 5a7f85a (evidence index) | g0-runbook.md; separate scratch evidence | Anonymous Tiramisu read and immediate Swarm round trips pass; Rabdi/SDK 0.8.1 mismatch reproduced. Funded entity/limit/expiry/cost tests and retention remain |
 | ENS parent setup | DONE | See git log | ens-evidence.md; spikes/ens-registration-verified.json | Resolver/subregistry are a separate bootstrap task; live ENS stays disabled |
-| A1 login | DONE | See git log | human-setup.md | whoami succeeded Nov 1; Studio app creation remains pending |
+| A1 login | DONE | See git log | human-setup.md | whoami succeeded; Studio app creation remains pending |
 | SL17 | BLOCKED-HUMAN | — | operations/platform-apps.md | Accounts, applicant identity, HTTPS callback origin, legal submission |
 | HTTPS staging | BLOCKED-HUMAN | — | human-setup.md | Hosting destination/domain/budget; Vercel tentative |
 | K1 onward | DATE-GATED | — | guide 26 rule 13 | Starts Nov 5; no production Arkiv code before then |

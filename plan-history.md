@@ -127,7 +127,7 @@ Walk-up QR joining and a temporary public tunnel (`npm run share`); three server
 | # | Decision | Where it is worked through |
 | --- | --- | --- |
 | 1 | ~~Allow a **phone** to administer the room~~ **Approved**: revocable delegation, TV keeps full control. Two modes: **Party** (VIP phone) and **Kiosk** (TV runs itself, staff PIN) for the hackathon | [`docs/plans/host-phone-controls.md`](docs/plans/host-phone-controls.md) §4.1 |
-| 2 | ~~Allow a **display** to host one seat's game (remote playing)~~ **Approved**: execution plan written; Kart Rush uses server-sequenced lockstep instead | [`docs/plans/remote-play-via-displays.md`](docs/plans/remote-play-via-displays.md), [§5h](#5h-how-multiplayer-and-remote-play-get-built-13-october-2026) |
+| 2 | ~~Allow a **display** to host one seat's game (remote playing)~~ **Approved**: execution plan written; Kart Rush uses server-sequenced lockstep instead | [`docs/plans/remote-play-via-displays.md`](docs/plans/remote-play-via-displays.md), [§5h](#5h-how-multiplayer-and-remote-play-get-built-6-november-2026) |
 | 3 | ~~Keep 4 seats or move toward 8~~ **Stay at 4**; move to 8 only through a flag-guarded plan that leaves 4-seat behaviour identical | [`docs/plans/seats-4-to-8.md`](docs/plans/seats-4-to-8.md) |
 | 4 | Fix game ids (neutral slugs, reserved namespace) **before anything is published** | same, D-G5 |
 | 5 | ~~**Nintendo files in git history**~~ Repo is **not public**; **no purge now**. Revisit before the ETHGlobal submission, which may need the repo shared with judges (then purge or share a clean copy) | [§5e.2](#5e2-assets-renaming-does-not-fix-this) |
@@ -145,7 +145,7 @@ Walk-up QR joining and a temporary public tunnel (`npm run share`); three server
 | [`docs/plans/remote-play-via-displays.md`](docs/plans/remote-play-via-displays.md) | Display-hosted views: view token, events, start gate, security, failure modes, tests, milestones M0-M6 |
 | [`docs/plans/seats-4-to-8.md`](docs/plans/seats-4-to-8.md) | Inventory of every "4" assumption, per-game feasibility, staged flag-guarded plan, performance estimates |
 | [`docs/plans/hackathon-floor-plan.md`](docs/plans/hackathon-floor-plan.md) | Making people come and play at the event: Kiosk flow, funnel, kit, runbook, metrics |
-| [`plan.md` §5h](#5h-how-multiplayer-and-remote-play-get-built-13-october-2026) | **How multiplayer and remote play get built**: the three simulation engines, the room model, pairing by QR, remote recipes per engine, Kart Rush lockstep, the leaver rule, latency, tests, the staged build order, and recommended answers on hosting, the lockstep spike, screen drops and input delay |
+| [`plan.md` §5h](#5h-how-multiplayer-and-remote-play-get-built-6-november-2026) | **How multiplayer and remote play get built**: the three simulation engines, the room model, pairing by QR, remote recipes per engine, Kart Rush lockstep, the leaver rule, latency, tests, the staged build order, and recommended answers on hosting, the lockstep spike, screen drops and input delay |
 | [`business-plan.md`](business-plan.md) | The Streamer Arcade pitch (verbatim), market research, platform rules, monetisation models and roadmap |
 
 Where the older sections below contradict this audit, the audit and the new documents win.
@@ -1283,7 +1283,7 @@ Consequences:
 - **E games are already remote-ready.** The display page draws server frames for anyone holding the display link; the host tab is not part of the simulation.
 - **S games work remotely today at a basic level**: a friend's phone joins from anywhere, and a display shows the board. It is a *viewer* with about 100-250 ms of lag, plus the network. That is fine for turns and drawing and weak for real-time rallies.
 - **I games need the display to run the game itself** (the view-token design), because that is the only way to keep the player's own game responsive.
-- **K (Kart Rush) uses server-sequenced lockstep**, decided 6 November: every screen with a human runs the same deterministic race from one input stream ([§5h.6a](#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october)).
+- **K (Kart Rush) uses server-sequenced lockstep**, decided 6 November: every screen with a human runs the same deterministic race from one input stream ([§5h.6a](#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-6-november)).
 - **The recipe is per mode, not per game.** If Shooting Range and Alien Attack gain a shared co-op or versus mode (as the games plan intends), *that mode* runs as engine S and gets the snapshot recipe, while their independent mode stays I. Slice Dojo is already like this: race is I, co-op and battle are S.
 
 ### 5h.2 Rules every multiplayer change must keep
@@ -1408,12 +1408,12 @@ Remote screens add two failure points per seat (the phone and the screen). **Kar
 | --- | --- | --- | --- |
 | **Phone drops** | As X7: autopilot or idle for 20-30 s, then DNF | Same | Input zeroed, then marked left |
 | **Remote screen drops** (network blip) | The copy keeps simulating; reconnecting within **10 s** re-registers the same token | Viewer reconnects and receives the latest snapshot; the seat is unaffected | Reconnects and resumes frames |
-| **Remote screen closed** | After the 10 s grace the view is `lost` and the seat is a **forfeit** ([§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-13-october)) with its last reported progress; others finish normally | The seat's play is unaffected, but its player is blind; the host is told | Same as S |
+| **Remote screen closed** | After the 10 s grace the view is `lost` and the seat is a **forfeit** ([§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-6-november)) with its last reported progress; others finish normally | The seat's play is unaffected, but its player is blind; the host is told | Same as S |
 | **Host tab drops** | Clock and relay freeze; the host reclaims within 120 s | Same | Round is server-side and continues; host controls resume on reclaim |
 | **Tab in the background** | Throttled timers and no rendering: a toast on the host and a pause prompt | Viewer only | Viewer only |
 | **Wrong build** | Seat falls back to the host tab; the display shows *Reload* | Reload | Reload |
 
-Fairness notes: independent games use a fixed 16:9 letterbox on remote screens (Slice already forces it); a remote screen cannot affect other seats' scores; replays reject sequence gaps, so chunk acks and retransmits are part of the build; takeover resume from a snapshot is *not* offered for independent-view games, because snapshots exclude the RNG state; Kart Rush lockstep instead resumes by replaying the input log. Leaving and dropping follow [§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-13-october).
+Fairness notes: independent games use a fixed 16:9 letterbox on remote screens (Slice already forces it); a remote screen cannot affect other seats' scores; replays reject sequence gaps, so chunk acks and retransmits are part of the build; takeover resume from a snapshot is *not* offered for independent-view games, because snapshots exclude the RNG state; Kart Rush lockstep instead resumes by replaying the input log. Leaving and dropping follow [§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-6-november).
 
 #### 5h.7a Leaving a match: the standard rule (decided 6 November)
 
@@ -1533,12 +1533,12 @@ Hackathon note: the same-room path and Kiosk mode come first ([hackathon-floor-p
 
 | Question | Decision |
 | --- | --- |
-| Kart Rush remote route | **Route 2, server-sequenced lockstep** ([§5h.6a](#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-13-october)), gated by a spike. The snapshot viewport stays as the spectator view and fallback |
+| Kart Rush remote route | **Route 2, server-sequenced lockstep** ([§5h.6a](#5h6a-kart-rush-remote-server-sequenced-lockstep-decided-6-november)), gated by a spike. The snapshot viewport stays as the spectator view and fallback |
 | Table Tennis and Foam Fencers remote | **Same room for now; online later on the lockstep layer** ([§5h.6b](#5h6b-table-tennis-and-foam-fencers-online-play)). No casual snapshot seat |
-| A remote player who drops | **Forfeit with a penalty** (last place, or a loss in a two-seat match), after a grace period; no penalty for a short drop or for being removed ([§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-13-october)) |
+| A remote player who drops | **Forfeit with a penalty** (last place, or a loss in a two-seat match), after a grace period; no penalty for a short drop or for being removed ([§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-6-november)) |
 | Remote screens in Kiosk mode | **Off by default.** It is a room setting, not a design limit: `remoteScreens` is `off` or `invite`, defaulting to `invite` in Party mode and `off` in Kiosk mode. Staff can change it for a room with the PIN, and the default can be changed later in one place. Turning it on in a public booth first needs the room hardening in the host plan (H5a): rate limits and invite hygiene |
 
-**Open questions now have recommended answers** (adopted unless the owner overrides): hosting is three tiers with a Mumbai-region VM as primary, the lockstep spike has a defined test and decision table, a screen that drops (including the host TV) follows one symmetric pause-then-continue rule, and the input delay is chosen per match from measurement. See [§5h.14](#5h14-recommended-answers-to-the-four-open-questions-13-october). **Genuinely still open:** the actual spike result, which cannot be known until it is run; and the region, which is chosen by measurement.
+**Open questions now have recommended answers** (adopted unless the owner overrides): hosting is three tiers with a Mumbai-region VM as primary, the lockstep spike has a defined test and decision table, a screen that drops (including the host TV) follows one symmetric pause-then-continue rule, and the input delay is chosen per match from measurement. See [§5h.14](#5h14-recommended-answers-to-the-four-open-questions-6-november). **Genuinely still open:** the actual spike result, which cannot be known until it is run; and the region, which is chosen by measurement.
 
 **Could not verify from the code alone.** Browser behaviour (audio activation inside iframes, wake lock, fullscreen); real latency, tunnel throughput and per-game snapshot sizes; whether the games interpolate between 10 Hz snapshots in viewer mode; that Golf's flight can be re-simulated from a stroke event on every screen without drift across browsers; that Kart Rush's item randomness is fully on the race's RNG; whether the three-engine float behaviour (Chrome, Safari, Firefox) stays hash-equal for a whole race. Each is a named check inside the stages above, not an assumption.
 
@@ -1615,7 +1615,7 @@ The result cannot be known until the spike is run, so the plan fixes **what to t
 | --- | --- | --- |
 | **0-10 s** | The sequencer **pauses for everyone**; an overlay says whose screen is missing. No penalty, nobody loses places. The returning screen replays the log and rejoins | Host tab lost: clock and relay freeze, as today. A remote copy keeps playing locally and may reconnect within 10 s |
 | **10-30 s** | The race **resumes** for the others; the missing screen's seats are on autopilot. If it returns, autopilot stops with **no penalty** | The freeze continues until the host returns. A remote view not back by 10 s is `lost` |
-| **30 s and later** | Those seats **forfeit** ([§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-13-october)). If **no screen with a human remains**, the match is **voided** (no contest) and nobody is penalised | Remote: forfeit at `lost`. Host not back within 120 s: the room follows today's expiry and the round is voided |
+| **30 s and later** | Those seats **forfeit** ([§5h.7a](#5h7a-leaving-a-match-the-standard-rule-decided-6-november)). If **no screen with a human remains**, the match is **voided** (no contest) and nobody is penalised | Remote: forfeit at `lost`. Host not back within 120 s: the room follows today's expiry and the round is voided |
 
 **Why.** The host TV is not special once the server owns the input stream; treating it like any other screen is simpler to build and to explain. A TV tab that crashes and reloads recovers in seconds, which the short pause absorbs without punishing the people sitting at it, and a remote friend is not held hostage for long. Room controls (kick, lobby, settings) stay reclaimable for 120 s as today, separately from the race. The 30 s limit matches the phone's grace in X7.
 

@@ -25,7 +25,7 @@ The deployment comes from the official [ENS deployment page](https://docs.ens.do
 
 The earlier [discovery](spikes/foundation-readonly.json) recorded availability and a zero balance before funding. Automatic approval review rejected agent broadcasts twice; the owner completed the transaction handoff. No alternate agent broadcast route was used. [Handoff instructions](ens-registration-handoff.md) are retained as history, not outstanding work.
 
-## Local E0 evidence — November 1
+## Local E0 evidence
 
 `node scripts/spikes/ens-fork.mjs` passes **12 checks with 16 successful local transactions**, against the pinned Sepolia deployment at block 12040400. It verifies SDK addresses and write helpers, parent/play root roles, address/text resolution, soulbound transfer/write denial, host kick/control grants and revocations, mint/escalation denial and expiry. Total local gas: 1,941,481; this includes temporary party/seat fixtures, not just bootstrap. No public transaction was sent.
 
