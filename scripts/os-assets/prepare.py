@@ -140,7 +140,6 @@ def legacy_glove():
     image.resize((128,128), Image.Resampling.LANCZOS).save(path,optimize=True)
     CREDITS.append(dict(file=path.relative_to(ROOT).as_posix(),
                         author='Existing Funcaster Console artwork',
-                        sourceUrl='https://github.com/raihankhan-rk/funcaster/blob/main/public/assets/hand-p1.png',
                         source=source.relative_to(ROOT).as_posix(),
                         sourceSha256=hashlib.sha256(source.read_bytes()).hexdigest(),
                         licence='Retained repository artwork, reused per owner build specification',

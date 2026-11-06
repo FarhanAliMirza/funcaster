@@ -4,7 +4,7 @@
 
 ## Implementation update — 6 November 2026
 
-The launch implementation is on `codex/arcade-launch-plan`, delivered through [PR #2](https://github.com/raihankhan-rk/funcaster/pull/2). Nothing is merged or deployed. The [dated implementation ledger](docs/IMPLEMENTATION.md) and [release evidence](docs/RELEASE-2026-11-06.md) are the current source of truth.
+The launch implementation is on `codex/arcade-launch-plan`. Nothing is merged or deployed. The [dated implementation ledger](docs/IMPLEMENTATION.md) and [release evidence](docs/RELEASE-2026-11-06.md) are the current source of truth.
 
 - [x] Shared catalog/IDs, controller calibration and pacing, four-seat lifecycle, queues, grace and explicit round outcomes.
 - [x] Approved revocable host-phone controls, PIN-protected kiosk mode, room/network safeguards and persistent event records.

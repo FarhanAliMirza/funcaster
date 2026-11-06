@@ -80,7 +80,7 @@ START NOW with Packet 1 (or the first unfinished task in docs/web3/progress.md),
 ### 3.2 Setup on the teammate's machine (about 45 minutes)
 
 1. Node 22.12 or later (`node -v`), Git, Chrome, and a phone on the same network.
-2. `git clone https://github.com/raihankhan-rk/funcaster.git`, then `npm ci`, then `npm start` and open the printed HTTPS address on the phone (accept the self-signed certificate) to confirm the console works before any web3 code exists.
+2. `npm ci`, then `npm start` and open the printed HTTPS address on the phone (accept the self-signed certificate) to confirm the console works before any web3 code exists.
 3. Install Foundry (`forge`, `anvil`) and the Arc Studio CLI: `npm i -g @circle-fin/arc-studio-cli` (Node 20 or later).
 4. Install Codex (CLI or app), open it in the repository folder.
 5. A password manager for keys. **Never paste a private key or token into a chat, a prompt or the repo.** Rotate any key that was.

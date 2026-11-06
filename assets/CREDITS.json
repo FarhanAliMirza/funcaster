@@ -486,7 +486,6 @@
   {
     "file": "assets/os/cursors/glove.png",
     "author": "Existing Funcaster Console artwork",
-    "sourceUrl": "https://github.com/raihankhan-rk/funcaster/blob/main/public/assets/hand-p1.png",
     "source": "public/assets/hand-p1.png",
     "sourceSha256": "b9484f8d7f6f9ce0485a2609f80c977e955d70867fa479df1b6fcf5c6399ff71",
     "licence": "Retained repository artwork, reused per owner build specification",
