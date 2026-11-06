@@ -40,7 +40,7 @@ VA-12 still requires these invariants in every future product flow and a live re
 
 ## Arkiv and Swarm (K0, outside this repository)
 
-Scratch: `/Users/raihankhan/Documents/Projects/funcaster-arkiv-k0/`. Its README and `arkiv/friction.md` contain exact repro steps and evidence. K1 onward starts November 5. No production Arkiv SDK or query code was added here.
+Scratch lives outside this repository. Its README and `arkiv/friction.md` contain exact repro steps and evidence. K1 onward starts November 5. No production Arkiv SDK or query code was added here.
 
 - Tiramisu + SDK 0.8.1 works for a bounded anonymous creator-scoped query; Rabdi rejects its query shape. Retain Tiramisu.
 - A single viem 2.57.14 satisfies both installed SDKs in scratch. The minimal anonymous-reader browser probe is 113,800 bytes gzip. It is not the Hall or the full worker; VX-08 remains open for cross-write and final bundles.

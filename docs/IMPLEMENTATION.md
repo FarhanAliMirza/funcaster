@@ -1,6 +1,6 @@
 # Arcade launch implementation — 6 November 2026
 
-Branch: `codex/arcade-launch-plan`, based on main `086d9b2`. Delivery: [PR #2](https://github.com/raihankhan-rk/funcaster/pull/2). No merge or deployment is authorized. This dated ledger supersedes the old audits and approval-blocked notes in the historical plan.
+Branch: `codex/arcade-launch-plan`, based on main `086d9b2`. No merge or deployment is authorized. This dated ledger supersedes the old audits and approval-blocked notes in the historical plan.
 
 ## Implemented
 

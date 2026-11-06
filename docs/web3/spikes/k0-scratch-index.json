@@ -1,7 +1,7 @@
 {
   "at": "2026-11-06T11:02:32.752Z",
   "scope": "Index of separate pre-event scratch evidence; not production Arkiv code",
-  "directory": "/Users/raihankhan/Documents/Projects/funcaster-arkiv-k0/",
+  "directory": "outside this repository",
   "files": [
     {
       "path": "network-readonly.mjs",

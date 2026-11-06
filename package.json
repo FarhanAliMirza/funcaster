@@ -4,11 +4,6 @@
   "private": true,
   "description": "Walk-up motion-controlled party games for one to four phones.",
   "license": "MIT",
-  "author": "Patrick Sun",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/raihankhan-rk/funcaster.git"
-  },
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
