@@ -1,4 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
 import { ghostFleet } from "../../sdk/index.js";
 import { seededRandom } from "../../sdk/index.js";
 import * as THREE from "/vendor/three/three.module.js";
@@ -29,10 +28,7 @@ const $ = (id) => document.getElementById(id);
 
 const canvas = $("game");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x17204a);
@@ -845,6 +841,17 @@ function frame(now) {
   camera.position.set(game.x * 0.7 + jx, 3.4 + jy, wz(game.z) + 11);
   camera.lookAt(game.x + jx * 0.5, 0.4 + jy * 0.5, wz(game.z) - 12);
 
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  if (
+    canvas.width !== Math.floor(w * renderer.getPixelRatio()) ||
+    canvas.height !== Math.floor(h * renderer.getPixelRatio())
+  ) {
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+
   const dbg = $("debug");
   if (dbg && dbg.classList.contains("on")) {
     dbg.textContent =
@@ -856,16 +863,6 @@ function frame(now) {
 
   renderer.render(scene, camera);
 }
-function resize() {
-  const w = Math.max(1, innerWidth),
-    h = Math.max(1, innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-}
-window.addEventListener("resize", resize);
-resize();
 requestAnimationFrame(frame);
 
 // Launching from the menu goes straight into flight — no instruction screen.

@@ -19,7 +19,7 @@
   box-shadow: 7px 7px 0 #0d1424aa !important;
   background: #0d1424ed !important;
   color: #fff1d6 !important;
-  padding: clamp(12px, 2.5vmin, 28px) !important;
+  padding: 28px !important;
 }
 .party-game #panel h1 {
   font-family: "Bungee", "Yatra One", sans-serif;
@@ -69,7 +69,6 @@
 
 /* Compact frames and standalone games share a non-overlapping status rail. */
 .arcade-game {
-  --arcade-text: max(16px, 1.5vmin);
   font-family: Poppins, Hind, system-ui, sans-serif;
 }
 .arcade-game .game-statusbar {
@@ -91,7 +90,7 @@
   max-width: none;
   margin: 0;
   font:
-    500 var(--arcade-text)/1.4 Poppins,
+    500 12px/1.5 Poppins,
     system-ui,
     sans-serif;
   padding: 8px 12px;
@@ -115,46 +114,39 @@
   white-space: nowrap;
 }
 .arcade-game #overlay {
-  padding: clamp(8px, 2vmin, 20px);
-  padding-bottom: max(96px, 12vmin);
-  overflow: hidden;
+  padding: 16px;
+  overflow: auto;
 }
 .arcade-game #panel {
-  display: grid;
-  gap: clamp(8px, 1.5vmin, 16px);
-  width: min(92vw, max(84vmin, 560px));
-  max-width: 100%;
-  max-height: 100%;
-  min-height: 0;
-  overflow: hidden;
+  max-width: min(580px, 100%);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
   box-sizing: border-box;
   border: 1px solid #f7c600;
   border-radius: 18px;
   box-shadow: 0 16px 48px #0005;
   background: #0d1424f0;
   color: #fff1d6;
-  padding: clamp(12px, 2.5vmin, 28px);
+  padding: clamp(18px, 4vw, 32px);
 }
 .arcade-game #panel h1 {
   font:
-    400 clamp(26px, 5vmin, 46px)/1.15 Bungee,
+    400 clamp(26px, 5.5vw, 46px)/1.2 Bungee,
     system-ui;
-  margin: 0;
+  margin: 0 0 16px;
   color: #f7c600;
   -webkit-text-fill-color: currentColor;
   overflow-wrap: anywhere;
 }
 .arcade-game #panel p {
-  font-size: var(--arcade-text);
-  line-height: 1.4;
-  max-width: none;
-  margin: 0;
+  font-size: clamp(13px, 2.4vw, 16px);
+  line-height: 1.65;
   color: #fff1d6;
 }
 .arcade-game #panel .cta {
-  font-size: var(--arcade-text);
-  line-height: 1.4;
-  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 18px;
   color: #f7c600;
 }
 .arcade-game .network-note {
@@ -162,7 +154,7 @@
   width: max-content;
   top: 12px;
   box-sizing: border-box;
-  font-size: var(--arcade-text);
+  font-size: 14px;
   text-align: center;
 }
 .arcade-game:has(> header) {
@@ -192,7 +184,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: var(--arcade-text);
+  font-size: 13px;
 }
 .arcade-game > header #hud span {
   background: #22314b;
@@ -203,7 +195,7 @@
   gap: 12px;
   flex-wrap: wrap;
   padding: 10px 20px;
-  font-size: var(--arcade-text);
+  font-size: 12px;
   background: #0d1424;
 }
 @media (max-width: 700px), (max-height: 420px) {
@@ -213,22 +205,22 @@
   }
   .arcade-game .game-statusbar #keys,
   .arcade-game .game-statusbar #link {
+    font-size: 10px;
     padding: 6px 8px;
   }
   .arcade-game #panel {
-    width: min(760px, 100%);
-    gap: 6px;
-    padding: 12px !important;
+    padding: 18px !important;
   }
   .arcade-game #panel h1 {
-    font-size: clamp(26px, 5vmin, 36px);
+    font-size: 30px;
   }
-  .arcade-game #panel .grip {
-    padding: 6px 8px;
-    margin: 0;
+  .arcade-game #panel p {
+    font-size: 13px;
+    line-height: 1.5;
   }
-  .arcade-game #panel .stat {
-    margin-block: 0;
+  .arcade-game #panel .cta {
+    font-size: 12px;
+    margin-top: 12px;
   }
   .arcade-game > header {
     padding: 8px 12px;
@@ -265,74 +257,4 @@
   background: #0d1424eb;
   padding: 5px 9px;
   border-radius: 6px;
-}
-
-/* Labels share the same legibility floor as the instruction rail. */
-.arcade-game #hud,
-.arcade-game #hud small,
-.arcade-game #hud .tag,
-.arcade-game #hud #meta,
-.arcade-game #panel .stat span,
-.arcade-game #panel .grip,
-.arcade-game #panel .laps {
-  font-size: var(--arcade-text);
-}
-
-/* The OS owns a persistent menu target in the top-right corner. Reserve its
-   rectangle inside shell-hosted frames without hiding any in-game controls. */
-.arcade-game[data-shell="os"] {
-  --shell-menu-clearance: max(150px, 18vmin);
-}
-.arcade-game[data-shell="os"] > header {
-  padding-right: var(--shell-menu-clearance) !important;
-}
-.arcade-game[data-shell="os"] #topline {
-  padding-right: var(--shell-menu-clearance) !important;
-}
-
-/* VP4 measured these legacy labels against the 16px-at-1080p floor. */
-.arcade-game[data-game="golf"] #strokes,
-.arcade-game[data-game="golf"] #club,
-.arcade-game[data-game="fruit-ninja"] #best,
-.arcade-game[data-game="fruit-ninja"] #players .prow,
-.arcade-game[data-game="fruit-ninja"] #players .prow b {
-  font-size: var(--arcade-text);
-}
-.arcade-game[data-game="golf"] #dist,
-.arcade-game[data-game="island-flyover"] #timer,
-.arcade-game[data-game="shooting-range"] #score,
-.arcade-game[data-game="alien-attack"] #score {
-  font-size: max(26px, var(--arcade-text));
-}
-.arcade-game[data-game="kart"] #lap,
-.arcade-game[data-game="island-flyover"] #count {
-  font-size: max(28px, var(--arcade-text));
-}
-.arcade-game[data-game="swordplay"] #p-score,
-.arcade-game[data-game="swordplay"] #a-score,
-.arcade-game[data-game="kart"] #time {
-  font-size: max(30px, var(--arcade-text));
-}
-.arcade-game[data-game="alien-attack"] #lives {
-  font-size: max(24px, var(--arcade-text));
-}
-
-/* Rival scores share the upper HUD rail with the shell menu on duel games. */
-.arcade-game[data-shell="os"] #a-score,
-.arcade-game[data-shell="os"] #a-tag {
-  right: var(--shell-menu-clearance);
-}
-
-.arcade-game[data-game="fruit-ninja"] #practice {
-  font-size: var(--arcade-text);
-}
-
-.arcade-game[data-shell="os"] #hud > #lives,
-.arcade-game[data-shell="os"] #hud > #time,
-.arcade-game[data-shell="os"] #hud > #timer {
-  right: var(--shell-menu-clearance);
-}
-
-.arcade-game[data-shell="os"] #hud > #times {
-  right: var(--shell-menu-clearance);
 }

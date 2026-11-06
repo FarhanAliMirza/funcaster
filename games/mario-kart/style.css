@@ -821,7 +821,6 @@ h2 {
   mask-image: radial-gradient(ellipse, transparent 35%, #000 77%);
 }
 #speed-lines svg {
-  display: block;
   width: 100%;
   height: 100%;
 }
@@ -1799,8 +1798,8 @@ body:not(.racing) #topline {
   top: 56px;
   bottom: 0;
   width: min(590px, 65%);
-  overflow: hidden;
-  padding: 28px clamp(20px, 4vw, 56px) 32px;
+  overflow-y: auto;
+  padding: 28px clamp(20px, 4vw, 56px) 88px;
 }
 #intro h1 {
   width: min(100%, 430px);
@@ -1929,16 +1928,16 @@ body:not(.racing) #bottomline {
 #intro {
   display: block;
 }
-@media (orientation: landscape) and (max-height: 800px) {
+@media (orientation: landscape) and (max-height: 500px) {
   #intro {
     display: grid;
     width: min(740px, 100%);
     grid-template-columns: minmax(220px, 1fr) minmax(180px, 1fr);
     grid-template-rows: auto auto auto;
-    gap: 8px 24px;
+    gap: 10px 24px;
     align-content: start;
     align-items: center;
-    padding: 12px 24px;
+    padding: 16px 24px;
   }
   #intro h1 {
     grid-column: 1;
@@ -1962,7 +1961,7 @@ body:not(.racing) #bottomline {
     grid-column: 1;
     grid-row: 3;
     margin: 0 !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
   #lap-options {
     grid-column: 2;
@@ -1980,8 +1979,7 @@ body:not(.racing) #bottomline {
   #menu-hint {
     grid-column: 2;
     grid-row: 3;
-    font-size: 16px;
-    line-height: 1.35;
+    font-size: 12px;
     margin: 0;
   }
   #intro:has(#characters[hidden]) {
@@ -1991,59 +1989,4 @@ body:not(.racing) #bottomline {
   #intro:has(#characters[hidden]) #chosen {
     margin: 24px 0 !important;
   }
-}
-
-/* The shell fixes this game's frame at 16:9; keep its small labels readable. */
-:root {
-  --hud-px: calc(100vmin / 720);
-  --kart-label: max(16px, 1.5vmin);
-}
-#topline,
-body:not(.racing) #topline,
-#topline button,
-#topline #home span,
-#item-caption,
-#drift-label,
-#bottomline,
-#track-label,
-#track-label span,
-#track-label small,
-.eyebrow,
-#intro .eyebrow,
-#intro .stadium-name,
-#lap-options > span,
-#lap-options button,
-#start span,
-#menu-hint,
-#intro .controls {
-  font-size: var(--kart-label);
-}
-#minimap {
-  width: calc(250 * var(--hud-px));
-  height: calc(220 * var(--hud-px));
-}
-@media (orientation: landscape) and (max-height: 800px) {
-  #intro .controls {
-    display: none;
-  }
-  #menu-hint {
-    line-height: 1.35;
-  }
-}
-
-/* Shared-world split cameras still sit on the full television viewport. */
-.race-view-hud {
-  font-size: max(16px, 1.5vmin, min(2cqw, 24px));
-}
-
-#intro .intro-copy,
-#intro #chosen {
-  font-size: var(--kart-label) !important;
-}
-
-#topline #home {
-  font-size: max(22px, var(--kart-label));
-}
-.arcade-game[data-shell="os"] .race-view-hud {
-  padding-right: max(22px, var(--shell-menu-clearance));
 }

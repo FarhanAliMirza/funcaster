@@ -1,6 +1,6 @@
 # Mario Kart audio
 
-The game loads the included prepared sample pack at `/assets/mario-kart/audio/manifest.json`. Its manifest and referenced runtime cues are included in Git. The original download archives remain local under the ignored `assets/mario-kart/audio-source/` folder; rebuilding from those archives is optional. See the [runtime pack credits](../../assets/mario-kart/README.md).
+The game loads the included prepared sample pack at `/assets/mario-kart/audio/manifest.json`. Its manifest and referenced runtime cues are included in Git. The original download archives remain local under the ignored `assets/mario-kart/audio-source/` folder; rebuilding from those archives is optional. See the [runtime pack credits](./../../assets/mario-kart/README.md).
 
 Build the prepared pack with `python3 games/mario-kart/pipeline/prepare-audio.py` from the repository root. The builder uses NumPy, SciPy and ffmpeg (or imageio-ffmpeg), preserves the originals, records source SHA-256 hashes, uses exact WAV loop metadata and detects repeated musical passages for music loops. The current selection is 104 cues, approximately 25 MB on disk; all-course source banks are not browser dependencies.
 

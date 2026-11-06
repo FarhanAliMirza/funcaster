@@ -4,7 +4,7 @@ Prepared November 6, 2026. The combined implementation is now in place: 97 prepa
 
 ## Source collection
 
-Open the [local listening catalog](../../assets/mario-kart/audio-source/index.html). It includes search, individual playback, source links and technical manifests.
+Open the [local listening catalog](./../../assets/mario-kart/audio-source/index.html). It includes search, individual playback, source links and technical manifests.
 
 - 17 original sound packs, containing **2,283 WAVs**, covering common effects, race/menu cues, engines, kart bodies, terrain, course ambience/objects, the eight current drivers, and Lakitu.
 - **55 FLAC music/cue files**, including all four Mario Kart Stadium variants (normal, frontrunning, final lap, final lap frontrunning), title/selection/grid music, lap and finish fanfares, results, Star music, and the album's SFX tracks. This is the current course/global selection, not the entire all-course soundtrack.

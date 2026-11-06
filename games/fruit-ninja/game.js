@@ -1,4 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
 import { scopedStorage } from "../../sdk/index.js";
 const gameStorage = scopedStorage("funcaster.fruit-ninja");
 import { Trail } from "../../sdk/index.js";
@@ -43,10 +42,7 @@ const renderer = new THREE.WebGLRenderer({
   desynchronized: true,
   powerPreference: "high-performance",
 });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x2b1a0c);
@@ -1020,7 +1016,6 @@ inputFor(0); // always present, for the desk-testing mouse/keyboard fallback
 function resize() {
   const w = Math.max(1, window.innerWidth);
   const h = Math.max(1, window.innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.position.z = CAM_Z * Math.max(1, 16 / 9 / camera.aspect);

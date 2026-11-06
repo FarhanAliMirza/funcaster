@@ -1,4 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
 import { ghostFleet } from "../../sdk/index.js";
 import * as THREE from "/vendor/three/three.module.js";
 import { consumeLaunchSplash } from "../../sdk/index.js";
@@ -26,10 +25,7 @@ const $ = (id) => document.getElementById(id);
 
 const canvas = $("game");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xa5d8f3);
@@ -344,7 +340,6 @@ function step(now, dt) {
 function resize() {
   const w = Math.max(1, window.innerWidth);
   const h = Math.max(1, window.innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();

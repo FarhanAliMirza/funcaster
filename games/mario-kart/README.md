@@ -6,6 +6,6 @@ Start the main party from the repository root with `npm run share`. Every phone 
 
 Two to four human karts share the same race and receive independent chase cameras/HUDs. Display invites can follow a chosen driver or group. A disconnected driver is auto-driven without changing the field. The host tab must remain open.
 
-For standalone keyboard play: arrows steer, Z accelerates, X brakes, Shift drifts, Space uses an item, Enter confirms, R recenters and Escape pauses. Historical extracted asset fixtures are not loaded by the public renderer; see [PRE_EXISTING.md](../../PRE_EXISTING.md).
+For standalone keyboard play: arrows steer, Z accelerates, X brakes, Shift drifts, Space uses an item, Enter confirms, R recenters and Escape pauses. Historical extracted asset fixtures are not loaded by the public renderer; see [PRE_EXISTING.md](./../../PRE_EXISTING.md).
 
 The pure race rules have a seeded fixed 120 Hz step. Multiplayer regression tests cover separate human inputs, boost limits, finish order and render-rate independence. The shared display tier lowers expensive effects when more cameras are active. Physical low-end-device frame rate and sensor feel still require rehearsal.

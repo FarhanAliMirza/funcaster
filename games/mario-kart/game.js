@@ -1,9 +1,7 @@
-import { dprFor } from "../../core/pixel-budget.js";
 import { scopedStorage } from "../../sdk/index.js";
 const gameStorage = scopedStorage("funcaster.kart-rush");
 import { encodeState, restoreState } from "../../sdk/index.js";
 import { RaceViews } from "./multiview.js";
-import { installRaceMenu, raceMenuLaps } from "./race-menu.js";
 import { itemRoulette } from "./item-roulette.js";
 import { raceEffects } from "./race-effects.js";
 import { itemPortraits } from "./item-portraits.js";
@@ -96,8 +94,8 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true,
   powerPreference: "high-performance",
 });
-renderer.setPixelRatio(dprFor(innerWidth, innerHeight, { cap: 1.6 }));
-renderer.setSize(Math.max(1, innerWidth), Math.max(1, innerHeight));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.toneMapping = THREE.NeutralToneMapping;
@@ -108,7 +106,7 @@ scene.background = new THREE.Color("#081325");
 scene.fog = new THREE.FogExp2("#111c30", 0.0011);
 const camera = new THREE.PerspectiveCamera(
   59,
-  Math.max(1, innerWidth) / Math.max(1, innerHeight),
+  innerWidth / innerHeight,
   0.2,
   1100,
 );
@@ -148,19 +146,13 @@ const trackLights = [-2, -1, 0, 1, 2].map((side) => {
   scene.add(light, light.target);
   return light;
 });
-const renderTarget = new THREE.WebGLRenderTarget(
-  Math.max(1, innerWidth),
-  Math.max(1, innerHeight),
-  { type: THREE.HalfFloatType, samples: 4 },
-);
+const renderTarget = new THREE.WebGLRenderTarget(innerWidth, innerHeight, {
+  type: THREE.HalfFloatType,
+  samples: 4,
+});
 const composer = new EffectComposer(renderer, renderTarget);
 composer.addPass(new RenderPass(scene, camera));
-const ambientOcclusion = new GTAOPass(
-  scene,
-  camera,
-  Math.max(1, innerWidth),
-  Math.max(1, innerHeight),
-);
+const ambientOcclusion = new GTAOPass(scene, camera, innerWidth, innerHeight);
 ambientOcclusion.updateGtaoMaterial({
   radius: 2.2,
   thickness: 1.1,
@@ -176,7 +168,7 @@ ambientOcclusion.updatePdMaterial({
 ambientOcclusion.blendIntensity = 0.6;
 composer.addPass(ambientOcclusion);
 const bloom = new UnrealBloomPass(
-  new THREE.Vector2(Math.max(1, innerWidth), Math.max(1, innerHeight)),
+  new THREE.Vector2(innerWidth, innerHeight),
   0.18,
   0.4,
   2.1,
@@ -190,8 +182,6 @@ outputPass.material.fragmentShader = outputPass.material.fragmentShader.replace(
   "gl_FragColor = vec4(texture2D( tDiffuse, vUv ).rgb, 1.0);",
 );
 composer.addPass(outputPass);
-// Explicit render targets also need the budgeted backing size before first use.
-composer.setSize(Math.max(1, innerWidth), Math.max(1, innerHeight));
 const world = buildWorld(scene);
 // The source stadium has 16:9 panels; generated scenery uses 4:3 panels.
 const broadcast = stadiumBroadcast(
@@ -324,7 +314,6 @@ const shadowTexture = canvasTexture(64, 64, (ctx, w, h) => {
   ctx.fillRect(0, 0, w, h);
 });
 function constructRace() {
-  selectedLaps = raceMenuLaps(link.party, partySetup, selectedLaps);
   race = new Race({
     character: selected,
     humans: partyPlayers.length
@@ -499,14 +488,10 @@ const link = new GameLink({
     partyPlayers = p.slots || [];
     partySetup = p.setup || {};
     const key = partyPlayers.map((p) => p.slot).join(",");
-    if (
-      race?.state === "ready" &&
-      (key !== partyPlayerKey ||
-        race.laps !== raceMenuLaps(link.party, partySetup, selectedLaps))
-    ) {
+    if (race?.state === "ready" && key !== partyPlayerKey) {
       partyPlayerKey = key;
       driverReady.clear();
-      selectedLaps = raceMenuLaps(link.party, partySetup, selectedLaps);
+      selectedLaps = partySetup.laps || selectedLaps;
       constructRace();
       syncLapOptions();
     }
@@ -563,7 +548,6 @@ function sendProfile() {
 }
 const profileTimer = setInterval(sendProfile, 250);
 if (link.party) {
-  $("keyboard-hint").textContent = "C clean view · Esc pause";
   document.querySelector(".controls").innerHTML =
     "<b>YOUR PHONE IS THE WHEEL</b><br>Hold Accelerate · tilt gently · tap Boost<br>Pickups play automatically. Eyes on the track.";
   document.querySelector("#item-frame .keycap").textContent = "AUTO USE";
@@ -677,30 +661,19 @@ function onEvent(e) {
 }
 let starting = false,
   driverConfirmed = false;
-const raceMenu = installRaceMenu({
-  document,
-  party: link.party,
-  getConfirmed: () => driverConfirmed,
-  setConfirmed: setDriverConfirmed,
-  playConfirm: () => audio.ui("confirm"),
-  startRace: begin,
-  selectLaps,
-});
 if (link.party) setDriverConfirmed(false);
 function setDriverConfirmed(value) {
   driverConfirmed = value;
   $("intro").classList.toggle("driver-confirmed", value);
   document.querySelector(".intro-copy").textContent = value
-    ? link.party
-      ? "Driver ready · Turn your phone sideways"
-      : "Choose race length · Turn your phone sideways"
+    ? "Choose race length · Turn your phone sideways"
     : "Choose your driver";
   $("start").innerHTML = value
     ? "Start Race <span>② OK</span>"
     : "Confirm Driver <span>② OK</span>";
   $("menu-hint").textContent = link.party
     ? value
-      ? "Your driver is ready. The race starts when everyone confirms."
+      ? "Choose laps with your phone’s arrows · tap Start race"
       : "Choose with your phone’s arrows · tap Choose driver"
     : value
       ? "← → Race length · ② Start Race · ① Change driver"
@@ -730,7 +703,7 @@ function chooseDriver(index) {
   audio.ui("cursor");
 }
 function selectLaps(laps) {
-  if (link.party || race.state !== "ready" || starting) return;
+  if (race.state !== "ready" || starting) return;
   selectedLaps = laps === 1 ? 1 : 3;
   race.laps = selectedLaps;
   gameStorage.set("laps", String(selectedLaps));
@@ -747,9 +720,12 @@ function syncLapOptions() {
   document.querySelector("#track-label small").textContent =
     `${selectedLaps} ${selectedLaps === 1 ? "LAP" : "LAPS"} · ${race?.racers.length || 8} RACERS · AURORA CIRCUIT`;
 }
+for (const button of document.querySelectorAll("[data-laps]")) {
+  button.onclick = () => selectLaps(Number(button.dataset.laps));
+}
 syncLapOptions();
 function navigateDriver(direction) {
-  if (driverConfirmed && !link.party) {
+  if (driverConfirmed) {
     if (direction === "left" || direction === "right")
       selectLaps(selectedLaps === 1 ? 3 : 1);
     return;
@@ -787,7 +763,10 @@ function confirm() {
     return;
   }
   if (race.state === "ready") {
-    raceMenu.confirmDriver();
+    if (!driverConfirmed) {
+      setDriverConfirmed(true);
+      audio.ui("confirm");
+    } else begin();
   } else if (race.state === "results" && resultsPresentation?.done) {
     constructRace();
     begin();
@@ -1629,9 +1608,6 @@ function draw(dt, now) {
     );
   } else {
     raceViews.hide();
-    const dpr = dprFor(innerWidth, innerHeight, { cap: 1.6 });
-    if (Math.abs(renderer.getPixelRatio() - dpr) > 1e-6)
-      renderer.setPixelRatio(dpr);
     composer.render();
   }
   renderCount++;
@@ -1964,10 +1940,7 @@ const debug = {
   rayAt(x, y) {
     const ray = new THREE.Raycaster();
     ray.setFromCamera(
-      new THREE.Vector2(
-        (x / Math.max(1, innerWidth)) * 2 - 1,
-        1 - (y / Math.max(1, innerHeight)) * 2,
-      ),
+      new THREE.Vector2((x / innerWidth) * 2 - 1, 1 - (y / innerHeight) * 2),
       camera,
     );
     return ray
@@ -2117,18 +2090,20 @@ syncPickupPools();
 audio.prepare();
 requestAnimationFrame(frame);
 window.addEventListener("resize", () => {
-  const dpr = dprFor(innerWidth, innerHeight, { cap: 1.6 });
-  renderer.setPixelRatio(dpr);
-  renderer.setSize(Math.max(1, innerWidth), Math.max(1, innerHeight));
-  composer.setPixelRatio(dpr);
-  composer.setSize(Math.max(1, innerWidth), Math.max(1, innerHeight));
-  camera.aspect = Math.max(1, innerWidth) / Math.max(1, innerHeight);
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
 });
 
+function toggleFullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(() => {});
+}
+$("fullscreen").addEventListener("click", toggleFullscreen);
 window.addEventListener("keydown", (e) => {
   if (e.repeat) return;
-  if (e.code === "KeyF") raceMenu.toggleFullscreen();
+  if (e.code === "KeyF") toggleFullscreen();
   if (e.code === "KeyC") document.body.classList.toggle("capture");
 });
 

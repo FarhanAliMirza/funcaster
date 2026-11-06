@@ -1,5 +1,3 @@
-import { drawIsotropic } from "../../core/render-scale.js";
-import { resizeCanvas } from "../../core/pixel-budget.js";
 import { GameLink } from "../../core/net.js";
 import { PartyWorld } from "./party-world.js";
 import { SEATS } from "../../core/seats.js";
@@ -63,7 +61,8 @@ function draw(now) {
     reported = true;
     link.finish(world.scores());
   }
-  resizeCanvas(canvas, canvas.clientWidth, canvas.clientHeight);
+  canvas.width = canvas.clientWidth * devicePixelRatio;
+  canvas.height = canvas.clientHeight * devicePixelRatio;
   ctx.setTransform(canvas.width, 0, 0, canvas.height, 0, 0);
   ctx.fillStyle = game === "island-flyover" ? "#164c59" : "#182821";
   ctx.fillRect(0, 0, 1, 1);
@@ -155,10 +154,8 @@ function draw(now) {
     for (const o of world.objects) {
       circle(o.x, o.y, 0.025, o.kind === "revive" ? "#c9ef77" : "#d387ed");
       ctx.fillStyle = "#17231f";
-      drawIsotropic(ctx, canvas.width, canvas.height, o.x, o.y, () => {
-        ctx.font = ".04px sans-serif";
-        ctx.fillText(o.kind === "revive" ? "+" : "•", -0.012, 0.012);
-      });
+      ctx.font = ".04px sans-serif";
+      ctx.fillText(o.kind === "revive" ? "+" : "•", o.x - 0.012, o.y + 0.012);
     }
     for (const b of world.bolts) {
       ctx.fillStyle = identity(world.players[b.slot]).color;
@@ -169,18 +166,16 @@ function draw(now) {
     for (const p of world.players) {
       ctx.globalAlpha = p.lives <= 0 ? 0.2 : p.invulnerable > 0 ? 0.65 : 1;
       ctx.fillStyle = identity(p).color;
-      drawIsotropic(ctx, canvas.width, canvas.height, p.x, p.y, () => {
-        ctx.beginPath();
-        ctx.moveTo(0, -0.033);
-        ctx.lineTo(-0.028, 0.024);
-        ctx.lineTo(0, 0.013);
-        ctx.lineTo(0.028, 0.024);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = "#17231f";
-        ctx.font = "bold .018px sans-serif";
-        ctx.fillText(p.ai ? "✦" : String(p.slot + 1), -0.006, 0.008);
-      });
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y - 0.033);
+      ctx.lineTo(p.x - 0.028, p.y + 0.024);
+      ctx.lineTo(p.x, p.y + 0.013);
+      ctx.lineTo(p.x + 0.028, p.y + 0.024);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#17231f";
+      ctx.font = "bold .018px sans-serif";
+      ctx.fillText(p.ai ? "✦" : String(p.slot + 1), p.x - 0.006, p.y + 0.008);
     }
   ctx.globalAlpha = 1;
   const scores = world.scores();

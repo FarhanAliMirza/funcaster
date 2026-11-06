@@ -1,4 +1,3 @@
-import { resizeCanvas, viewPixelBudget } from "../../core/pixel-budget.js";
 import { seededRandom } from "../../sdk/index.js";
 import { consumeLaunchSplash } from "../../sdk/index.js";
 
@@ -24,7 +23,6 @@ import {
 const $ = (id) => document.getElementById(id);
 const canvas = $("game");
 const ctx = canvas.getContext("2d");
-const pixelBudget = viewPixelBudget();
 
 const range = new Range({ onEvent: handleEvent });
 let started = false;
@@ -34,9 +32,11 @@ let started = false;
 let view = { x: 0, y: 0, w: 1, h: 1, s: 1 };
 let backdrop = null; // pre-rendered sky + grass + trees
 function layout() {
-  const w = Math.max(1, window.innerWidth);
-  const h = Math.max(1, window.innerHeight);
-  const dpr = resizeCanvas(canvas, w, h, { maxPixels: pixelBudget });
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio, 2);
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const s = Math.max(w / FIELD_W, h / FIELD_H);
   view = { x: (w - FIELD_W * s) / 2, y: (h - FIELD_H * s) / 2, w, h, s };
