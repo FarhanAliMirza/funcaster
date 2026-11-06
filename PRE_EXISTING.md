@@ -1,6 +1,6 @@
 # Pre-existing work and this implementation
 
-The local project was cloned from `https://github.com/raihankhan-rk/funcaster`. The comparison base for this feature branch is commit `71b9b26d8157dea6ade012d998fc5e6c2fb3a8fe`. The retained MIT license credits Patrick Sun. This record describes code provenance, not an assertion that all historical assets share that license.
+The comparison base for this feature branch is commit `71b9b26d8157dea6ade012d998fc5e6c2fb3a8fe`. This record describes code provenance, not an assertion that all historical assets share one license.
 
 ## Already present at that base
 
