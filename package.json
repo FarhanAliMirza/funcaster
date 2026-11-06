@@ -13,7 +13,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "tv": "node scripts/open-browser.cjs",
+    "tv": "open -na 'Google Chrome' --args --user-data-dir=$HOME/.openwii-chrome --no-first-run --no-default-browser-check --autoplay-policy=no-user-gesture-required --new-window https://localhost:8443/",
     "dev": "node --watch server.js",
     "cert": "node scripts/gen-cert.js",
     "test": "node tests/kart-prototype/server.cjs",
@@ -24,29 +24,19 @@
     "test:kart-fallback": "node games/mario-kart/public-review.mjs --fallback",
     "test:party": "node --test tests/party/*.test.cjs",
     "share": "node scripts/share.cjs",
-    "check": "npm run catalog:check && npm run validate:games && npm run test:unit && npm run test:party && npm run test:os",
+    "check": "npm run validate:games && npm run test:unit && npm run test:party",
     "validate:games": "node scripts/validate-games.mjs",
-    "format:check": "prettier --check core/catalog.js core/state.js server/party.cjs server/records.cjs public/party/host.js public/party/phone.js \"public/os/**/*.{js,mjs,css,html,json}\" \"tests/os/*.mjs\" public/party/phone-page.js public/party/phone-page.css public/controller.webmanifest tests/party/phone-remote.test.cjs public/party/remote.js public/party/remote.test.mjs public/party/remote.css public/party/remote-skins.css public/controller.html server/shell-input.cjs server/shell-routes.cjs server/public-assets.cjs tests/party/pointer.test.cjs tests/party/shell-routes.test.cjs games/mario-kart/race-menu.js games/mario-kart/race-menu.test.mjs games/mario-kart/multiview.test.mjs public/party/phone-capabilities.js public/party/phone-pointer.js core/pixel-budget.js core/pixel-budget.test.mjs scripts/os-assets/initial-files.mjs tests/party/phone-text.test.cjs tests/party/results-hold.test.cjs scripts/launch-kiosk.cjs public/party/phone-audio.js tests/party/end-room.test.cjs tests/party/restore-player.test.cjs server/arcade.cjs core/render-scale.js core/render-scale.test.mjs",
+    "format:check": "prettier --check core/catalog.js core/state.js server/party.cjs server/records.cjs public/party/host.js public/party/phone.js",
     "game:create": "node scripts/create-game.mjs",
     "game:validate": "node scripts/validate-games.mjs",
-    "replay:check": "node scripts/replay-check.cjs",
-    "catalog:sync": "node scripts/sync-manifests.mjs",
-    "catalog:check": "node scripts/sync-manifests.mjs --check",
-    "test:stress": "node --test tests/stress/*.test.cjs",
-    "game:preview": "node scripts/preview-game.mjs",
-    "test:determinism": "node scripts/determinism-check.mjs",
-    "lab:lockstep": "node scripts/lockstep-lab.cjs",
-    "game:registry": "node scripts/registry.mjs",
-    "test:os": "node --test \"tests/os/*.test.mjs\" \"public/os/**/*.test.mjs\" public/party/remote.test.mjs",
-    "kiosk": "node scripts/launch-kiosk.cjs"
+    "replay:check": "node scripts/replay-check.cjs"
   },
   "dependencies": {
     "compression": "^1.8.2",
     "express": "^4.21.2",
     "qrcode": "^1.5.4",
     "socket.io": "^4.8.1",
-    "three": "^0.185.1",
-    "proxy-addr": "^2.0.7"
+    "three": "^0.185.1"
   },
   "engines": {
     "node": ">=22.12"

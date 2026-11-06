@@ -148,12 +148,6 @@ audio/
 !/assets/mario-kart/ui/provenance.json
 /games/mario-kart/evidence/
 
-!/assets/brand/
-!/assets/os/
-!/assets/source/
-!/assets/CREDITS.json
-!/public/assets/audio/
-
 # Local environment configuration and credentials.
 .env
 .env.*
@@ -168,7 +162,3 @@ audio/
 # Local demo tools, logs, and browser evidence.
 .tools/
 .local/
-
-# Generated Python asset-build caches.
-__pycache__/
-*.py[cod]
