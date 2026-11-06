@@ -1,31 +1,4 @@
 import { mountPhoneAdmin } from "./phone-admin.js";
-import {
-  requestMotionPermissions,
-  probeDevice,
-  deviceProfile,
-  sensorErrorMessage,
-  createWakeKeeper,
-  createOrientationControl,
-} from "./phone-capabilities.js";
-import { PhonePointer } from "./phone-pointer.js";
-import { playPhoneCue } from "./phone-audio.js";
-import {
-  normalizeRemoteSkin,
-  paintSeatLamps,
-  GAME_REMOTE,
-  remoteButtonMap,
-  remotePosture,
-  racingRemote,
-  paintButtons,
-  HomeGesture,
-  kartGasCaption,
-  remoteInputInterrupted,
-} from "./remote.js";
-import {
-  detectInAppBrowser,
-  installPhonePageGuards,
-  phoneFeedback,
-} from "./phone-page.js";
 import { InputPacer } from "/core/input-pacer.js";
 import { SEATS } from "/core/seats.js";
 import { holdButton } from "./hold.js";
@@ -35,7 +8,6 @@ import { RacingMotion } from "/core/racing-motion.js";
 import { DriveControls } from "/core/drive-controls.js";
 import { PartyMotion } from "/core/party-motion.js";
 import { gameById, remember, recalled } from "./catalog.js";
-const pairingScreen = new URLSearchParams(location.search).get("screen");
 const $ = (id) => document.getElementById(id),
   socket = io("/party", { transports: ["websocket", "polling"] });
 let code =
@@ -51,6 +23,7 @@ let code =
   lastSend = 0,
   lastPulse = false,
   generic = null,
+  wake = null,
   offset = 0,
   joinPending = false,
   retryTimer = null,
@@ -68,51 +41,10 @@ const wheelMotion = new RacingMotion({
 });
 const pedals = new DriveControls();
 const pacer = new InputPacer();
-const pointerStream = new PhonePointer();
-const wakeKeeper = createWakeKeeper(navigator);
-const orientationControl = createOrientationControl(screen.orientation);
-let gateGeneration = 0;
-let gateTask = null,
-  pendingDevice = null,
-  currentDevice = null,
-  genericObserver = null,
-  sensorDiagnostic = "",
-  relativeAt = -Infinity,
-  pointerFlushTimer = 0;
-const pointerOn = () =>
-  state?.pointerMode === true &&
-  !!identity &&
-  !identity.queued &&
-  started &&
-  !document.hidden;
-function flushPointer() {
-  clearTimeout(pointerFlushTimer);
-  const time = performance.now(),
-    enabled = pointerOn() && socket.connected,
-    writable = socket.io.engine?.transport?.writable !== false;
-  const packet = pointerStream.flush(time, { enabled, writable, mode });
-  if (packet) socket.emit("pointer", packet);
-  // Deliver the final touch position if it arrived inside the 8ms floor.
-  // Backpressure waits for transport drain, never an unbounded retry loop.
-  if (enabled && writable && pointerStream.pending(time, mode))
-    pointerFlushTimer = setTimeout(
-      flushPointer,
-      Math.max(1, 8 - (time - pointerStream.lastSent)),
-    );
-}
-function shellButton(button) {
-  if (!pointerOn() || !socket.connected) return false;
-  // Shell actions are discrete presses; an artificial release would consume the
-  // shared rate-limit window and could swallow the visitor's next button.
-  socket.emit("shell-button", { button, pressed: true });
-  buzz(8);
-  return true;
-}
 let shotAim = 0,
   feedbackAudio = null,
   terminalReason = "";
 let sketchStatus = null;
-let faceMap = null;
 let sampleOffset = null;
 let raceStatus = null,
   playStatus = null,
@@ -166,34 +98,35 @@ function setSensitivity(value) {
   syncSettings();
 }
 syncSettings();
-const buzz = (pattern, cue = "click") =>
-  phoneFeedback(
-    {
-      visual() {
-        document.body.classList.add("feedback-pulse");
-        $("remote").classList.add("feedback-pulse");
-        $("speaker").classList.add("talk");
-        clearTimeout(buzz.talkTimer);
-        buzz.talkTimer = setTimeout(
-          () => $("speaker").classList.remove("talk"),
-          cue === "thud" ? 500 : cue === "swoosh" ? 220 : 120,
+const buzz = (pattern) => {
+  try {
+    if (!$("phone-haptics").checked) return;
+    if (navigator.vibrate) navigator.vibrate(pattern);
+    else {
+      document.body.classList.add("feedback-pulse");
+      clearTimeout(buzz.timer);
+      buzz.timer = setTimeout(
+        () => document.body.classList.remove("feedback-pulse"),
+        90,
+      );
+      if ($("phone-sound").checked) {
+        feedbackAudio ||= new AudioContext();
+        feedbackAudio.resume();
+        const o = feedbackAudio.createOscillator(),
+          g = feedbackAudio.createGain();
+        o.connect(g).connect(feedbackAudio.destination);
+        o.frequency.value = 660;
+        g.gain.setValueAtTime(0.035, feedbackAudio.currentTime);
+        g.gain.exponentialRampToValueAtTime(
+          0.001,
+          feedbackAudio.currentTime + 0.06,
         );
-        clearTimeout(buzz.timer);
-        buzz.timer = setTimeout(() => {
-          document.body.classList.remove("feedback-pulse");
-          $("remote").classList.remove("feedback-pulse");
-        }, 90);
-      },
-      haptics: $("phone-haptics").checked,
-      vibrate: navigator.vibrate?.bind(navigator),
-      userActivation: navigator.userActivation,
-      sound: $("phone-sound").checked,
-      playSound() {
-        playPhoneCue(feedbackAudio, cue);
-      },
-    },
-    pattern,
-  );
+        o.start();
+        o.stop(feedbackAudio.currentTime + 0.065);
+      }
+    }
+  } catch {}
+};
 function message(text) {
   $("join-error").textContent = text;
   $("join-error").hidden = !text;
@@ -201,21 +134,25 @@ function message(text) {
 function status(text, online = false) {
   $("phone-status").textContent = text;
   $("phone-status").classList.toggle("online", online);
-  $("power").classList.toggle("linked", online);
-  $("power").classList.toggle("err", !online);
-  $("power").setAttribute("aria-label", `Link status: ${text}`);
-  paintSeatLamps($("seat-lamp"), SEATS, identity);
-  $("remote").classList.toggle("asleep", !started || !!identity?.queued);
 }
 function setReady(value) {
   ready = value;
   if (identity && socket.connected)
     socket.emit("ready", { ready: value, mode });
 }
-function keepAwake() {
-  return wakeKeeper.keep();
+async function keepAwake() {
+  try {
+    if (wake && !wake.released) return;
+    wake = await navigator.wakeLock?.request("screen");
+    wake?.addEventListener(
+      "release",
+      () => {
+        wake = null;
+      },
+      { once: true },
+    );
+  } catch {}
 }
-
 function join() {
   if (!code || removed || joinPending || identity || !socket.connected) return;
   joinPending = true;
@@ -250,7 +187,7 @@ function join() {
 function acceptIdentity(answer) {
   if (!answer.queued && new URLSearchParams(location.search).has("screen"))
     history.replaceState(
-      history.state,
+      null,
       "",
       `/controller?room=${encodeURIComponent(code)}`,
     );
@@ -264,29 +201,30 @@ function acceptIdentity(answer) {
     $("join-view").hidden = true;
     $("queue-position").textContent =
       `${answer.position || "Your"} spot in line`;
-    paintSeatLamps($("seat-lamp"), SEATS, answer);
+    $("seat-lamp").textContent = "NEXT UP";
     status("Place saved", true);
     return;
   }
   $("join-view").hidden = started;
   $("play-view").hidden = !started;
-  paintSeatLamps($("seat-lamp"), SEATS, answer);
+  const badge = SEATS[answer.slot];
+  if (badge) {
+    $("seat-lamp").textContent = SEATS.map((s, i) =>
+      i === answer.slot ? `${s.shape} ${i + 1}` : s.shape,
+    ).join("   ");
+    $("seat-lamp").style.color = badge.color;
+  }
   remember(`funcaster.player.${code}`, answer);
   document.documentElement.style.setProperty("--player", answer.color);
   $("player-identity").textContent =
     `You’re ${answer.name} · Player ${answer.slot + 1}`;
   $("play-identity").textContent = `You’re ${answer.name}`;
-  $("join-title").innerHTML = "Your phone. <br>Your superpower.";
+  $("join-title").innerHTML = "Your phone.<br>Your superpower.";
   $("join-description").textContent = "One little tilt. A whole lot of fun.";
   $("enable").disabled = false;
   $("touch-mode").disabled = false;
   message("");
   status("You’re connected", true);
-  if (pendingDevice) {
-    activateDevice(pendingDevice);
-    return;
-  }
-  if (currentDevice) socket.emit("device", currentDevice);
   if (started) {
     if (mode === "touch") setReady(true);
     else calibrate();
@@ -309,18 +247,13 @@ if (!code) {
 $("code-form").onsubmit = (event) => {
   event.preventDefault();
   code = $("code-input").value.trim().toUpperCase();
-  history.replaceState(
-    history.state,
-    "",
-    `/controller?room=${encodeURIComponent(code)}`,
-  );
+  history.replaceState({}, "", `/controller?room=${encodeURIComponent(code)}`);
   $("code-form").hidden = true;
   $("join-view").hidden = false;
   removed = false;
   join();
 };
 socket.on("connect", () => {
-  socket.io.engine?.on("drain", flushPointer);
   identity = null;
   joinPending = false;
   status("Finding your party…");
@@ -348,8 +281,8 @@ socket.on("disconnect", (reason) => {
     );
     $("recover-connection").hidden = false;
   } else status("Reconnecting…");
-  $("enable").disabled = false;
-  $("touch-mode").disabled = false;
+  $("enable").disabled = true;
+  $("touch-mode").disabled = true;
   $("connection-detail").textContent =
     reason === "io server disconnect"
       ? "Connection ended"
@@ -390,7 +323,7 @@ function calibrate() {
   render();
   clearTimeout(sensorTimeout);
   sensorTimeout = setTimeout(() => {
-    if (!ready && mode === "motion") {
+    if (!ready && mode === "motion" && (!isWheel() || landscape())) {
       sensorProblem(
         "No motion yet. Allow Motion & Orientation in your browser, or play with touch.",
       );
@@ -406,9 +339,9 @@ function sensorProblem(text) {
   setReady(false);
 }
 function sensor(sample) {
-  if (gateTask) return;
   if (!started || mode !== "motion" || document.hidden) return;
   lastSample = performance.now();
+  if (isWheel() && !landscape()) return;
   const result = (isWheel() ? wheelMotion : motion).update(sample, lastSample);
   if (!result) return;
   latest = result;
@@ -424,10 +357,7 @@ function sensor(sample) {
   }
 }
 function orientation(event) {
-  const time = performance.now();
-  if (!pointerStream.orientation(event, time)) return;
-  if (event.type === "deviceorientation") relativeAt = time;
-  flushPointer();
+  if (!Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
   sensor({
     alpha: Number.isFinite(event.alpha) ? event.alpha : 0,
     beta: event.beta,
@@ -436,9 +366,7 @@ function orientation(event) {
   });
 }
 function acceleration(event) {
-  if (pointerStream.motion(event.rotationRate, performance.now()))
-    flushPointer();
-  if (!started || mode !== "motion" || gateTask || document.hidden) return;
+  if (!started || mode !== "motion") return;
   let a = event.acceleration;
   if (!a || ![a.x, a.y, a.z].every(Number.isFinite)) {
     const g = event.accelerationIncludingGravity;
@@ -453,165 +381,72 @@ function acceleration(event) {
   if (!isWheel() && motion.flick(a, performance.now())) lastPulse = true;
 }
 window.addEventListener("deviceorientation", orientation);
-window.addEventListener("deviceorientationabsolute", (event) => {
-  if (performance.now() - relativeAt > 250) orientation(event);
-});
 window.addEventListener("devicemotion", acceleration);
-function genericFallback(onSample = null) {
-  genericObserver = typeof onSample === "function" ? onSample : genericObserver;
-  if (generic) return;
+async function permission() {
+  if (!window.isSecureContext)
+    throw Error(
+      "Motion needs a secure invite link. You can still play with touch.",
+    );
+  // Request both permissions synchronously inside the tap's user activation.
+  const requests = [];
+  for (const Ctor of [window.DeviceOrientationEvent, window.DeviceMotionEvent])
+    if (typeof Ctor?.requestPermission === "function")
+      requests.push(Ctor.requestPermission());
+  const decisions = await Promise.allSettled(requests);
+  if (
+    decisions.some((d) => d.status === "fulfilled" && d.value !== "granted") ||
+    decisions.some((d) => d.status === "rejected")
+  )
+    throw Error(
+      "Motion wasn’t allowed. Use touch to play now. On iPhone, open Safari’s page menu → Website Settings → Motion & Orientation, if available; otherwise reload and allow the prompt.",
+    );
+}
+function genericFallback() {
+  if (lastSample || generic || mode !== "motion") return;
   const Ctor =
     window.RelativeOrientationSensor || window.AbsoluteOrientationSensor;
   if (!Ctor) return;
   try {
     generic = new Ctor({ frequency: 60, referenceFrame: "device" });
     generic.addEventListener("reading", () => {
-      // A late native stream wins; do not alternate two attitude sources.
-      if (performance.now() - relativeAt <= 250) return;
-      const q = generic?.quaternion ? Array.from(generic.quaternion) : null;
-      if (!pointerStream.quaternion(q, performance.now())) return;
-      genericObserver?.(q);
-      flushPointer();
-      sensor({ quat: q, screenAngle: screen.orientation?.angle || 0 });
+      if (generic.quaternion)
+        sensor({
+          quat: [...generic.quaternion],
+          screenAngle: screen.orientation?.angle || 0,
+        });
     });
-    generic.addEventListener("error", (event) => {
-      sensorDiagnostic = sensorErrorMessage(event);
-    });
+    generic.addEventListener("error", () => {});
     generic.start();
-  } catch (error) {
-    sensorDiagnostic = sensorErrorMessage(error);
+  } catch {
     generic = null;
   }
 }
-function unlockInteraction() {
+$("enable").onclick = async () => {
+  if (!identity) return;
+  $("enable").disabled = true;
+  message("");
   try {
-    const Audio = window.AudioContext || window.webkitAudioContext;
-    if (Audio) {
-      feedbackAudio ||= new Audio();
-      feedbackAudio.resume().catch(() => {});
-    }
-  } catch {}
-  keepAwake();
-  // Fullscreen/orientation are best effort and cannot delay choosing a playable tier.
-  try {
-    const entering = document.fullscreenEnabled
-      ? document.documentElement.requestFullscreen({ navigationUI: "hide" })
-      : Promise.resolve();
-    Promise.resolve(entering)
-      .then(() => {
-        if (removed || document.hidden) orientationControl.release();
-        else
-          orientationControl.set(
-            racingRemote({
-              game: state?.game,
-              phase: state?.phase,
-              pointerMode: state?.pointerMode,
-            })
-              ? "landscape"
-              : "portrait",
-            true,
-          );
-      })
-      .catch(() => {});
-  } catch {}
-}
-function activateDevice(device) {
-  if (removed) return;
-  currentDevice = device;
-  if (!identity || identity.queued) {
-    pendingDevice = device;
-    message("You’re ready. Finding your seat…");
-    $("enable").textContent = "Waiting for your seat";
-    return;
+    await permission();
+    mode = "motion";
+    started = true;
+    $("join-view").hidden = true;
+    $("play-view").hidden = false;
+    lastSample = 0;
+    calibrate();
+    keepAwake();
+    setTimeout(genericFallback, 1500);
+  } catch (error) {
+    message(error.message);
+    $("enable").disabled = false;
   }
-  pendingDevice = null;
-  socket.emit("device", device);
-  $("capability-note").textContent =
-    device.tier === "C"
-      ? "Open this invite in Safari or Chrome for motion. Touch controls work here."
-      : ["B"].includes(device.tier)
-        ? sensorDiagnostic ||
-          "Touch controls are ready. You can try motion again from this menu."
-        : `Motion ready · ${device.hz} samples/sec${device.gyro ? " · gyroscope available" : ""}.`;
-  $("copy-invite").hidden = device.tier !== "C";
-  if (["B", "C"].includes(device.tier)) {
-    activateTouch();
-    return;
-  }
-  mode = "motion";
-  started = true;
-  $("join-view").hidden = true;
-  $("play-view").hidden = false;
-  lastSample = 0;
-  calibrate();
-}
-function startPlaying() {
-  if (gateTask || removed) return gateTask;
-  const generation = ++gateGeneration;
-  releasePedals();
-  setReady(false);
-  // Both APIs are called before any await or fullscreen promise can consume activation.
-  const permission = requestMotionPermissions(window);
-  unlockInteraction();
-  sensorDiagnostic = "";
-  mode = "motion";
-  lastSample = 0;
-  $("enable").setAttribute("aria-busy", "true");
-  $("enable").textContent = "Getting ready…";
-  gateTask = (async () => {
-    const { denied } = await permission;
-    const { device, diagnostics } = await probeDevice({
-      window,
-      navigator,
-      document,
-      denied,
-      startFallback: (observer) => {
-        if (generation === gateGeneration && !removed)
-          genericFallback(observer);
-      },
-    });
-    if (generation !== gateGeneration || removed) return;
-    genericObserver = null;
-    $("sensor-diagnostics").textContent =
-      `Tier ${device.tier} · ${device.platform} · ${device.hz} Hz · ${diagnostics.samples} samples · gravity Z ${diagnostics.gravityZ ?? "unavailable"}`;
-    activateDevice(device);
-  })()
-    .catch((error) => {
-      if (generation !== gateGeneration || removed) return;
-      sensorDiagnostic = sensorErrorMessage(error);
-      activateDevice(
-        deviceProfile({ window, navigator, document, denied: true }),
-      );
-    })
-    .finally(() => {
-      if (generation !== gateGeneration) return;
-      gateTask = null;
-      $("enable").removeAttribute("aria-busy");
-      if (!pendingDevice) $("enable").textContent = "Tap to start";
-    });
-  return gateTask;
-}
-$("enable").onclick = startPlaying;
+};
 function beginTouch() {
-  gateGeneration++;
-  gateTask = null;
-  $("enable").removeAttribute("aria-busy");
-  $("enable").textContent = "Tap to start";
-  unlockInteraction();
-  activateDevice(deviceProfile({ window, navigator, document, denied: true }));
-}
-function activateTouch() {
   if (!identity) return;
   releasePedals();
   mode = "touch";
-  generic?.stop();
-  generic = null;
-  genericObserver = null;
   $("connection-detail").textContent = "Touch controls · connected";
   started = true;
   latest = { x: 0, y: 0 };
-  pointerStream.point(0, 0, performance.now());
-  flushPointer();
   $("join-view").hidden = true;
   $("play-view").hidden = false;
   $("sensor-message").hidden = true;
@@ -636,17 +471,8 @@ function touch(event) {
       Math.min(1, ((event.clientY - r.top) / r.height - 0.5) * 2.4),
     ),
   };
-  pointerStream.point(latest.x, latest.y, performance.now());
-  flushPointer();
 }
 $("motion-pad").onpointerdown = (event) => {
-  // A tablet/desktop with working motion can still choose its mouse immediately.
-  if (
-    mode !== "touch" &&
-    currentDevice?.tier === "D" &&
-    event.pointerType === "mouse"
-  )
-    activateTouch();
   if (mode !== "touch") return;
   event.preventDefault();
   touchId = event.pointerId;
@@ -661,6 +487,7 @@ for (const name of ["pointerup", "pointercancel"])
     if (event.pointerId === touchId) touchId = null;
   });
 $("motion-pad").onkeydown = (event) => {
+  if (mode !== "touch") return;
   const moves = {
     ArrowLeft: [-0.15, 0],
     ArrowRight: [0.15, 0],
@@ -668,16 +495,12 @@ $("motion-pad").onkeydown = (event) => {
     ArrowDown: [0, 0.15],
   };
   if (moves[event.key]) {
-    if (mode !== "touch" && currentDevice?.tier === "D") activateTouch();
-    if (mode !== "touch") return;
     event.preventDefault();
     const [x, y] = moves[event.key];
     latest = {
       x: Math.max(-1, Math.min(1, (latest?.x || 0) + x)),
       y: Math.max(-1, Math.min(1, (latest?.y || 0) + y)),
     };
-    pointerStream.point(latest.x, latest.y, performance.now());
-    flushPointer();
   }
 };
 $("pulse").onclick = () => {
@@ -691,85 +514,7 @@ $("recenter").onclick = () => {
     setReady(true);
   } else calibrate();
 };
-function faceElements(racing) {
-  return {
-    A: $(racing ? "boost" : "btn-a"),
-    B: $("btn-b"),
-    1: $(racing ? "brake" : "btn-1"),
-    2: $(racing ? "gas" : "btn-2"),
-    up: $("dp-up"),
-    down: $("dp-down"),
-    left: $("dp-left"),
-    right: $("dp-right"),
-    minus: $("btn-minus"),
-    home: $("btn-home"),
-    plus: $("btn-plus"),
-  };
-}
-function syncRemoteFace() {
-  const context = {
-    game: state?.game,
-    phase: state?.phase,
-    pointerMode: state?.pointerMode === true,
-    landscape: landscape(),
-  };
-  const racing = started && racingRemote(context);
-  orientationControl.set(
-    started && !document.hidden ? (racing ? "landscape" : "portrait") : null,
-  );
-  const posture = remotePosture(context);
-  $("remote").dataset.inputMode = mode;
-  $("remote").dataset.mirrored = String($("left-handed").checked);
-  $("remote").dataset.racing = String(racing);
-  $("remote").dataset.posture = posture;
-  document.body.dataset.posture = posture;
-  document.body.classList.toggle("wheel-mode", racing);
-  $("remote").classList.toggle("asleep", !started || !!identity?.queued);
-  $("race-pedals").hidden = !racing;
-  $("btn-a").hidden = racing;
-  $("ones").hidden = racing;
-  const action = !$("classic-action").hidden
-    ? $("classic-action")
-    : !$("pulse").hidden
-      ? $("pulse")
-      : null;
-  const connected =
-    !!state?.hostConnected &&
-    (state?.phase !== "classic" || !!state?.screenConnected);
-  const active = !!state?.active.includes(identity?.slot);
-  const canDrive = ready && active && connected && racing;
-  faceMap = remoteButtonMap({
-    ...context,
-    ready: started && ready,
-    shellReady: pointerOn(),
-    active,
-    paused: !!state?.paused,
-    connected,
-    primaryEnabled: !!action && !action.disabled,
-    primaryCaption: action?.textContent.trim(),
-    canDrive,
-    gasEnabled: !$("gas").disabled,
-    boostEnabled: !$("boost").disabled,
-    gasCaption:
-      state?.game === "mario-kart" ? kartGasCaption(raceStatus) : "Gas",
-    driverSetup: !$("driver-choices").hidden,
-    shotStarted: !!shotStarted,
-    guessing:
-      state?.game === "drawing" &&
-      !$("guess-panel").hidden &&
-      !$("guess-form").hidden,
-  });
-  paintButtons(faceElements(racing), faceMap);
-  $("golf-power").hidden =
-    state?.game !== "golf" || !active || state?.phase !== "classic";
-  $("golf-wind").textContent =
-    state?.game === "golf"
-      ? playStatus?.caption || "Aim, hold A, then release to putt."
-      : "";
-}
-
 function render() {
-  syncRemoteFace();
   if (identity?.queued) {
     $("waiting-view").hidden = false;
     $("join-view").hidden = true;
@@ -780,14 +525,9 @@ function render() {
   const g = gameById(state.game),
     self = state.players.find((p) => p.slot === identity.slot),
     active = state.active.includes(identity.slot);
-  const wheel =
-      g.mode === "wheel" &&
-      racingRemote({
-        game: state.game,
-        phase: state.phase,
-        pointerMode: state.pointerMode === true,
-      }),
-    rotate = false;
+  const wheel = g.mode === "wheel",
+    rotate = wheel && mode === "motion" && !landscape();
+  document.body.classList.toggle("wheel-mode", wheel);
   $("motion-pad").hidden = wheel;
   $("wheel-controls").hidden = !wheel || rotate;
   $("rotate-phone").hidden = !rotate;
@@ -813,10 +553,19 @@ function render() {
   $("driver-name").textContent = raceStatus?.waiting
     ? "Waiting for your crew…"
     : raceStatus?.confirmed
-      ? "Waiting for your crew…"
+      ? "Choose 1 or 3 laps"
       : raceStatus?.driver || "Choose your driver";
-  $("gas-label").textContent =
-    state.game === "mario-kart" ? kartGasCaption(raceStatus) : "Accelerate";
+  $("gas-label").textContent = setup
+    ? raceStatus?.waiting
+      ? "Ready ✓"
+      : raceStatus?.confirmed
+        ? "Start race"
+        : "Choose driver"
+    : raceStatus?.stage === "paused"
+      ? "Resume"
+      : raceStatus?.stage === "results"
+        ? "Race again"
+        : "Accelerate";
   $("gas-hint").textContent = raceStatus?.waiting
     ? "STARTING TOGETHER"
     : setup || ["paused", "results"].includes(raceStatus?.stage)
@@ -846,8 +595,7 @@ function render() {
     state.hostConnected &&
     (state.phase !== "classic" || state.screenConnected) &&
     ["classic", "practice", "countdown", "playing"].includes(state.phase);
-  $("gas").disabled =
-    !canDrive || (setup && (raceStatus?.waiting || raceStatus?.confirmed));
+  $("gas").disabled = !canDrive || (setup && raceStatus?.waiting);
   $("brake").disabled = !canDrive;
   $("boost").disabled =
     !canDrive ||
@@ -855,18 +603,13 @@ function render() {
     exhausted ||
     boostIn > 0 ||
     (state.game === "mario-kart" && raceStatus?.stage !== "racing");
-  $("pulse").disabled = !!state.paused;
   $("pulse").hidden =
     state.game !== "bubble-burst" ||
     !ready ||
     !active ||
     !["practice", "playing"].includes(state.phase);
   $("pad-caption").textContent =
-    mode === "touch"
-      ? "DRAG HERE TO MOVE"
-      : currentDevice?.tier === "D"
-        ? "TILT OR DRAG TO MOVE"
-        : "A LITTLE TILT IS ALL IT TAKES";
+    mode === "touch" ? "DRAG HERE TO MOVE" : "A LITTLE TILT IS ALL IT TAKES";
   $("switch-mode").textContent =
     mode === "touch" ? "Try motion controls" : "Use touch controls";
   $("phone-phase").textContent = !ready
@@ -883,7 +626,7 @@ function render() {
     $("phone-hint").textContent =
       "Rotate sideways, then hold your comfortable driving grip still.";
   } else if (!ready && mode === "motion") {
-    $("phone-title").innerHTML = "Hold comfy. <br>Stay still.";
+    $("phone-title").innerHTML = "Hold comfy.<br>Stay still.";
     $("phone-hint").textContent = "We’re finding your natural grip.";
   } else if (!state.hostConnected) {
     $("phone-title").textContent = "Keep your spot.";
@@ -897,7 +640,7 @@ function render() {
       $("phone-title").textContent = "Ready for more?";
       $("phone-hint").textContent = "Tap Recenter to join the next game.";
     } else {
-      $("phone-title").innerHTML = "You’re ready. <br>Look up!";
+      $("phone-title").innerHTML = "You’re ready.<br>Look up!";
       $("phone-hint").textContent =
         "Waiting for your crew. We’ll start together.";
     }
@@ -914,7 +657,7 @@ function render() {
       ? raceStatus?.waiting
         ? "Waiting for your crew."
         : raceStatus?.confirmed
-          ? "Waiting for your crew."
+          ? "Ready for the grid?"
           : "Pick your favorite."
       : "Easy turns. Smooth racing.";
     $("phone-hint").textContent = setup
@@ -988,22 +731,20 @@ function render() {
     for (const id of ["gas", "brake", "boost", "classic-action"])
       $(id).disabled = true;
   }
-  syncRemoteFace();
 }
 let previousScore = 0;
 socket.on("state", (next) => {
-  const previous = state,
-    oldGame = state?.game,
+  const oldGame = state?.game,
     oldRound = state?.roundId,
     oldActive = state?.active.includes(identity?.slot);
   state = next;
-  if (remoteInputInterrupted(previous, next, identity?.slot)) releasePedals();
   if (oldGame !== next.game) syncSettings();
   if (
     oldGame !== next.game ||
     oldRound !== next.roundId ||
     (oldActive && !next.active.includes(identity?.slot))
   ) {
+    releasePedals();
     raceStatus = null;
     playStatus = null;
     sketchStatus = null;
@@ -1026,12 +767,9 @@ socket.on("state", (next) => {
 function frame(time) {
   requestAnimationFrame(frame);
   if (!started) return;
-  const shotPower = shotStarted
-    ? Math.round(Math.min(1, (time - shotStarted) / 1600) * 100)
-    : 0;
-  $("golf-power-meter").value = shotPower;
-  $("golf-power-value").textContent = `${shotPower}%`;
-  if (shotStarted) $("btn-a").dataset.caption = `Release · ${shotPower}%`;
+  if (shotStarted)
+    $("classic-action").textContent =
+      `Release to shoot · ${Math.round(Math.min(1, (time - shotStarted) / 1600) * 100)}%`;
   if (latest) {
     $("steering-dot").style.left = `${50 + latest.x * 45}%`;
     $("motion-dot").style.transform =
@@ -1115,8 +853,7 @@ document.addEventListener("visibilitychange", () => {
     releasePedals();
     setReady(false);
     socket.emit("input", { x: 0, y: 0 });
-    wakeKeeper.release();
-    orientationControl.release();
+    wake?.release().catch(() => {});
   } else if (started) {
     keepAwake();
     if (mode === "motion") calibrate();
@@ -1133,34 +870,11 @@ window.addEventListener("orientationchange", () => {
   if (started && mode === "motion") setTimeout(calibrate, 150);
 });
 window.addEventListener("blur", releasePedals);
-function openPartyMenu() {
+$("tune").onclick = () => {
   releasePedals();
-  for (const dialog of document.querySelectorAll("dialog[open]")) {
-    if (dialog.id !== "settings") dialog.close();
-  }
   syncSettings();
-  $("remote-help-title").textContent =
-    $("phone-title").innerText || "Your remote";
-  $("remote-help-copy").textContent = $("phone-hint").textContent;
-  const unavailable = GAME_REMOTE[state?.game]?.unavailable || [];
-  $("remote-unavailable").textContent = unavailable.length
-    ? `Not available in this version: ${unavailable.join("; ")}. Dim buttons have no action. Hold 1 to recenter; Home opens this menu.`
-    : "Dim buttons have no action. Hold 1 to recenter; Home opens this menu. Host controls, when assigned, are below.";
-  if (!$("settings").open) $("settings").showModal();
-}
-$("tune").onclick = openPartyMenu;
-installPhonePageGuards({
-  window,
-  document,
-  openPartyMenu,
-  // A code typed after the guard was installed must survive Back and reload.
-  returnUrl: () => {
-    const query = new URLSearchParams();
-    if (code) query.set("room", code);
-    if (pairingScreen && !identity) query.set("screen", pairingScreen);
-    return `/controller${query.size ? `?${query}` : ""}`;
-  },
-});
+  $("settings").showModal();
+};
 $("close-settings").onclick = () => $("settings").close();
 $("sensitivity").oninput = () =>
   setSensitivity(Number($("sensitivity").value) / 100);
@@ -1168,35 +882,31 @@ $("reset-sensitivity").onclick = () => {
   const name = isWheel() ? "racing" : "party";
   setSensitivity(MOTION_PROFILES[name].default);
 };
-$("switch-mode").onclick = () => {
+$("switch-mode").onclick = async () => {
   $("settings").close();
   if (mode === "motion") beginTouch();
-  else startPlaying();
-};
-async function copyInvite(event) {
-  const button = event.currentTarget;
-  try {
-    await navigator.clipboard.writeText(location.href);
-    button.textContent = "Link copied";
-  } catch {
-    button.textContent = "Use your browser’s Share menu";
+  else {
+    try {
+      await permission();
+      mode = "motion";
+      lastSample = 0;
+      calibrate();
+      setTimeout(genericFallback, 1500);
+    } catch (error) {
+      $("sensor-message").textContent = error.message;
+      $("sensor-message").hidden = false;
+    }
   }
-}
-$("copy-invite").onclick = copyInvite;
-$("gate-copy-invite").onclick = copyInvite;
+};
 $("leave").onclick = () => {
   releasePedals();
   removed = true;
-  pendingDevice = null;
-  gateGeneration++;
-  gateTask = null;
   socket.emit("leave");
   remember(`funcaster.player.${code}`, null);
   identity = null;
   started = false;
   generic?.stop();
-  wakeKeeper.release();
-  orientationControl.release();
+  wake?.release().catch(() => {});
   $("settings").close();
   $("play-view").hidden = true;
   $("join-view").hidden = false;
@@ -1216,13 +926,7 @@ $("classic-action").onclick = () => {
 };
 let shotSequence = Date.now();
 function startShot(event) {
-  if (
-    state?.game !== "golf" ||
-    faceMap?.A.action !== "shot" ||
-    !faceMap?.A.enabled ||
-    $("classic-action").disabled
-  )
-    return;
+  if (state?.game !== "golf" || $("classic-action").disabled) return;
   event.preventDefault();
   shotStarted = performance.now();
   shotAim = latest?.x || 0;
@@ -1232,8 +936,7 @@ function startShot(event) {
     seq: ++shotSequence,
   });
   if (event.pointerId !== undefined)
-    event.currentTarget.setPointerCapture(event.pointerId);
-  syncRemoteFace();
+    $("classic-action").setPointerCapture(event.pointerId);
 }
 function finishShot(event) {
   if (!shotStarted) return;
@@ -1249,15 +952,10 @@ function finishShot(event) {
 }
 $("classic-action").onpointerdown = startShot;
 $("classic-action").onpointerup = finishShot;
-function cancelShot() {
-  if (!shotStarted) return;
+$("classic-action").onpointercancel = () => {
   socket.emit("action", { action: "cancel", seq: shotSequence });
   shotStarted = 0;
-  syncRemoteFace();
-}
-$("classic-action").onpointercancel = cancelShot;
-$("classic-action").addEventListener("lostpointercapture", cancelShot);
-$("btn-a").addEventListener("lostpointercapture", cancelShot);
+};
 $("classic-action").onkeydown = (e) => {
   if ([" ", "Enter"].includes(e.key) && !e.repeat) startShot(e);
 };
@@ -1323,9 +1021,7 @@ socket.on("feedback", (data) => {
     render();
   }
   if (data.type === "rumble") buzz(data.pattern);
-  if (data.type === "slice") buzz(data.combo > 2 ? [12, 18, 22] : 18, "swoosh");
-  if (data.type === "hit") buzz(12);
-  if (data.type === "bomb") buzz([60, 40, 120], "thud");
+  if (["slice", "hit"].includes(data.type)) buzz(12);
 });
 
 for (const id of ["left-handed", "phone-haptics", "phone-sound"]) {
@@ -1402,159 +1098,18 @@ $("queue-leave").onclick = () => {
 };
 const leaveParty = $("leave").onclick;
 holdButton($("leave"), leaveParty);
-const recenterPhone = $("recenter").onclick;
-holdButton(
-  $("btn-1"),
-  () => {
-    if (!shellButton("1")) recenterPhone();
-  },
-  650,
-);
-holdButton($("recenter"), recenterPhone, 650);
-// Every enabled role below uses the already-supported input protocol.
-function runFaceAction(name) {
-  const role = faceMap?.[name];
-  if (!role?.enabled) return;
-  if (pointerOn() && shellButton(name)) return;
-  switch (role.action) {
-    case "menu":
-    case "help":
-      openPartyMenu();
-      break;
-    case "slower":
-      setSensitivity(motionSettings.get(isWheel() ? "racing" : "party") - 0.1);
-      break;
-    case "faster":
-      setSensitivity(motionSettings.get(isWheel() ? "racing" : "party") + 0.1);
-      break;
-    case "primary":
-      $("classic-action").click();
-      break;
-    case "pulse":
-      $("pulse").click();
-      break;
-    case "cancel":
-      cancelShot();
-      break;
-    case "left":
-      $("driver-left").click();
-      break;
-    case "right":
-      $("driver-right").click();
-      break;
-    case "guess":
-      $("guess-form").requestSubmit();
-      break;
-  }
-}
-$("power").onclick = openPartyMenu;
-for (const [id, name] of [
-  ["btn-a", "A"],
-  ["btn-b", "B"],
-  ["btn-2", "2"],
-  ["btn-minus", "minus"],
-  ["btn-plus", "plus"],
-  ["dp-left", "left"],
-  ["dp-right", "right"],
-  ["dp-up", "up"],
-  ["dp-down", "down"],
-])
-  $(id).onclick = () => runFaceAction(name);
-for (const name of [
-  "onpointerdown",
-  "onpointerup",
-  "onpointercancel",
-  "onkeydown",
-  "onkeyup",
-])
-  $("btn-a")[name] = $("classic-action")[name];
-const homeGesture = new HomeGesture();
-let homeFrame = 0,
-  homeActive = false,
-  ignoreHomeClick = false;
-function homeEffects(actions) {
-  for (const action of actions) {
-    if (action === "confirm") $("leave-confirmation").hidden = false;
-    if (action === "dismiss") $("leave-confirmation").hidden = true;
-    if (action === "menu" && !shellButton("home")) openPartyMenu();
-    if (action === "leave") {
-      leaveParty();
-      $("leave-confirmation").hidden = true;
-    }
-  }
-}
-function homeTick(time) {
-  homeEffects(homeGesture.advance(time));
-  if (homeActive) homeFrame = requestAnimationFrame(homeTick);
-}
-function beginHome(event) {
-  if (homeActive || event.repeat) return;
-  event.preventDefault();
-  homeActive = true;
-  homeGesture.start(performance.now());
-  if (event.pointerId !== undefined)
-    $("btn-home").setPointerCapture(event.pointerId);
-  homeFrame = requestAnimationFrame(homeTick);
-}
-function endHome(event) {
-  if (!homeActive) return;
-  event.preventDefault();
-  homeActive = false;
-  cancelAnimationFrame(homeFrame);
-  ignoreHomeClick = true;
-  homeEffects(homeGesture.end(performance.now()));
-  setTimeout(() => {
-    ignoreHomeClick = false;
-  }, 0);
-}
-function cancelHome() {
-  homeActive = false;
-  cancelAnimationFrame(homeFrame);
-  homeEffects(homeGesture.cancel());
-}
-$("btn-home").onpointerdown = beginHome;
-$("btn-home").onpointerup = endHome;
-for (const event of ["pointercancel", "lostpointercapture", "blur"])
-  $("btn-home").addEventListener(event, cancelHome);
-$("btn-home").onkeydown = (event) => {
-  if (["Enter", " "].includes(event.key)) beginHome(event);
-};
-$("btn-home").onkeyup = (event) => {
-  if (["Enter", " "].includes(event.key)) endHome(event);
-};
-$("btn-home").onclick = (event) => {
-  event.preventDefault();
-  if (
-    !ignoreHomeClick &&
-    !homeActive &&
-    event.detail === 0 &&
-    !shellButton("home")
-  )
-    openPartyMenu();
-};
-window.addEventListener("blur", cancelHome);
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) cancelHome();
-});
-paintSeatLamps($("seat-lamp"), SEATS, identity);
-syncRemoteFace();
+holdButton($("recenter"), $("recenter").onclick, 650);
 $("leave").textContent = "Hold to leave the party";
 $("recenter").textContent = "Hold to recenter";
 for (const id of ["remote-skin", "large-targets", "calm-phone"]) {
   try {
     const value = localStorage.getItem(`funcaster.${id}`);
-    if (id === "remote-skin") $(id).value = normalizeRemoteSkin(value);
+    if (id === "remote-skin") $(id).value = value || "taxi";
     else $(id).checked = value === "true";
   } catch {}
   const apply = () => {
-    if (id === "remote-skin") {
-      document.body.dataset.skin = $(id).value;
-      const style = getComputedStyle(document.body);
-      document.querySelector('meta[name="theme-color"]').content =
-        style.getPropertyValue("--bg").trim() ||
-        style.getPropertyValue("--shell").trim() ||
-        "#0a58d6";
-    } else document.body.classList.toggle(id, $(id).checked);
+    if (id === "remote-skin") document.body.dataset.skin = $(id).value;
+    else document.body.classList.toggle(id, $(id).checked);
     try {
       localStorage.setItem(
         `funcaster.${id}`,
@@ -1565,8 +1120,10 @@ for (const id of ["remote-skin", "large-targets", "calm-phone"]) {
   $(id).onchange = apply;
   apply();
 }
-if (detectInAppBrowser(navigator.userAgent)) {
+if (/Instagram|FBAN|FBAV|Line\//i.test(navigator.userAgent)) {
   $("browser-coaching").hidden = false;
+  $("browser-coaching").textContent =
+    "For motion controls, open this page in Safari or Chrome using this app’s menu. Touch controls work here too.";
 }
 
 mountPhoneAdmin(socket, () => state);

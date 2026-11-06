@@ -10,7 +10,6 @@ const node = (tag, text, cls) => {
 export function mountPhoneAdmin(socket, getState) {
   const dialog = node("dialog", null, "settings-dialog admin-dialog"),
     close = node("button", "×", "icon-button dialog-close");
-  dialog.dataset.scroll = "";
   close.setAttribute("aria-label", "Close party controls");
   close.onclick = () => dialog.close();
   const title = node("h2", "Your party."),
@@ -61,7 +60,6 @@ export function mountPhoneAdmin(socket, getState) {
     signature = "";
   const open = document.getElementById("phone-admin-open");
   open.onclick = () => {
-    document.getElementById("settings")?.close();
     render();
     dialog.showModal();
   };
@@ -205,9 +203,6 @@ export function mountPhoneAdmin(socket, getState) {
       const label = node("label", "Custom drawing words"),
         words = node("textarea"),
         apply = node("button", "Use this word deck", "secondary-button");
-      words.id = "phone-custom-words";
-      label.htmlFor = words.id;
-      label.tabIndex = -1;
       words.rows = 3;
       words.maxLength = 2050;
       words.value = (s.setup.customWords || []).join("\n");
@@ -249,34 +244,6 @@ export function mountPhoneAdmin(socket, getState) {
       crew.append(row);
     }
   }
-  socket.on("phone-text", (request, ack = () => {}) => {
-    const state = getState();
-    if (
-      request?.field !== "customWords" ||
-      !rights.host ||
-      state?.game !== "drawing" ||
-      !["lobby", "results"].includes(state?.phase)
-    ) {
-      ack({
-        error:
-          "Custom words are available on the host phone before a Drawing round.",
-      });
-      return;
-    }
-    document.getElementById("settings")?.close();
-    render();
-    if (!dialog.open) dialog.showModal();
-    const words = document.getElementById("phone-custom-words");
-    if (!words) {
-      ack({ error: "The word editor is unavailable." });
-      return;
-    }
-    message.textContent =
-      "Tap the word box to edit the deck, then choose Use this word deck.";
-    words.parentElement.focus({ preventScroll: true });
-    words.scrollIntoView({ block: "center", behavior: "instant" });
-    ack({ ok: true });
-  });
   socket.on("admin.state", (next) => {
     rights = next;
     seq = Math.max(seq, next.seq || 0);

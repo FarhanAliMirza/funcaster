@@ -303,7 +303,7 @@ socket.on("state", (next) => {
             viewCount > 2 && i >= 2 ? "calc(50% + 12px)" : "12px";
           wrap.append(badge);
         }
-        frame.src = `/games/${state.game}/${sharedWorld(state.game, state.match) ? "shared.html" : ""}?party=${state.code}&round=${state.roundId}&view=${localViews[i]}&views=${viewCount}${state.match?.serverSimulation ? "&shared=1" : ""}`;
+        frame.src = `/games/${state.game}/${sharedWorld(state.game, state.match) ? "shared.html" : ""}?party=${state.code}&round=${state.roundId}&view=${localViews[i]}${state.match?.serverSimulation ? "&shared=1" : ""}`;
       }
     }
   } else if (frameKey) {

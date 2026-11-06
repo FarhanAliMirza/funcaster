@@ -162,7 +162,7 @@ function draw(next) {
       frame.title = game.title;
       frame.style.visibility = "hidden";
       frame.allow = "autoplay; fullscreen";
-      frame.src = `/games/${state.game}/${sharedWorld(state.game, state.match) ? "shared.html" : ""}?party=${code}&round=${state.roundId}&view=${view}&views=${views.length}&display=1&seats=${state.match?.serverSimulation && paired ? state.active.indexOf(paired.slot) : selection}${state.match?.serverSimulation ? "&shared=1" : ""}`;
+      frame.src = `/games/${state.game}/${sharedWorld(state.game, state.match) ? "shared.html" : ""}?party=${code}&round=${state.roundId}&view=${view}&display=1&seats=${state.match?.serverSimulation && paired ? state.active.indexOf(paired.slot) : selection}${state.match?.serverSimulation ? "&shared=1" : ""}`;
       $("display-stage").append(frame);
     }
   } else if (["practice", "playing", "countdown"].includes(state.phase)) {
