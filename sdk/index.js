@@ -9,8 +9,3 @@ export { encodeState, restoreState } from "../core/state.js";
 export { GameSession, scopedStorage } from "./session.js";
 export const SDK_VERSION = "1.0.0";
 export { FixedStep } from "../core/fixed-step.js";
-
-export { defineGame, GameRuntime } from "./lifecycle.js";
-export { SEATS, ROOM_SEATS, seatIdentity } from "../core/seats.js";
-
-export { ghostFleet } from "../core/ghost-fleet.js";

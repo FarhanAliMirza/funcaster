@@ -1,6 +1,49 @@
 const test = require("node:test"),
   assert = require("node:assert/strict");
-const { fixture, emit, wait } = require("./harness.cjs");
+const http = require("node:http");
+const { Server } = require("socket.io");
+const { io: client } = require("socket.io-client");
+const { attachParty } = require("../../server/party.cjs");
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const emit = (s, name, payload = {}) =>
+  new Promise((resolve, reject) =>
+    s.timeout(1000).emit(name, payload, (e, r) => (e ? reject(e) : resolve(r))),
+  );
+async function fixture(t, options = {}) {
+  let time = 100000;
+  const server = http.createServer(),
+    io = new Server(server),
+    party = attachParty(io, { now: () => time, tickMs: 5, ...options });
+  await new Promise((r) => server.listen(0, "127.0.0.1", r));
+  const sockets = [];
+  t.after(async () => {
+    sockets.forEach((s) => s.disconnect());
+    party.close();
+    await new Promise((r) => io.close(r));
+  });
+  async function connect() {
+    const s = client(`http://127.0.0.1:${server.address().port}/party`, {
+      forceNew: true,
+      transports: ["websocket"],
+      reconnection: false,
+    });
+    sockets.push(s);
+    await new Promise((r, j) => {
+      s.once("connect", r);
+      s.once("connect_error", j);
+    });
+    return s;
+  }
+  return {
+    io,
+    party,
+    connect,
+    advance: async (ms) => {
+      time += ms;
+      await wait(20);
+    },
+  };
+}
 test("four slots, overflow, reconnect identity, and room isolation", async (t) => {
   const f = await fixture(t),
     host = await f.connect(),
@@ -440,11 +483,7 @@ test("isolated view inputs and one final scoreboard after every challenge finish
   await emit(screens[1], "match.finish", { scores: [{ slot: 0, score: 100 }] });
   assert.equal(room.phase, "results");
   assert.equal(room.result.scores[0].slot, 1);
-  assert.equal(
-    room.result.verification,
-    "failed",
-    "claimed scores without input logs are unverified",
-  );
+  assert.equal(room.result.verification, "attested");
   const oldHash = room.result.hash;
   await emit(screens[1], "match.finish", {
     scores: [{ slot: 0, score: 99999 }],

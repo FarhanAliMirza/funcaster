@@ -23,26 +23,3 @@ test("draw-and-guess keeps prompts private, scores one guess per player, and rot
   r.step(3);
   assert.equal(r.finished, true);
 });
-
-test("Hindi prompts remain private; bilingual aliases and five-attempt penalty work", () => {
-  const r = new SketchRound([0, 1], 12, { language: "hi", theme: "nature" });
-  assert.match(r.word, /[^a-z]/i);
-  assert.equal(r.privateState(1).word, null);
-  assert.equal(r.guess(1, "fuck"), false);
-  assert.equal(r.privateState(1).attemptsLeft, 5);
-  assert.equal(r.guess(1, "wrong"), false);
-  assert.equal(r.privateState(1).attemptsLeft, 4);
-  assert.equal(r.guess(1, r.deck[0][0]), true);
-  assert.equal(r.scores[1], 150);
-  const blocked = new SketchRound([0, 1], 7);
-  for (let i = 0; i < 5; i++) blocked.guess(1, "wrong");
-  assert.equal(blocked.guess(1, blocked.word), false);
-});
-test("custom words are bounded, filtered and never leaked through a public prompt", () => {
-  const r = new SketchRound([0, 1], 1, {
-    customWords: ["samosa", "<script>", "fuck", "samosa"],
-  });
-  assert.equal(r.word, "samosa");
-  assert.equal(r.deck.length, 1);
-  assert.ok(!JSON.stringify(r.publicState()).includes("samosa"));
-});

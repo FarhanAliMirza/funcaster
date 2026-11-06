@@ -74,6 +74,7 @@ export class GameSession {
     this.link.bindState(read, after);
   }
   dispose() {
-    this.link.dispose();
+    clearInterval(this.link.stateTimer);
+    this.link.socket.disconnect();
   }
 }
