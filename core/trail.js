@@ -8,26 +8,17 @@ export class Trail {
     this.minStep = minStep;
     this.speedWindowMs = speedWindowMs;
     this.points = [];
-    this.segments = []; // segments added on the last push, for hit tests
+    this.segments = [];   // segments added on the last push, for hit tests
   }
 
   push(x, y, now) {
     const last = this.points[this.points.length - 1];
     this.segments = [];
     if (!last || Math.hypot(x - last.x, y - last.y) > this.minStep) {
-      if (last)
-        this.segments.push({
-          x1: last.x,
-          y1: last.y,
-          x2: x,
-          y2: y,
-          t0: last.t,
-          t1: now,
-        });
+      if (last) this.segments.push({ x1: last.x, y1: last.y, x2: x, y2: y });
       this.points.push({ x, y, t: now });
     }
-    while (this.points.length && now - this.points[0].t > this.lifetimeMs)
-      this.points.shift();
+    while (this.points.length && now - this.points[0].t > this.lifetimeMs) this.points.shift();
   }
 
   clear() {
@@ -62,19 +53,4 @@ export function segmentDistance(cx, cy, x1, y1, x2, y2) {
   if (lenSq === 0) return Math.hypot(cx - x1, cy - y1);
   const t = Math.max(0, Math.min(1, ((cx - x1) * dx + (cy - y1) * dy) / lenSq));
   return Math.hypot(cx - (x1 + t * dx), cy - (y1 + t * dy));
-}
-
-/** First entry of a moving segment into a circle, fraction 0..1 or null. */
-export function segmentCircleEntry(x0, y0, x1, y1, r) {
-  const dx = x1 - x0,
-    dy = y1 - y0,
-    a = dx * dx + dy * dy,
-    c = x0 * x0 + y0 * y0 - r * r;
-  if (c <= 0) return 0;
-  if (a < 1e-15) return null;
-  const b = 2 * (x0 * dx + y0 * dy),
-    d = b * b - 4 * a * c;
-  if (d < 0) return null;
-  const u = (-b - Math.sqrt(d)) / (2 * a);
-  return u >= 0 && u <= 1 ? u : null;
 }

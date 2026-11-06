@@ -68,7 +68,7 @@ export function createChannel({
           6,
         );
         saveSensitivity(pointer.sensitivity);
-      } else onCommand(cmd, slot);
+      } else onCommand(cmd);
     },
     onPresence: (presence) => {
       const { controller } = presence;

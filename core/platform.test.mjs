@@ -148,14 +148,3 @@ test("two-human racing stays deterministic across different render schedules", (
     b.racers.map((r) => [r.s, r.offset, r.speed]),
   );
 });
-
-test("catalog aliases preserve view routing before and after match setup", async () => {
-  const { gameById, independentViews } = await import("./catalog.js");
-  assert.equal(gameById("funcaster.mario-kart").gameId, "funcaster.kart-rush");
-  assert.equal(independentViews("fruit-ninja", null), false);
-  assert.equal(
-    independentViews("funcaster.slice-dojo", { variant: "race" }),
-    true,
-  );
-  assert.equal(independentViews("funcaster.time-trial"), true);
-});

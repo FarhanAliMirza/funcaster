@@ -1,8 +1,8 @@
 /**
  * Audio — synthesized cues with a file-override hook.
  *
- * Every cue has a procedural Web Audio fallback; selected cues also ship as
- * original synthesized samples with credits. Each cue is also
+ * Every cue has a procedural Web Audio implementation, so the repo ships no
+ * audio binaries and nothing copyrighted enters it by default. Each cue is also
  * overridable: drop `audio/<cue>.{mp3,wav,ogg}` next to the server and it wins,
  * with no code change. That's the migration path for swapping in real audio
  * later without rewriting the call sites.
@@ -94,18 +94,17 @@ export class AudioEngine {
   async loadOverride(name) {
     if (this.overrides.has(name)) return this.overrides.get(name);
     if (!this.ensureCtx()) return null;
-    for (const base of [...new Set([this.basePath, "/assets/audio"])])
-      for (const ext of EXTENSIONS) {
-        try {
-          const res = await fetch(`${base}/${name}.${ext}`);
-          if (!res.ok) continue;
-          const buf = await this.ctx.decodeAudioData(await res.arrayBuffer());
-          this.overrides.set(name, buf);
-          return buf;
-        } catch {
-          /* try the next extension */
-        }
+    for (const ext of EXTENSIONS) {
+      try {
+        const res = await fetch(`${this.basePath}/${name}.${ext}`);
+        if (!res.ok) continue;
+        const buf = await this.ctx.decodeAudioData(await res.arrayBuffer());
+        this.overrides.set(name, buf);
+        return buf;
+      } catch {
+        /* try the next extension */
       }
+    }
     this.overrides.set(name, null);
     return null;
   }

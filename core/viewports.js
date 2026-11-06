@@ -1,39 +1,16 @@
-/** Integer-pixel camera rectangles. A three-player game uses the whole screen. */
-export function viewports(
-  count,
-  width,
-  height,
-  { threeLayout = "balanced" } = {},
-) {
+export function viewports(count, width, height) {
   if (!Number.isInteger(count) || count < 1 || count > 4)
     throw Error("One to four views are supported");
-  if (!["balanced", "grid"].includes(threeLayout))
-    throw Error("Unknown three-view layout");
-  const w = Number.isFinite(width) ? Math.max(0, Math.floor(width)) : 0,
-    h = Number.isFinite(height) ? Math.max(0, Math.floor(height)) : 0,
-    halfW = Math.floor(w / 2),
-    halfH = Math.floor(h / 2);
-  if (count === 1) return [{ x: 0, y: 0, width: w, height: h }];
-  if (count === 2 && w / Math.max(1, h) < 1.2)
-    return [
-      { x: 0, y: 0, width: w, height: halfH },
-      { x: 0, y: halfH, width: w, height: h - halfH },
-    ];
-  if (count === 3 && threeLayout === "balanced")
-    return [
-      { x: 0, y: 0, width: w, height: halfH },
-      { x: 0, y: halfH, width: halfW, height: h - halfH },
-      { x: halfW, y: halfH, width: w - halfW, height: h - halfH },
-    ];
-  const rows = count > 2 ? 2 : 1;
+  const columns = count === 1 ? 1 : 2,
+    rows = count > 2 ? 2 : 1;
   return Array.from({ length: count }, (_, i) => {
-    const x = Math.floor(((i % 2) * w) / 2),
-      y = Math.floor((Math.floor(i / 2) * h) / rows);
+    const x = Math.floor(((i % columns) * width) / columns),
+      y = Math.floor((Math.floor(i / columns) * height) / rows);
     return {
       x,
       y,
-      width: Math.floor((((i % 2) + 1) * w) / 2) - x,
-      height: Math.floor(((Math.floor(i / 2) + 1) * h) / rows) - y,
+      width: Math.floor((((i % columns) + 1) * width) / columns) - x,
+      height: Math.floor(((Math.floor(i / columns) + 1) * height) / rows) - y,
     };
   });
 }
