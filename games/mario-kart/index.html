@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Kart Rush — Funcaster Console</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="importmap">
+      { "imports": { "three": "/vendor/three/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <canvas id="game" aria-label="Aurora Circuit race"></canvas>
+    <div id="speed-lines"></div>
+    <div id="hit-flash"></div>
+    <div id="hud" hidden>
+      <div id="item-frame">
+        <div id="item-icon"></div>
+        <span id="item-caption">ITEM</span><span class="keycap">→ / SPACE</span>
+      </div>
+      <div id="race-brand"><b>KART RUSH</b><span>STADIUM</span></div>
+      <div id="lap-panel">
+        <span id="coin-icon" aria-label="Coins"></span><b id="coins">00</b
+        ><i></i
+        ><span class="flag" aria-label="Lap"
+          ><svg viewBox="0 0 28 32" aria-hidden="true">
+            <path
+              d="M3 30V3h22v18H4"
+              fill="none"
+              stroke="white"
+              stroke-width="2.8"
+            />
+            <path
+              d="M5 4h6v5H5m12-5h6v5h-6M11 9h6v5h-6M5 14h6v5H5m12-5h6v5h-6"
+              fill="white"
+            /></svg></span
+        ><b id="lap">1 <small>/ 3</small></b>
+      </div>
+      <div id="position">8<sup>th</sup></div>
+      <canvas id="minimap" width="250" height="220"></canvas>
+      <div id="speed">
+        <b id="speed-number">0</b><span>km/h</span>
+        <div id="speed-bar"></div>
+      </div>
+      <div id="drift-meter">
+        <span id="drift-label">MINI-TURBO</span>
+        <div id="drift-fill"></div>
+      </div>
+      <div id="notice"></div>
+      <div id="countdown">
+        <div id="lamps"><i></i><i></i><i></i></div>
+        <b id="count-number"></b>
+        <div id="wheel-ready" hidden>
+          Hold your phone sideways and level<br /><small
+            >The countdown starts when your wheel is ready</small
+          >
+        </div>
+      </div>
+    </div>
+    <div id="topline">
+      <a href="/" id="home">⌂ <span>CHANNELS</span></a
+      ><span id="connection">KEYBOARD READY</span
+      ><button id="fullscreen" aria-label="Toggle fullscreen">
+        ⛶ FULLSCREEN</button
+      ><button id="mute" aria-label="Toggle audio">♪ SOUND ON</button>
+    </div>
+    <div id="intro">
+      <div class="eyebrow">FUNCASTER CUP · ORIGINAL CREW</div>
+      <h1><img src="menu-logo.svg" alt="Kart Rush" /></h1>
+      <div class="stadium-name">AURORA CIRCUIT <span>★</span></div>
+      <p class="intro-copy">Choose your driver</p>
+      <div id="characters" role="group" aria-label="Choose character"></div>
+      <div id="chosen">COMET</div>
+      <div id="lap-options" role="group" aria-label="Race length">
+        <span>RACE LENGTH</span>
+        <button type="button" data-laps="1" aria-pressed="false">1 LAP</button>
+        <button type="button" data-laps="3" aria-pressed="true">3 LAPS</button>
+      </div>
+      <button id="start">Confirm Driver <span>② OK</span></button>
+      <p id="menu-hint">Crosspad to choose · ② Confirm driver</p>
+      <p class="controls">
+        <b>PHONE</b> Hold sideways, screen facing up · roll to steer<br /><b
+          >2</b
+        >
+        gas &nbsp; <b>1</b> brake &nbsp; <b>A</b> drift &nbsp;
+        <b>→</b> item<br /><b>KEYBOARD</b>
+        ← → steer · Z gas · X brake · Shift drift · Space item
+      </p>
+    </div>
+    <div id="track-label">
+      <span>KART RUSH CUP</span><b>Aurora Circuit</b
+      ><small>YOUR CREW · YOUR RACE · AURORA CIRCUIT</small>
+    </div>
+    <div id="bottomline">
+      <span id="wheel-status">Z gas · X brake · Shift drift · Space item</span
+      ><span id="keyboard-hint">F fullscreen · C clean view · Esc pause</span>
+    </div>
+    <div id="pause" class="scrim" hidden>
+      <div class="pause-panel">
+        <h2>PAUSED</h2>
+        <p id="pause-reason">Take a breath. The race will wait.</p>
+        <button id="resume">BACK TO THE RACE</button
+        ><a href="/">Return to channels</a>
+      </div>
+    </div>
+    <div id="results" class="scrim" hidden>
+      <div class="results-panel">
+        <div class="eyebrow">KART RUSH CUP · AURORA CIRCUIT</div>
+        <h2>Race Results</h2>
+        <p id="result-summary"></p>
+        <div id="standings"></div>
+        <button id="again">RACE AGAIN <span>② / ENTER →</span></button
+        ><a href="/">Return to channels</a>
+      </div>
+    </div>
+    <div id="error" hidden></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "id": "mario-kart",
+  "title": "Kart Rush",
+  "verb": "Your phone. Your steering wheel.",
+  "detail": "Hold Accelerate. Tilt gently to steer. Boost out of the pack.",
+  "color": "#d74842",
+  "bg": "#ffe5d8",
+  "icon": "↝",
+  "mode": "wheel",
+  "classic": true,
+  "players": "1–4 drivers",
+  "tag": "THE STARTING GRID",
+  "duration": "1 or 3 laps",
+  "action": "Start race",
+  "schemaVersion": 2,
+  "gameId": "funcaster.kart-rush",
+  "version": "1.1.0",
+  "order": 0,
+  "maxPlayers": 4,
+  "controller": "wheel",
+  "view": "split",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "lower",
+    "unit": "place",
+    "integer": true,
+    "tieBreak": "finish time"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 7
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.kart-rush",
+    "funcaster.mario-kart"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "split",
+  "remote": "preview",
+  "roundPolicy": {
+    "kind": "untilDone",
+    "hardCapMs": 600000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": [
+    "finishMs",
+    "boostsUsed"
+  ]
+}
