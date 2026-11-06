@@ -4,10 +4,7 @@
     name="viewport"
     content="width=device-width,initial-scale=1"
   /><title>Creator playground · Funcaster</title
-  ><link rel="stylesheet" href="/party/party.css" /><link
-    rel="stylesheet"
-    href="/party/arcade.css"
-  /><link rel="stylesheet" href="/party/layout.css" /><style>
+  ><link rel="stylesheet" href="/party/party.css" /><style>
     main {
       max-width: 1000px;
       margin: 40px auto;
@@ -29,49 +26,46 @@
       margin: 16px 0;
     }
   </style>
-  <body class="utility-page">
-    <main>
-      <a class="brand" href="/">funcaster.</a>
-      <h1>A little idea. A new game.</h1>
-      <p>
-        Paste your standalone HTML and try it here. Preview is local and cannot
-        access your party, storage or the network. For complete game bundles,
-        use the SDK preview command. Reviewed community games have their own
-        gallery.
-      </p>
-      <label for="source">Game HTML</label
-      ><textarea
-        id="source"
-        spellcheck="false"
-        placeholder="Paste standalone HTML with inline scripts and styles"
-      ></textarea
-      ><button id="preview" class="primary-button">Preview ↗</button>
-      <p id="creator-status" role="status"></p>
-      <div class="setup-fields">
-        <label
-          >Pointer left / right<input
-            id="preview-x"
-            type="range"
-            min="-1"
-            max="1"
-            step="0.01"
-            value="0" /></label
-        ><label
-          >Pointer up / down<input
-            id="preview-y"
-            type="range"
-            min="-1"
-            max="1"
-            step="0.01"
-            value="0"
-        /></label>
-      </div>
-      <iframe
-        id="sandbox"
-        title="Isolated game preview"
-        sandbox="allow-scripts"
-      ></iframe>
-    </main>
-    <script type="module" src="/party/creator.js"></script>
-  </body>
+  <main>
+    <a class="brand" href="/">funcaster.</a>
+    <h1>A little idea. A new game.</h1>
+    <p>
+      Paste your standalone HTML and try it here. Preview is local and cannot
+      access your party, storage or the network. Community publishing is
+      awaiting a first outside creator review.
+    </p>
+    <label for="source">Game HTML</label
+    ><textarea
+      id="source"
+      spellcheck="false"
+      placeholder="Paste the generated index.html here"
+    ></textarea
+    ><button id="preview" class="primary-button">Preview ↗</button>
+    <p id="creator-status" role="status"></p>
+    <div class="setup-fields">
+      <label
+        >Pointer left / right<input
+          id="preview-x"
+          type="range"
+          min="-1"
+          max="1"
+          step="0.01"
+          value="0" /></label
+      ><label
+        >Pointer up / down<input
+          id="preview-y"
+          type="range"
+          min="-1"
+          max="1"
+          step="0.01"
+          value="0"
+      /></label>
+    </div>
+    <iframe
+      id="sandbox"
+      title="Isolated game preview"
+      sandbox="allow-scripts"
+    ></iframe>
+  </main>
+  <script type="module" src="/party/creator.js"></script>
 </html>

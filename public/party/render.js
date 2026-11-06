@@ -1,14 +1,10 @@
-import { resizeCanvas } from "../../core/pixel-budget.js";
-import { renderScale } from "../../core/render-scale.js";
-import { SEATS } from "../../core/seats.js";
-const colors = SEATS.map((seat) => seat.color);
+import { colors } from "./catalog.js";
 const palettes = ["#f0ebff", "#fff0e7", "#e6f5ed", "#fff7db"];
 export class PartyRenderer {
   constructor(canvas) {
     this.canvas = canvas;
     this.g = canvas.getContext("2d");
     this.frame = null;
-    this.insets = { top: 0, bottom: 0 };
     this.positions = new Map();
     this.particles = [];
     this.feedback = new Map();
@@ -22,16 +18,12 @@ export class PartyRenderer {
   }
   resize() {
     const r = this.canvas.getBoundingClientRect(),
-      d = resizeCanvas(this.canvas, r.width, r.height);
+      d = Math.min(devicePixelRatio, 2);
     this.w = r.width;
     this.h = r.height;
+    this.canvas.width = r.width * d;
+    this.canvas.height = r.height * d;
     this.g.setTransform(d, 0, 0, d, 0, 0);
-  }
-  setInsets({ top = 0, bottom = 0 } = {}) {
-    this.insets = {
-      top: Number.isFinite(top) ? Math.max(0, top) : 0,
-      bottom: Number.isFinite(bottom) ? Math.max(0, bottom) : 0,
-    };
   }
   setFrame(frame) {
     this.frame = frame;
@@ -85,25 +77,13 @@ export class PartyRenderer {
     requestAnimationFrame(this.animate);
     const dt = Math.min(0.04, (time - (this.time || time)) / 1000);
     this.time = time;
-    const g = this.g;
-    g.clearRect(0, 0, this.w, this.h);
-    if (!this.frame?.players.length || !this.w || !this.h) return;
-    const top = Math.min(this.h - 1, this.insets.top),
-      bottom = Math.min(this.h - top - 1, this.insets.bottom),
-      scale = renderScale(this.h),
-      w = this.w / scale,
-      h = (this.h - top - bottom) / scale,
-      n = this.frame.players.length,
+    const g = this.g,
+      w = this.w,
+      h = this.h;
+    g.clearRect(0, 0, w, h);
+    if (!this.frame || !w || !h) return;
+    const n = this.frame.players.length,
       lw = w / n;
-    // Keep lane backgrounds behind the UI, but paint gameplay only between its rails.
-    this.frame.players.forEach((player, index) => {
-      g.fillStyle = palettes[player.slot];
-      g.fillRect((index * this.w) / n, 0, this.w / n, this.h);
-    });
-    // Work in 720p art units: sprites, outlines and captions all scale together.
-    g.save();
-    g.translate(0, top);
-    g.scale(scale, scale);
     this.frame.players.forEach((p, index) => {
       const left = index * lw;
       g.save();
@@ -230,11 +210,8 @@ export class PartyRenderer {
         }
       }
       const x = pos.x * lw,
-        size = game === "star-catch" ? lw * 0.105 : Math.min(48, lw * 0.14),
-        y =
-          game === "star-catch"
-            ? Math.min(pos.y * h, h - size * 0.85)
-            : pos.y * h;
+        y = pos.y * h,
+        size = game === "star-catch" ? lw * 0.105 : Math.min(48, lw * 0.14);
       g.save();
       g.translate(x, y);
       if (p.hit > 0 && this.motion) g.translate(Math.sin(time * 0.1) * 3, 0);
@@ -332,7 +309,6 @@ export class PartyRenderer {
         g.fillRect(left - 3, 0, 6, h);
       }
     });
-    g.restore();
     this.particles = this.particles.filter((p) => {
       p.t -= dt;
       p.x += p.vx * dt;

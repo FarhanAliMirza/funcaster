@@ -6,14 +6,6 @@
     <meta name="theme-color" content="#f7f5ef" />
     <title>Funcaster — A little motion. A lot of fun.</title>
     <link rel="stylesheet" href="/party/party.css" />
-    <link rel="stylesheet" href="/party/arcade.css" />
-    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#0d1424" />
-    <meta property="og:image" content="/og-default.png" />
-    <meta property="og:title" content="Funcaster · Scan. Tilt. Play." />
-    <link rel="stylesheet" href="/party/layout.css" />
   </head>
   <body class="host-page">
     <header class="topbar">
@@ -43,9 +35,9 @@
     <main id="lobby" class="lobby-shell">
       <section class="welcome">
         <div class="eyebrow">
-          <span class="spark">✳</span> BOMBAY ARCADE / EST. 2099
+          <span class="spark">✳</span> GOOD TIMES. ZERO DOWNLOADS.
         </div>
-        <h1>NEXT STOP:<br /><span>GOOD TIMES.</span></h1>
+        <h1>Your phone.<br />Your moves.<br /><span>The whole party.</span></h1>
         <p>
           Pick a game, grab a friend, and make a little<br
             class="desktop-break"
@@ -84,7 +76,7 @@
       </aside>
       <section class="player-section">
         <div class="section-heading">
-          <h2>Your crew, all aboard <span id="player-count">0 / 4</span></h2>
+          <h2>Your little crew <span id="player-count">0 / 4</span></h2>
           <span id="crew-hint">Scan to claim your color</span>
         </div>
         <div class="player-slots" id="players"></div>
@@ -92,8 +84,8 @@
       <section class="game-section">
         <div class="section-heading">
           <div>
-            <span class="step-label">02 / THE ARCADE LINE</span>
-            <h2>Pick your next stop.</h2>
+            <span class="step-label">02 / FIND YOUR KIND OF FUN</span>
+            <h2>Old favorites. New obsessions.</h2>
           </div>
           <span class="round-tag">One QR. Every game. ↗</span>
         </div>
@@ -155,7 +147,6 @@
               >Drawing mode<select id="drawing-mode">
                 <option value="guess">Draw &amp; guess · take turns</option>
                 <option value="free">Free draw · everyone paints</option>
-                <option value="vote">Draw, then vote</option>
               </select></label
             >
             <label id="pair-first-field" hidden
@@ -178,7 +169,6 @@
       <footer>
         <span>LESS SCROLLING. MORE PLAYING.</span
         ><span>Made for the people in the room. ✳</span>
-        <a href="/credits">Artwork, fonts & sound credits</a>
       </footer>
     </main>
     <details class="party-extras">
@@ -251,7 +241,6 @@
       <div class="arena-bottom">
         <span id="round-status">A quick warm-up. Find your rhythm.</span
         ><span>YOUR COLOR. YOUR LANE.</span
-        ><a class="text-button" href="/classic.html">Try with keyboard ↗</a
         ><button id="invite" class="text-button">Invite a friend ↗</button>
       </div>
     </section>

@@ -1,15 +1,7 @@
-import { AudioEngine } from "/core/audio.js";
-import { gamepadMenu } from "/core/gamepad-menu.js";
-import { mountSchemaOptions } from "./schema-options.js";
-import { mountHostAdmin } from "./host-admin.js";
-import { enhanceOptions, focusNavigation } from "./choices.js";
-import { SEATS } from "/core/seats.js";
 import { buildId } from "/build.js";
 import {
   games,
   gameById,
-  independentViews,
-  sharedWorld,
   colors,
   names,
   remember,
@@ -26,7 +18,6 @@ let state = null,
   offset = 0,
   sound = false,
   audio = null,
-  ambience = null,
   lastBeep = null,
   frameKey = null;
 const toast = (text) => {
@@ -44,10 +35,7 @@ function beep(frequency = 660) {
       g = audio.createGain();
     o.connect(g).connect(audio.destination);
     o.frequency.value = frequency;
-    g.gain.setValueAtTime(
-      (0.07 * Number($("party-volume").value)) / 100,
-      audio.currentTime,
-    );
+    g.gain.setValueAtTime(0.07, audio.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.16);
     o.start();
     o.stop(audio.currentTime + 0.17);
@@ -92,10 +80,10 @@ async function pairingFor(code) {
 }
 socket.on("connect", () => {
   const saved = recalled("funcaster.host");
-  socket.emit("host", { ...(saved || {}), buildId, arcade: true }, (answer) => {
+  socket.emit("host", { ...(saved || {}), buildId }, (answer) => {
     if (answer.error) {
       remember("funcaster.host", null);
-      socket.emit("host", { buildId, arcade: true }, (retry) => {
+      socket.emit("host", { buildId }, (retry) => {
         if (retry.error) return toast(retry.error);
         remember("funcaster.host", retry);
         setDisplayInvite(retry);
@@ -119,60 +107,37 @@ socket.on("ended", () => {
 });
 socket.on("frame", (frame) => renderer.setFrame(frame));
 function playerMarkup(p, slot) {
-  return `<div class="player-slot ${p ? "occupied" : ""} ${p && !p.connected ? "offline" : ""}" style="--player:${colors[slot]}"><div class="avatar">${p ? SEATS[slot].shape : "+"}</div><div><div class="player-name">${p ? names[slot] : `Player ${slot + 1}`}</div><div class="player-status">${!p ? "Waiting for a friend" : !p.connected ? "Reconnecting…" : p.ready ? "Ready to roll ✓" : "Finding their balance…"}</div></div>${p ? `<button class="player-remove" data-remove="${slot}" aria-label="Remove ${names[slot]} from party" title="Free this spot">×</button>` : ""}</div>`;
+  return `<div class="player-slot ${p ? "occupied" : ""} ${p && !p.connected ? "offline" : ""}" style="--player:${colors[slot]}"><div class="avatar">${p ? "" : "+"}</div><div><div class="player-name">${p ? names[slot] : `Player ${slot + 1}`}</div><div class="player-status">${!p ? "Waiting for a friend" : !p.connected ? "Reconnecting…" : p.ready ? "Ready to roll ✓" : "Finding their balance…"}</div></div>${p ? `<button class="player-remove" data-remove="${slot}" aria-label="Remove ${names[slot]} from party" title="Free this spot">×</button>` : ""}</div>`;
 }
 function results() {
-  const ranked = (state.result?.scores || []).map((s) => ({
-      ...s,
-      ...SEATS[s.slot],
-    })),
+  const ranked = [...state.players]
+      .filter((p) => state.active.includes(p.slot))
+      .sort((a, b) =>
+        gameById(state.game).scoring.direction === "lower"
+          ? a.score - b.score
+          : b.score - a.score,
+      ),
     top = ranked[0];
   if (!top) return;
-  const tied = ranked.filter((p) => p.rank === top.rank).length > 1;
-  const golfPoints =
-    state.game === "golf" && ["skins", "match"].includes(state.match?.golfMode);
-  const unit = golfPoints
-    ? "points"
-    : state.game === "golf" && state.match?.golfMode === "closest"
-      ? "m from pin"
-      : gameById(state.game).scoring.unit;
-  const displayScore = (p) =>
-    golfPoints
-      ? -p.score
-      : state.game === "golf" && state.match?.golfMode === "closest"
-        ? (p.score / 1000).toFixed(2)
-        : p.score;
+  const tied = ranked.filter((p) => p.score === top.score).length > 1;
   const solo = ranked.length === 1;
   const target = gameById(state.game).target;
-  $("winner").textContent =
-    state.result?.status === "no-contest"
-      ? "Round cancelled · no contest"
-      : solo
-        ? target === undefined || top.score >= target
-          ? "You’re on a roll!"
-          : "Nicely played!"
-        : tied
-          ? "A perfect tie!"
-          : `${top.name} takes it!`;
+  $("winner").textContent = solo
+    ? top.score >= target
+      ? "You’re on a roll!"
+      : "Nicely played!"
+    : tied
+      ? "A perfect tie!"
+      : `${top.name} takes it!`;
   $("result-subtitle").textContent = solo
-    ? `${displayScore(top)} ${unit}${target ? ` · Try for ${target} next round.` : " · Same phone. One more go?"}`
+    ? `${top.score} ${gameById(state.game).scoring.unit}${target ? ` · Try for ${target} next round.` : " · Same phone. One more go?"}`
     : "Good moves. Better company.";
   $("rankings").innerHTML = ranked
     .map(
       (p, i) =>
-        `<div class="ranking" style="--player:${p.color}"><span>${state.result?.scores.find((s) => s.slot === p.slot)?.rank || i + 1}. ${p.name}</span><b>${p.outcome && p.outcome !== "finished" ? { dnf: "DNF", forfeit: "Forfeit", removed: "Removed" }[p.outcome] || "" : displayScore(p)} <small>${unit.toUpperCase()}</small></b></div>`,
+        `<div class="ranking" style="--player:${p.color}"><span>${state.result?.scores.find((s) => s.slot === p.slot)?.rank || i + 1}. ${p.name}</span><b>${p.score} <small>${gameById(state.game).scoring.unit.toUpperCase()}</small></b></div>`,
     )
     .join("");
-  for (const [i, p] of ranked.entries()) {
-    if (!p.stats) continue;
-    const detail = document.createElement("small");
-    detail.className = "result-stats";
-    detail.textContent = Object.entries(p.stats)
-      .filter(([, v]) => Number.isFinite(v))
-      .map(([k, v]) => `${k.replace(/([A-Z])/g, " $1").toLowerCase()}: ${v}`)
-      .join(" · ");
-    $("rankings").children[i]?.append(detail);
-  }
   $("crew-standings").textContent =
     (state.bracket?.champion !== null && state.bracket?.champion !== undefined
       ? `${names[state.bracket.champion]} wins the bracket! · `
@@ -188,9 +153,6 @@ function results() {
       failed: "Replay check did not match · unverified scores",
       unverified: "Just for fun",
     }[state.result?.verification] || "";
-  if (state.result?.views?.some((v) => v.source === "remote"))
-    $("result-verification").textContent +=
-      " · Includes remotely reported views";
   if (!$("results").open) $("results").showModal();
 }
 socket.on("state", (next) => {
@@ -205,7 +167,6 @@ socket.on("state", (next) => {
       matchId: state.result.matchId,
       title: gameById(state.game).title,
       round: state.roundId,
-      verification: state.result.verification,
     });
     records.splice(20);
     remember(recordsKey, records);
@@ -218,7 +179,7 @@ socket.on("state", (next) => {
       ...records.map((r) => {
         const option = document.createElement("option");
         option.value = r.matchId;
-        option.textContent = `Round ${r.round} · ${r.title} · ${r.verification === "verified" ? "Replay checked" : r.verification === "failed" ? "Replay mismatch" : "Recorded"}`;
+        option.textContent = `Round ${r.round} · ${r.title}`;
         return option;
       }),
     );
@@ -249,41 +210,22 @@ socket.on("state", (next) => {
     $("next-player").hidden =
       state.match?.maxHumans !== 1 ||
       state.players.filter((p) => p.connected && p.ready).length < 2;
-    const localViews = independentViews(state.game, state.match)
-      ? state.active
-          .map((_, i) => i)
-          .filter(
-            (i) =>
-              !state.seatViews?.some((v) => v.view === i && v.where !== "host"),
-          )
-      : [0];
-    const key = `${state.game}:${state.roundId}:${localViews.join(",")}`;
+    const key = `${state.game}:${state.roundId}`;
     if (frameKey !== key) {
       frameKey = key;
       $("classic-loading").hidden = false;
-      const independent = independentViews(state.game, state.match);
+      const independent =
+        ["kart", "island-flyover", "alien-attack", "shooting-range"].includes(
+          state.game,
+        ) ||
+        (state.game === "fruit-ninja" && state.match?.variant === "race");
       document
         .querySelectorAll(".extra-game-view")
         .forEach((el) => el.remove());
       const wrap = $("classic-frame").parentElement;
       wrap.querySelectorAll(".view-name").forEach((e) => e.remove());
-      wrap.dataset.views = Math.max(1, localViews.length);
-      const viewCount = localViews.length;
-      $("classic-frame").hidden = !viewCount;
-      if (!viewCount) {
-        $("classic-frame").removeAttribute("src");
-        $("classic-loading").hidden = true;
-      }
-      wrap.querySelector(".remote-view-note")?.remove();
-      if (!viewCount) {
-        const note = document.createElement("p");
-        note.className = "remote-view-note";
-        note.textContent =
-          state.seatViews
-            ?.map((v) => `${names[v.slot]} is playing on ${v.label}`)
-            .join(" · ") || "Your players are on their own screens.";
-        wrap.append(note);
-      }
+      wrap.dataset.views = independent ? state.active.length : 1;
+      const viewCount = independent ? state.active.length : 1;
       for (let i = 0; i < viewCount; i++) {
         const frame =
           i === 0 ? $("classic-frame") : document.createElement("iframe");
@@ -292,18 +234,18 @@ socket.on("state", (next) => {
           frame.allow = "autoplay; fullscreen";
           wrap.append(frame);
         }
-        frame.title = `${game.title}${independent ? " · " + names[state.active[localViews[i]]] : ""}`;
+        frame.title = `${game.title}${independent ? " · " + names[state.active[i]] : ""}`;
         if (independent) {
           const badge = document.createElement("span");
           badge.className = "view-name";
-          badge.textContent = names[state.active[localViews[i]]];
-          badge.style.background = colors[state.active[localViews[i]]];
-          badge.style.left = `${viewCount > 1 ? (i % 2) * 50 + 25 : 50}%`;
-          badge.style.top =
-            viewCount > 2 && i >= 2 ? "calc(50% + 12px)" : "12px";
+          badge.textContent = names[state.active[i]];
+          badge.style.background = colors[state.active[i]];
+          badge.style.left = `calc(${viewCount > 1 ? (i % 2) * 50 : 0}% + 12px)`;
+          badge.style.bottom =
+            viewCount > 2 && i < 2 ? "calc(50% + 8px)" : "8px";
           wrap.append(badge);
         }
-        frame.src = `/games/${state.game}/${sharedWorld(state.game, state.match) ? "shared.html" : ""}?party=${state.code}&round=${state.roundId}&view=${localViews[i]}&views=${viewCount}${state.match?.serverSimulation ? "&shared=1" : ""}`;
+        frame.src = `/games/${state.game}/?party=${state.code}&round=${state.roundId}&view=${i}`;
       }
     }
   } else if (frameKey) {
@@ -328,9 +270,7 @@ socket.on("state", (next) => {
     ? `${ready.length} ready · good things incoming`
     : "Scan to claim your color";
   const minHumans = state.setup?.mode === "multiplayer" ? 2 : 1;
-  $("start").disabled =
-    ready.length < minHumans ||
-    !!(state.startReason && state.startReason !== "Ready to play");
+  $("start").disabled = ready.length < minHumans;
   $("match-mode").value = state.setup?.mode || "auto";
   $("cpu-count").value = Number.isInteger(state.setup?.cpuCount)
     ? String(state.setup.cpuCount)
@@ -391,9 +331,6 @@ socket.on("state", (next) => {
             ? "Everyone’s in. Here we go!"
             : "We’ll start as soon as everyone finds their balance."
           : "Choose a game. We’ll start when everyone is ready.";
-  if (state.startReason && state.startReason !== "Ready to play")
-    $("start-hint").textContent = state.startReason;
-  renderSchemaOptions(state);
   for (const card of document.querySelectorAll("[data-game]")) {
     const selected = card.dataset.game === state.game;
     card.classList.toggle("selected", selected);
@@ -426,11 +363,6 @@ socket.on("state", (next) => {
   if (state.phase === "results") results();
   else if ($("results").open) $("results").close();
   if (previousPhase !== state.phase) {
-    window.scrollTo({ top: 0, behavior: "instant" });
-    if (ambience) {
-      if (sound && state.phase === "lobby") ambience.startSynthMusic();
-      else ambience.stopMusic();
-    }
     if (state.phase === "lobby") renderer.clear();
     if (state.phase === "playing") beep(880);
     previousPhase = state.phase;
@@ -451,7 +383,7 @@ setInterval(() => {
     lastBeep = remaining;
   }
   $("next-round").textContent =
-    `Back to the game room in ${remaining}s. Your phones stay connected.`;
+    `Another round starts in ${remaining}s. Same phones, new chances.`;
 }, 100);
 for (const id of [
   "match-mode",
@@ -466,7 +398,6 @@ for (const id of [
 ])
   $(id).onchange = () =>
     socket.emit("setup", {
-      ...state.setup,
       mode: $("match-mode").value,
       cpuCount:
         $("cpu-count").value === "auto" ? null : Number($("cpu-count").value),
@@ -486,14 +417,8 @@ $("results").addEventListener("cancel", (e) => {
   e.preventDefault();
   socket.emit("lobby");
 });
-$("sound").onclick = async () => {
+$("sound").onclick = () => {
   sound = !sound;
-  ambience ||= new AudioEngine();
-  if (sound) {
-    await ambience.unlock();
-    ambience.play("boot");
-    if (state?.phase === "lobby") ambience.startSynthMusic();
-  } else ambience.stopMusic();
   $("sound").setAttribute(
     "aria-label",
     sound ? "Turn sound off" : "Turn sound on",
@@ -582,13 +507,3 @@ for (const id of ["party-volume", "reduced-effects"]) {
     renderer.motion = !$("reduced-effects").checked;
   };
 }
-
-const syncOptionChoices = enhanceOptions(document);
-syncOptionChoices();
-focusNavigation(document);
-socket.on("state", () => syncOptionChoices());
-
-mountHostAdmin(socket);
-const renderSchemaOptions = mountSchemaOptions(socket);
-
-gamepadMenu();

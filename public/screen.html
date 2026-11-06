@@ -5,11 +5,64 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Watch the party · Funcaster</title>
     <link rel="stylesheet" href="/party/party.css" />
-    <link rel="stylesheet" href="/party/arcade.css" />
-    <link rel="stylesheet" href="/party/layout.css" />
-    <link rel="stylesheet" href="/party/display.css" />
+    <style>
+      body {
+        margin: 0;
+      }
+      .display-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 24px;
+        background: #faf8f1;
+      }
+      .display-toolbar strong {
+        margin-right: auto;
+      }
+      .display-stage {
+        position: relative;
+        height: calc(100dvh - 70px);
+        display: grid;
+        gap: 3px;
+        background: #241e3b;
+      }
+      .display-stage[data-count="2"],
+      .display-stage[data-count="3"],
+      .display-stage[data-count="4"] {
+        grid-template-columns: 1fr 1fr;
+      }
+      .display-stage[data-count="3"],
+      .display-stage[data-count="4"] {
+        grid-template-rows: 1fr 1fr;
+      }
+      .display-stage iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        min-height: 0;
+      }
+      .display-stage canvas {
+        width: 100%;
+        height: 100%;
+      }
+      #display-loading {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #faf8f1;
+        font-size: 1.5rem;
+        pointer-events: none;
+      }
+      #display-note {
+        padding: 8vh;
+        text-align: center;
+        color: #faf8f1;
+        font-size: 2rem;
+      }
+    </style>
   </head>
-  <body class="display-page">
+  <body>
     <header class="display-toolbar">
       <a class="brand" href="/">funcaster.</a
       ><strong id="display-title">Joining the party…</strong
@@ -28,32 +81,6 @@
         Full screen ↗
       </button>
     </header>
-    <section id="screen-pairing" hidden class="display-pairing">
-      <img id="screen-qr" alt="Scan to pair your phone with this screen" />
-      <div>
-        <h1>Your screen. Your phone.</h1>
-        <p id="screen-pairing-note">Scan to join this game.</p>
-        <div class="display-actions">
-          <a
-            id="screen-controller"
-            class="secondary-button"
-            target="_blank"
-            rel="noopener"
-            >Open this controller ↗</a
-          ><button id="screen-ready" class="primary-button">
-            Ready on this screen ↗
-          </button>
-        </div>
-        <p id="screen-offer" role="status"></p>
-        <div class="display-actions">
-          <button id="view-play" class="primary-button" hidden>
-            Play on this screen</button
-          ><button id="view-decline" class="secondary-button" hidden>
-            Not now
-          </button>
-        </div>
-      </div>
-    </section>
     <main id="display-stage" class="display-stage">
       <p id="display-note" role="status">
         The host keeps the game running. Your screen follows along.

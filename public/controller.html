@@ -6,363 +6,209 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#0a58d6" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
+    <meta name="theme-color" content="#f7f5ef" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>Your moves — Funcaster</title>
     <link rel="stylesheet" href="/party/party.css" />
-    <link rel="stylesheet" href="/party/remote.css" />
     <link rel="stylesheet" href="/party/phone.css" />
-    <link rel="stylesheet" href="/party/arcade.css" />
-    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <link rel="manifest" href="/controller.webmanifest" />
-    <meta property="og:image" content="/og-default.png" />
-    <meta property="og:title" content="Funcaster · Scan. Tilt. Play." />
-    <link rel="stylesheet" href="/party/layout.css" />
-    <link rel="stylesheet" href="/party/phone-page.css" />
-    <link rel="stylesheet" href="/party/remote-skins.css" />
   </head>
-  <body class="phone-page" data-skin="luna" data-posture="pointer">
-    <div id="stage">
-      <div id="remote" class="remote asleep" data-posture="pointer">
-        <header id="row-top">
-          <button
-            id="power"
-            aria-label="Link status: connecting"
-            title="Connection status"
-          >
-            ⏻
-          </button>
-          <div id="brand">funcaster</div>
-          <div
-            id="seat-lamp"
-            class="leds seek"
-            role="status"
-            aria-label="Finding your seat"
-          >
-            <i data-seat="0"></i><i data-seat="1"></i><i data-seat="2"></i
-            ><i data-seat="3"></i>
+  <body class="phone-page">
+    <div class="phone-shell">
+      <header class="phone-top">
+        <a class="brand" href="/controller"
+          ><span class="brand-mark">c<span>✦</span></span
+          >funcaster<span class="brand-period">.</span></a
+        ><span id="phone-status" class="phone-status" role="status"
+          >Connecting…</span
+        >
+      </header>
+      <form id="code-form" class="code-form" hidden>
+        <span class="eyebrow">YOU’RE INVITED</span>
+        <h1>Find your party.</h1>
+        <p>
+          Scan the QR on the big screen, or enter its six-character party code.
+        </p>
+        <label for="code-input">Party code</label
+        ><input
+          id="code-input"
+          name="code"
+          maxlength="6"
+          pattern="[A-Za-z2-9]{6}"
+          autocomplete="off"
+          autocapitalize="characters"
+          placeholder="ABC123"
+          required
+        /><button class="primary-button">Join the fun ↗</button>
+      </form>
+      <section id="join-view" class="phone-view">
+        <div class="player-chip">
+          <span id="player-dot"></span
+          ><span id="player-identity">Finding your crew</span>
+        </div>
+        <h1 id="join-title">Your phone.<br />Your superpower.</h1>
+        <p id="join-description">One little tilt. A whole lot of fun.</p>
+        <div class="phone-illustration" aria-hidden="true">
+          <div class="orbit one"></div>
+          <div class="orbit two"></div>
+          <span class="ill-star first">✦</span
+          ><span class="ill-star second">✳</span>
+          <div class="tiny-phone">
+            <span></span>
+            <div class="phone-face">••<i>⌣</i></div>
           </div>
-        </header>
-        <section
-          id="screen"
-          class="context-window"
-          aria-label="Game and connection details"
-        >
-          <span id="phone-status" class="phone-status" role="status"
-            >Connecting…</span
-          >
-          <form id="code-form" class="code-form" data-scroll hidden>
-            <span class="eyebrow">YOU’RE INVITED</span>
-            <h1>Find your party.</h1>
-            <p>
-              Scan the QR on the big screen, or enter its six-character party
-              code.
-            </p>
-            <label for="code-input">Party code</label
-            ><input
-              id="code-input"
-              name="code"
-              maxlength="6"
-              pattern="[A-Za-z2-9]{6}"
-              autocomplete="off"
-              autocapitalize="characters"
-              placeholder="ABC123"
-              required
-            /><button class="primary-button">Join the fun ↗</button>
-          </form>
-          <section id="waiting-view" class="phone-view" data-scroll hidden>
-            <span class="eyebrow">A PLACE IN THE CREW</span>
-            <h1>You’re on the list.</h1>
-            <p id="queue-position" role="status">Saving your spot…</p>
-            <p>
-              Keep this page open. Your controls appear when it’s your turn.
-            </p>
-            <button id="queue-leave" class="secondary-button">
-              Leave the line
-            </button>
-            <button data-staff-open class="text-button">Staff access</button>
-          </section>
-          <section id="join-view" class="phone-view" data-scroll>
-            <div class="player-chip">
-              <span id="player-dot"></span
-              ><span id="player-identity">Finding your crew</span>
-            </div>
-            <h1 id="join-title">Your phone.<br />Your superpower.</h1>
-            <p id="join-description">One little tilt. A whole lot of fun.</p>
-            <div class="phone-illustration" aria-hidden="true">
-              <div class="orbit one"></div>
-              <div class="orbit two"></div>
-              <span class="ill-star first">✦</span
-              ><span class="ill-star second">✳</span>
-              <div class="tiny-phone">
-                <span></span>
-                <div class="phone-face">••<i>⌣</i></div>
-              </div>
-              <span class="tilt-arrow">↔</span>
-            </div>
-            <div
-              id="join-error"
-              class="inline-message"
-              role="status"
-              hidden
-            ></div>
-            <p class="safety-note">
-              Hold securely. Little wrist moves. Give friends room.
-            </p>
-            <p id="browser-coaching" class="inline-message" hidden>
-              Open in Safari or Chrome for motion.
-              <button id="gate-copy-invite" class="text-button">
-                Copy link
-              </button>
-            </p>
-            <button id="recover-connection" class="secondary-button" hidden>
-              Rejoin this party
-            </button>
-            <div class="join-actions">
-              <button id="enable" class="primary-button">Tap to start</button>
-              <p class="permission-note" id="permission-note">
-                Allow motion when asked.
-              </p>
-              <button id="touch-mode" class="text-button">
-                Play with touch instead
-              </button>
-            </div>
-          </section>
-          <section
-            id="play-view"
-            class="phone-view play-view"
-            data-scroll
-            hidden
-          >
-            <div class="player-chip">
-              <span class="chip-dot"></span
-              ><span id="play-identity">You’re Lilac</span
-              ><span id="phone-score" class="phone-score">0 PTS</span>
-            </div>
-            <div class="play-copy">
-              <span id="phone-phase" class="eyebrow">FIND YOUR BALANCE</span>
-              <h1 id="phone-title">Hold comfy. <br />Stay still.</h1>
-              <p id="phone-hint">We’re finding your natural grip.</p>
-            </div>
-            <div
-              id="motion-pad"
-              class="motion-pad"
-              aria-label="Touch control pad: drag to move"
-              role="application"
-              tabindex="0"
-            >
-              <div class="pad-cross x"></div>
-              <div class="pad-cross y"></div>
-              <div class="pad-ring"></div>
-              <div id="motion-dot" class="motion-dot"><span>••</span></div>
-              <div id="phone-countdown" hidden></div>
-              <span id="pad-caption">A LITTLE TILT IS ALL IT TAKES</span>
-            </div>
-            <section id="guess-panel" class="guess-panel" hidden>
-              <p id="secret-word"></p>
-              <form id="guess-form">
-                <label for="guess-text">Your guess</label
-                ><input
-                  id="guess-text"
-                  maxlength="60"
-                  autocomplete="off"
-                  placeholder="What is the drawing?"
-                /><button class="primary-button" type="submit">Guess ↗</button>
-              </form>
-              <p id="guess-note" role="status"></p>
-            </section>
-            <div id="rotate-phone" class="rotate-phone" hidden>
-              <span aria-hidden="true">▱ ↻</span>Turn your phone sideways<small
-                >Both hands. Like a little steering wheel.</small
-              ><button id="rotate-touch" class="secondary-button">
-                Use touch steering
-              </button>
-            </div>
-            <section
-              id="wheel-controls"
-              class="wheel-controls"
-              aria-label="Driving controls"
-              hidden
-            >
-              <div class="steering-meter">
-                <span>LEFT</span>
-                <div class="steering-track"><i id="steering-dot"></i></div>
-                <span>RIGHT</span>
-              </div>
-              <div id="driver-choices" class="driver-choices" hidden>
-                <button
-                  id="driver-left"
-                  class="secondary-button"
-                  aria-label="Previous driver or lap count"
-                >
-                  ←</button
-                ><span id="driver-name">Choose on the big screen</span
-                ><button
-                  id="driver-right"
-                  class="secondary-button"
-                  aria-label="Next driver or lap count"
-                >
-                  →
-                </button>
-              </div>
-              <label id="touch-steer-wrap" class="touch-steer" hidden
-                >Slide to steer<input
-                  id="touch-steer"
-                  type="range"
-                  min="-100"
-                  max="100"
-                  value="0"
-                  aria-label="Steering"
-              /></label>
-              <div id="boost-info" class="boost-info" role="status">
-                <span id="boost-left" class="boost-stock" aria-live="polite"
-                  >— LEFT</span
-                >
-                <small id="boost-label">TAP FOR NITRO</small>
-                <span
-                  id="boost-recharge"
-                  class="boost-recharge"
-                  aria-hidden="true"
-                  ><i id="boost-recharge-fill"></i
-                ></span>
-              </div>
-            </section>
-            <button
-              id="classic-action"
-              class="primary-button classic-action"
-              hidden
-            >
-              Start / Fire
-            </button>
-            <section id="golf-power" class="golf-power" hidden>
-              <label for="golf-power-meter"
-                >Shot power <output id="golf-power-value">0%</output></label
-              >
-              <progress id="golf-power-meter" max="100" value="0"></progress>
-              <p id="golf-wind"></p>
-            </section>
-            <div class="calibration-track" id="calibration-track">
-              <i id="calibration-progress"></i>
-            </div>
-            <button id="pulse" class="primary-button pulse-button" hidden>
-              Pop a little extra ✧
-            </button>
-            <div id="sensor-message" class="inline-message" hidden></div>
-            <button id="retry-sensors" class="text-button" hidden>
-              Try motion again
-            </button>
-            <div class="phone-foot">
-              <span id="connection-detail">Getting connected</span
-              ><span>LOOK UP. THE FUN’S ON SCREEN. ↗</span>
-            </div>
-          </section>
-        </section>
-        <div id="dpad" aria-label="Direction controls">
-          <button class="dp u" id="dp-up" aria-label="Up" disabled></button>
-          <button class="dp l" id="dp-left" aria-label="Left" disabled></button>
-          <span class="dp c" aria-hidden="true"></span>
-          <button
-            class="dp r"
-            id="dp-right"
-            aria-label="Right"
-            disabled
-          ></button>
-          <button class="dp d" id="dp-down" aria-label="Down" disabled></button>
+          <span class="tilt-arrow">↔</span>
         </div>
-        <button
-          id="btn-a"
-          class="face-button"
-          data-caption="Action"
-          aria-label="Primary action"
-          disabled
-        >
-          A
-        </button>
-        <button
-          id="btn-b"
-          class="face-button"
-          data-caption="Back"
-          aria-label="Back to party menu"
-        >
-          B
-        </button>
-        <div id="row-mid">
-          <button class="pill" id="btn-minus" aria-label="Lower sensitivity">
-            −
+        <div id="join-error" class="inline-message" role="status" hidden></div>
+        <div class="join-actions">
+          <button id="enable" class="primary-button" disabled>
+            Let’s play <span>↗</span>
           </button>
-          <button class="pill" id="btn-home" aria-label="Party menu">⌂</button>
-          <button class="pill" id="btn-plus" aria-label="Higher sensitivity">
-            +
+          <p class="permission-note" id="permission-note">
+            Allow motion when your browser asks.<br />No app. No account. Just
+            you.
+          </p>
+          <button id="touch-mode" class="text-button" disabled>
+            Play with touch instead
           </button>
         </div>
-        <div id="speaker" aria-hidden="true">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
-          ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
-          ><i></i>
+      </section>
+      <section id="play-view" class="phone-view play-view" hidden>
+        <div class="player-chip">
+          <span class="chip-dot"></span
+          ><span id="play-identity">You’re Lilac</span
+          ><span id="phone-score" class="phone-score">0 PTS</span>
         </div>
-        <div id="ones">
-          <button
-            class="num"
-            id="btn-1"
-            data-caption="Recentre"
-            aria-label="Hold to recenter"
-          >
-            1
-          </button>
-          <button
-            class="num"
-            id="btn-2"
-            data-caption="Settings"
-            aria-label="Settings and help"
-          >
-            2
-          </button>
-        </div>
-        <div id="race-pedals" class="pedals" hidden>
-          <button
-            id="brake"
-            class="pedal brake"
-            data-caption="Brake"
-            aria-label="1: Brake"
-          >
-            <span class="pedal-mark" aria-hidden="true">1</span>
-          </button>
-          <button
-            id="boost"
-            class="pedal boost"
-            data-caption="Boost"
-            aria-label="A: Boost"
-            aria-describedby="boost-left boost-label"
-          >
-            <span class="pedal-mark" aria-hidden="true">A</span>
-          </button>
-          <button
-            id="gas"
-            class="pedal gas"
-            data-caption="Gas"
-            aria-label="2: Gas"
-          >
-            <span class="pedal-mark" aria-hidden="true">2</span
-            ><strong id="gas-label" class="remote-sr-only">Accelerate</strong
-            ><small id="gas-hint" class="remote-sr-only">Hold to go</small>
-          </button>
+        <div class="play-copy">
+          <span id="phone-phase" class="eyebrow">FIND YOUR BALANCE</span>
+          <h1 id="phone-title">Hold comfy.<br />Stay still.</h1>
+          <p id="phone-hint">We’re finding your natural grip.</p>
         </div>
         <div
-          id="leave-confirmation"
-          class="leave-confirmation"
-          role="status"
+          id="motion-pad"
+          class="motion-pad"
+          aria-label="Touch control pad: drag to move"
+          role="application"
+          tabindex="0"
+        >
+          <div class="pad-cross x"></div>
+          <div class="pad-cross y"></div>
+          <div class="pad-ring"></div>
+          <div id="motion-dot" class="motion-dot"><span>••</span></div>
+          <div id="phone-countdown" hidden></div>
+          <span id="pad-caption">A LITTLE TILT IS ALL IT TAKES</span>
+        </div>
+        <section id="guess-panel" class="guess-panel" hidden>
+          <p id="secret-word"></p>
+          <form id="guess-form">
+            <label for="guess-text">Your guess</label
+            ><input
+              id="guess-text"
+              maxlength="60"
+              autocomplete="off"
+              placeholder="What is the drawing?"
+            /><button class="primary-button" type="submit">Guess ↗</button>
+          </form>
+          <p id="guess-note" role="status"></p>
+        </section>
+        <div id="rotate-phone" class="rotate-phone" hidden>
+          <span aria-hidden="true">▱ ↻</span>Turn your phone sideways<small
+            >Both hands. Like a little steering wheel.</small
+          >
+        </div>
+        <section
+          id="wheel-controls"
+          class="wheel-controls"
+          aria-label="Driving controls"
           hidden
         >
-          Keep holding Home to leave. Release to stay.
+          <div class="steering-meter">
+            <span>LEFT</span>
+            <div class="steering-track"><i id="steering-dot"></i></div>
+            <span>RIGHT</span>
+          </div>
+          <div id="driver-choices" class="driver-choices" hidden>
+            <button
+              id="driver-left"
+              class="secondary-button"
+              aria-label="Previous driver or lap count"
+            >
+              ←</button
+            ><span id="driver-name">Choose on the big screen</span
+            ><button
+              id="driver-right"
+              class="secondary-button"
+              aria-label="Next driver or lap count"
+            >
+              →
+            </button>
+          </div>
+          <label id="touch-steer-wrap" class="touch-steer" hidden
+            >Slide to steer<input
+              id="touch-steer"
+              type="range"
+              min="-100"
+              max="100"
+              value="0"
+              aria-label="Steering"
+          /></label>
+          <div class="pedals">
+            <button id="brake" class="pedal brake" aria-label="Brake">
+              <span aria-hidden="true">▰</span><strong>Brake</strong
+              ><small>HOLD TO SLOW</small>
+            </button>
+            <button
+              id="boost"
+              class="pedal boost"
+              aria-label="Nitro boost"
+              aria-describedby="boost-left boost-label"
+            >
+              <span aria-hidden="true">ϟ</span><strong>Boost</strong>
+              <span id="boost-left" class="boost-stock" aria-live="polite"
+                >— LEFT</span
+              >
+              <small id="boost-label">TAP FOR NITRO</small>
+              <span
+                id="boost-recharge"
+                class="boost-recharge"
+                aria-hidden="true"
+                ><i id="boost-recharge-fill"></i
+              ></span>
+            </button>
+            <button id="gas" class="pedal gas" aria-label="Accelerate">
+              <span aria-hidden="true">↑</span>
+              <strong id="gas-label">Accelerate</strong>
+              <small id="gas-hint">HOLD TO GO</small>
+            </button>
+          </div>
+        </section>
+        <button
+          id="classic-action"
+          class="primary-button classic-action"
+          hidden
+        >
+          Start / Fire
+        </button>
+        <div class="calibration-track" id="calibration-track">
+          <i id="calibration-progress"></i>
         </div>
-      </div>
+        <button id="pulse" class="primary-button pulse-button" hidden>
+          Pop a little extra ✧
+        </button>
+        <div id="sensor-message" class="inline-message" hidden></div>
+        <button id="retry-sensors" class="text-button" hidden>
+          Try motion again
+        </button>
+        <div class="phone-tools">
+          <button id="recenter" class="secondary-button">◎ Recenter</button
+          ><button id="tune" class="secondary-button">Adjust feel</button>
+        </div>
+        <div class="phone-foot">
+          <span id="connection-detail">Getting connected</span
+          ><span>LOOK UP. THE FUN’S ON SCREEN. ↗</span>
+        </div>
+      </section>
     </div>
-    <dialog id="settings" class="settings-dialog" data-scroll>
+    <dialog id="settings" class="settings-dialog">
       <button
         id="close-settings"
         class="icon-button dialog-close"
@@ -374,23 +220,6 @@
       <p id="settings-description">
         Small moves or big moves. Find your sweet spot.
       </p>
-      <section class="remote-help" aria-label="Current controls">
-        <h3 id="remote-help-title">Your remote</h3>
-        <p id="remote-help-copy">Hold 1 to recenter. Home opens this menu.</p>
-        <p id="remote-unavailable"></p>
-        <p id="capability-note"></p>
-        <p id="sensor-diagnostics" class="settings-note"></p>
-        <button id="copy-invite" class="secondary-button" hidden>
-          Copy invite link
-        </button>
-      </section>
-      <div class="phone-tools">
-        <button id="recenter" class="secondary-button">◎ Recenter</button
-        ><button id="tune" class="secondary-button" hidden>Adjust feel</button>
-        <button id="phone-admin-open" class="secondary-button" hidden>
-          Party controls
-        </button>
-      </div>
       <label for="sensitivity"
         ><span id="sensitivity-label">Motion sensitivity</span>
         <output id="sensitivity-value">125%</output></label
@@ -417,18 +246,7 @@
       ><label
         ><input id="phone-haptics" type="checkbox" checked />Vibration
         feedback</label
-      ><label><input id="phone-sound" type="checkbox" />Phone sound cues</label>
-      <label for="remote-skin"
-        >Paint job<select id="remote-skin">
-          <option value="luna">Luna blue</option>
-          <option value="cream">Cream</option>
-          <option value="taxi">Kaali-Peeli</option>
-          <option value="classic">Classic</option>
-        </select></label
-      >
-      <label><input type="checkbox" id="large-targets" />Larger controls</label>
-      <label><input type="checkbox" id="calm-phone" />Calm motion</label>
-      <label for="profile-name">Your nickname (on this phone)</label
+      ><label for="profile-name">Your nickname (on this phone)</label
       ><input
         id="profile-name"
         maxlength="20"
@@ -443,7 +261,6 @@
       ><button id="switch-mode" class="secondary-button">
         Use touch controls</button
       ><button id="leave" class="text-button">Leave this party</button>
-      <button data-staff-open class="text-button">Staff access</button>
     </dialog>
     <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="/party/phone.js"></script>
