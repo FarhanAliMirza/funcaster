@@ -149,8 +149,6 @@ audio/
 /games/mario-kart/evidence/
 
 !/assets/brand/
-!/assets/os/
-!/assets/source/
 !/assets/CREDITS.json
 !/public/assets/audio/
 
@@ -168,7 +166,3 @@ audio/
 # Local demo tools, logs, and browser evidence.
 .tools/
 .local/
-
-# Generated Python asset-build caches.
-__pycache__/
-*.py[cod]
