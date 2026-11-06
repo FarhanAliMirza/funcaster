@@ -1,0 +1,22 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { Race } from "./logic.js";
+test("Time Trial nitro requires gas, releases between uses and keeps three-use stock", () => {
+  const r = new Race();
+  r.start(0);
+  r.pedals = { boost: true, gas: false };
+  r.update(16, 1 / 60);
+  assert.equal(r.boostsLeft, 3);
+  r.pedals = { boost: false, gas: true };
+  r.update(32, 1 / 60);
+  r.pedals.boost = true;
+  r.update(48, 1 / 60);
+  assert.equal(r.boostsLeft, 2);
+  for (let i = 0; i < 600; i++) r.update(64 + i * 16, 1 / 60);
+  assert.equal(r.boostsLeft, 2);
+  r.pedals.boost = false;
+  r.update(10000, 1 / 60);
+  r.pedals.boost = true;
+  r.update(10016, 1 / 60);
+  assert.equal(r.boostsLeft, 1);
+});

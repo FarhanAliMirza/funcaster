@@ -1,0 +1,78 @@
+{
+  "id": "kart",
+  "title": "Time Trial",
+  "verb": "Find your fastest lap.",
+  "detail": "Hold Accelerate. Tilt to steer. Race the clock with your crew.",
+  "color": "#dc7449",
+  "bg": "#ffe8da",
+  "icon": "↝",
+  "mode": "wheel",
+  "classic": true,
+  "tag": "CHASE YOUR BEST",
+  "duration": "3 laps",
+  "action": "Start driving",
+  "schemaVersion": 2,
+  "gameId": "funcaster.time-trial",
+  "version": "1.1.0",
+  "order": 8,
+  "maxPlayers": 4,
+  "controller": "wheel",
+  "view": "split",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "players": "1–4 players",
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.kart"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "independent",
+  "remote": "views",
+  "roundPolicy": {
+    "kind": "untilDone",
+    "hardCapMs": 300000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
