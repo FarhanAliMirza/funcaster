@@ -1,0 +1,117 @@
+.os-mascot {
+  position: absolute;
+  z-index: 80;
+  pointer-events: none;
+}
+.os-mascot[hidden] {
+  display: none;
+}
+.os-mascot-sprite {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: calc(180 * var(--px));
+  height: calc(180 * var(--px));
+  background-repeat: no-repeat;
+  background-size: calc(var(--mascot-frames, 1) * 180 * var(--px))
+    calc(180 * var(--px));
+  background-position: calc(var(--mascot-frame, 0) * -180 * var(--px)) 0;
+  image-rendering: auto;
+}
+.os-mascot-bubble {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(170 * var(--px));
+  min-height: calc(48 * var(--px));
+  max-height: calc(125 * var(--px));
+  overflow: auto;
+  border: calc(1 * var(--px)) solid #696b53;
+  border-radius: calc(8 * var(--px));
+  background: #ffffdc;
+  color: #202014;
+  box-shadow: calc(2 * var(--px)) calc(2 * var(--px)) calc(3 * var(--px)) #0005;
+  padding: calc(10 * var(--px)) calc(35 * var(--px)) calc(10 * var(--px))
+    calc(12 * var(--px));
+  font-size: calc(15 * var(--px));
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  pointer-events: auto;
+}
+.os-mascot-bubble[hidden] {
+  display: none;
+}
+.os-mascot-bubble button {
+  position: absolute;
+  top: calc(2 * var(--px));
+  right: calc(2 * var(--px));
+  width: calc(30 * var(--px));
+  height: calc(30 * var(--px));
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-size: calc(22 * var(--px));
+}
+.os-mascot-bubble button:focus-visible {
+  outline: calc(2 * var(--px)) solid #124dab;
+  outline-offset: calc(-3 * var(--px));
+}
+
+.os-pets {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+}
+.os-pets[hidden] {
+  display: none;
+}
+.os-pet {
+  position: absolute;
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  border-radius: calc(4 * var(--px));
+}
+.os-pet span {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: var(--pet-size);
+  height: var(--pet-size);
+  transform: translateX(-50%) scaleX(var(--pet-direction, 1));
+  background-repeat: no-repeat;
+  background-size: calc(var(--pet-size) * var(--pet-frames)) var(--pet-size);
+  background-position: calc(var(--pet-size) * var(--pet-frame, 0) * -1) 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.os-pet:focus-visible {
+  outline: calc(2 * var(--px)) solid #fff;
+  box-shadow: 0 0 0 calc(4 * var(--px)) #155fd3;
+}
+.os-seat-avatar {
+  display: inline-block;
+  flex: none;
+  width: var(--avatar-size, 48px);
+  height: var(--avatar-size, 48px);
+  min-width: var(--avatar-size, 48px);
+  background-repeat: no-repeat;
+  background-size: calc(var(--avatar-size) * var(--avatar-frames))
+    var(--avatar-size);
+  background-position: calc(var(--avatar-size) * var(--avatar-frame, 0) * -1) 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.os-seat-avatar.is-empty {
+  filter: brightness(0);
+  opacity: 0.22;
+}
+
+[data-avatar-slot].is-disabled {
+  display: none;
+}

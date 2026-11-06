@@ -1,0 +1,177 @@
+/* Optional paint jobs share all sizing, focus and interaction contracts. */
+:root[data-skin="classic"] {
+  --lu-face: #d4d0c8;
+  --lu-panel: #ffffff;
+  --lu-ink: #000000;
+  --lu-ink-soft: #303030;
+  --lu-title-active: linear-gradient(90deg, #000080, #1084d0);
+  --lu-title-inactive: #808080;
+  --lu-select: #000080;
+  --lu-select-ink: #fff;
+  --lu-taskbar: #d4d0c8;
+  --lu-task: #d4d0c8;
+  --lu-task-hover: #e6e3dc;
+  --lu-task-active: #ffffff;
+  --lu-link: #000080;
+  --lu-legend: #000080;
+  --lu-title-shadow: none;
+}
+:root[data-skin="classic"] .xp-window {
+  border: calc(3 * var(--px)) ridge #fff;
+  border-image: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+:root[data-skin="classic"] .os-window-titlebar {
+  background-image: var(--lu-title-active);
+  border-radius: 0;
+}
+:root[data-skin="classic"]
+  .os-window:not(.os-window-active)
+  .os-window-titlebar {
+  background-image: none;
+  background-color: #808080;
+}
+:root[data-skin="classic"] .os-taskbar {
+  background: #d4d0c8;
+  border-top: 2px solid #fff;
+}
+:root[data-skin="classic"] .os-task,
+:root[data-skin="classic"] .os-tray button,
+:root[data-skin="classic"] .os-tray time {
+  color: #111;
+  text-shadow: none;
+}
+:root[data-skin="classic"] .os-start {
+  background: #d4d0c8;
+  color: #111;
+  border: 2px outset #fff;
+  border-radius: 0;
+  text-shadow: none;
+}
+:root[data-skin="classic"] .xp-button {
+  background: #d4d0c8;
+  border: 2px outset #fff;
+  border-radius: 0;
+}
+:root[data-skin="classic"] .xp-button:active {
+  border-style: inset;
+}
+:root[data-skin="classic"] .os-tray {
+  background: #d4d0c8;
+  border: 1px inset #fff;
+}
+:root[data-skin="classic"] .os-start-menu {
+  border-radius: 0;
+  border-color: #808080;
+}
+:root[data-skin="classic"] .os-start-menu header {
+  background: #000080;
+}
+:root[data-skin="classic"] .os-start-menu footer {
+  background: #d4d0c8;
+}
+:root[data-skin="classic"] .os-start-menu footer button {
+  color: #111;
+}
+:root[data-skin="classic"] .os-menu-system {
+  background: #e8e5df;
+}
+:root[data-skin="classic"] .gp-taskpane {
+  background: #e8e5df;
+}
+:root[data-skin="classic"] .gp-task-group > summary {
+  background: #d4d0c8;
+  color: #000080;
+}
+:root[data-skin="taxi"] {
+  --lu-title-active: linear-gradient(#3c3a34, #141414);
+  --lu-title-inactive: linear-gradient(#69665c, #45433c);
+  --lu-face: #fff5cf;
+  --lu-panel: #fffdf4;
+  --lu-ink: #17140b;
+  --lu-ink-soft: #52472b;
+  --lu-select: #242019;
+  --lu-select-ink: #ffdc43;
+  --lu-taskbar: #171717;
+  --lu-task: #37352e;
+  --lu-task-hover: #514c3d;
+  --lu-task-active: #5b4c1b;
+  --lu-start-1: #ffe363;
+  --lu-start-2: #e5b91e;
+  --lu-start-pressed: #e6b312;
+  --lu-link: #6c4600;
+  --lu-legend: #614000;
+  --lu-hover-ring: #ffcc25;
+  --lu-default-ring: #b5840e;
+}
+:root[data-skin="taxi"] .xp-window {
+  border-color: #27251e;
+  border-image: none;
+}
+:root[data-skin="taxi"] .os-window-titlebar {
+  background-image: var(--lu-title-active);
+  color: #ffe574;
+}
+:root[data-skin="taxi"] .os-window:not(.os-window-active) .os-window-titlebar {
+  background-image: var(--lu-title-inactive);
+}
+:root[data-skin="taxi"] .os-taskbar {
+  background: linear-gradient(#4d4730, #191919 22%);
+  border-top-color: #ffce39;
+}
+:root[data-skin="taxi"] .os-tray {
+  background: linear-gradient(#3e3826, #171717);
+}
+:root[data-skin="taxi"] .os-start {
+  background: linear-gradient(#ffe889, #e9bc27);
+  color: #171717;
+  text-shadow: none;
+  border-color: #6e5714;
+}
+:root[data-skin="taxi"] .os-start-menu {
+  border-color: #28251c;
+}
+:root[data-skin="taxi"] .os-start-menu header,
+:root[data-skin="taxi"] .os-start-menu footer {
+  background: #24211a;
+}
+:root[data-skin="taxi"] .os-menu-system {
+  background: #fff0bd;
+}
+:root[data-skin="taxi"] .gp-taskpane {
+  background: #f4e6b6;
+}
+:root[data-skin="taxi"] .gp-task-group > summary {
+  background: linear-gradient(#fff9e3, #e8cd7b);
+  color: #5c3c00;
+}
+:root[data-skin="classic"] *,
+:root[data-gentle="true"] * {
+  scroll-behavior: auto;
+}
+
+:root[data-skin="classic"] .os-task {
+  background: #d4d0c8;
+  border: 2px outset #fff;
+}
+:root[data-skin="classic"] .os-task[aria-pressed="true"] {
+  background: #fff;
+  border-style: inset;
+  color: #000;
+}
+:root[data-skin="classic"] .os-task:hover {
+  background: #eceae4;
+}
+:root[data-skin="taxi"] .os-task {
+  background: #37352e;
+  color: #fff4c3;
+  border-color: #78632c;
+}
+:root[data-skin="taxi"] .os-task[aria-pressed="true"] {
+  background: #5b4c1b;
+  color: #fff9e4;
+}
+:root[data-skin="taxi"] .os-task:hover {
+  background: #514c3d;
+}

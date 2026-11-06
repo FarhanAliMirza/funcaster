@@ -1,0 +1,165 @@
+.os-windows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.os-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  pointer-events: auto;
+  transition:
+    opacity var(--dur),
+    transform var(--dur);
+}
+.os-window .os-window-titlebar {
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: calc(3 * var(--px)) calc(5 * var(--px));
+  gap: calc(6 * var(--px));
+  user-select: none;
+  touch-action: none;
+}
+.os-window:not(.os-window-active) .os-window-titlebar {
+  background: var(--lu-title-inactive);
+  color: var(--lu-title-ink-inactive);
+  text-shadow: none;
+}
+.os-window-title {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: calc(20 * var(--px));
+  font-weight: 700;
+}
+.os-window-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: calc(3 * var(--px));
+}
+.os-window-control {
+  display: grid;
+  place-items: center;
+  width: calc(30 * var(--px));
+  height: calc(30 * var(--px));
+  min-width: 0;
+  border: 1px solid #fff;
+  border-radius: calc(4 * var(--px));
+  background: linear-gradient(#79b9ff, #1765dd 25%, #1254c5);
+  box-shadow: inset 1px 1px #ffffff70;
+  color: white;
+  padding: 0;
+  font: bold calc(22 * var(--px))/1 var(--font-ui);
+}
+.os-window-control:hover {
+  filter: brightness(1.15);
+}
+.os-window-control[aria-pressed="true"] {
+  background: #164ca7;
+  box-shadow: inset 1px 2px 3px #0007;
+}
+.os-window-control.os-window-close {
+  background: linear-gradient(#ffb59e, #e7684a 25%, #bd381e);
+}
+.os-window-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: calc(20 * var(--px));
+}
+.os-window-body > * {
+  max-width: 100%;
+}
+.os-modal-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  background: #06132a66;
+}
+.os-message {
+  display: flex;
+  flex-direction: column;
+  gap: calc(20 * var(--px));
+  min-height: 100%;
+}
+.os-message-text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  flex: 1;
+  white-space: pre-line;
+}
+.os-message-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: calc(10 * var(--px));
+}
+.os-message-actions .xp-button {
+  min-width: calc(90 * var(--px));
+}
+.os-danger {
+  color: #8b1522;
+}
+.os-game-window {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #101527;
+}
+.os-game-window > .os-window-body {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Manifest-loaded sprite variables keep supplied Luna chrome swappable. */
+.os-window:not(.os-game-window) {
+  border-width: calc(5 * var(--px));
+  border-image-source: var(--sp-window-frame-active);
+  border-image-slice: 5;
+}
+.os-window .os-window-titlebar {
+  background-image: var(--sp-window-title-active, var(--lu-title-active));
+  background-size: 100% 100%;
+}
+.os-window:not(.os-window-active) .os-window-titlebar {
+  background-image: var(--sp-window-title-inactive, var(--lu-title-inactive));
+}
+.os-window-control[data-chrome="min"] {
+  --chrome-normal: var(--sp-titlebtn-min-normal);
+  --chrome-hover: var(--sp-titlebtn-min-hover);
+  --chrome-pressed: var(--sp-titlebtn-min-pressed);
+}
+.os-window-control[data-chrome="max"] {
+  --chrome-normal: var(--sp-titlebtn-max-normal);
+  --chrome-hover: var(--sp-titlebtn-max-hover);
+  --chrome-pressed: var(--sp-titlebtn-max-pressed);
+}
+.os-window-control[data-chrome="restore"] {
+  --chrome-normal: var(--sp-titlebtn-restore-normal);
+  --chrome-hover: var(--sp-titlebtn-restore-hover);
+  --chrome-pressed: var(--sp-titlebtn-restore-pressed);
+}
+.os-window-control[data-chrome="close"] {
+  --chrome-normal: var(--sp-titlebtn-close-normal);
+  --chrome-hover: var(--sp-titlebtn-close-hover);
+  --chrome-pressed: var(--sp-titlebtn-close-pressed);
+}
+.os-window-control:not([data-chrome="pin"]) {
+  background-image: var(--chrome-normal);
+  background-size: 100% 100%;
+  border: 0;
+  box-shadow: none;
+  color: transparent;
+}
+.os-window-control:not([data-chrome="pin"]):hover {
+  background-image: var(--chrome-hover);
+}
+.os-window-control:not([data-chrome="pin"]):active {
+  background-image: var(--chrome-pressed);
+}

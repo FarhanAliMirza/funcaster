@@ -1,0 +1,71 @@
+:root {
+  --lu-title-active: linear-gradient(
+    #4198ff 0%,
+    #0370ff 7%,
+    #0058e8 14%,
+    #0050e1 28%,
+    #004fe4 45%,
+    #0055f1 58%,
+    #005efc 70%,
+    #0166fe 80%,
+    #005af8 92%,
+    #0043cf 100%
+  );
+  --lu-title-inactive: linear-gradient(
+    #99b3e9,
+    #88aee9 20%,
+    #7994de 50%,
+    #81a8e9 85%,
+    #7a92df
+  );
+  --lu-title-ink: #ffffff;
+  --lu-title-shadow: 1px 1px 0 #0a1f6b;
+  --lu-title-ink-inactive: #000000;
+  --lu-frame-fill: #efeee0;
+  --lu-face: #efeee0;
+  --lu-face-alt: #f5f4ea;
+  --lu-track: #ebebe4;
+  --lu-ink: #111111;
+  --lu-ink-soft: #4a4a58;
+  --lu-btn-outline: #003c74;
+  --lu-hover-ring: #f8b330;
+  --lu-default-ring: #89ade4;
+  --lu-check: #21a121;
+  --lu-select: #316ac5;
+  --lu-select-ink: #ffffff;
+  --lu-taskbar: #2257d5;
+  --lu-task: #4085f5;
+  --lu-task-hover: #559df8;
+  --lu-task-active: #164dbc;
+  --lu-start-1: #45b845;
+  --lu-start-2: #2c743a;
+  --lu-start-pressed: #178717;
+  --lu-link: #0000ee;
+  --lu-legend: #0046d5;
+  --lu-danger: #c62f3b;
+  --lu-tab-border: #919b9c;
+  --lu-tab-top: #ffc73c;
+  --lu-status: #ece9d8;
+  --lu-menu-border: #aca899;
+  --lu-input-border: #7f9db9;
+  --lu-tooltip: #ffffe1;
+  --seat-peeli: #f7c600;
+  --seat-magenta: #ef5da8;
+  --seat-cyan: #4de2df;
+  --seat-marigold: #ffad42;
+  --focus: 0 0 0 2px #ffffff, 0 0 0 5px #111111;
+  --m-title: 29;
+  --m-border: 5;
+  --m-taskbar: 42;
+  --m-icon: 48;
+  --m-target: 40;
+  --m-radius: 6;
+  --dur: 120ms;
+  --font-ui:
+    "Tahoma XP", "Tahoma XP Fallback", Tahoma, Verdana, "Hind", system-ui,
+    sans-serif;
+  --font-logo:
+    "Franklin Gothic XP", "Franklin Gothic Medium", "Hind", sans-serif;
+  --ui: 1;
+  --px: 1px;
+}
