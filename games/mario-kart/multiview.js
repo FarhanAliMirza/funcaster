@@ -1,14 +1,8 @@
-import {
-  dprFor,
-  SINGLE_VIEW_PIXELS,
-  SPLIT_VIEW_PIXELS,
-} from "../../core/pixel-budget.js";
 import * as THREE from "three";
 import { viewports, QualityGovernor } from "../../core/viewports.js";
 import { rivalVisible } from "./rival-visibility.js";
 import { chasePose, cameraClearance } from "./visual-frame.js";
-import { SEATS } from "../../core/seats.js";
-const colors = SEATS.map((s) => s.color);
+const colors = ["#7357f5", "#fb7858", "#20a88a", "#e4ad26"];
 export class ChaseCamera {
   constructor() {
     this.camera = new THREE.PerspectiveCamera(62, 1, 0.12, 1500);
@@ -26,7 +20,7 @@ export class ChaseCamera {
     c.position.copy(cameraClearance(c.position, racer.s));
     c.up.set(p.up.x, p.up.y, p.up.z);
     c.lookAt(this.aim);
-    c.aspect = Math.max(1, viewport.width) / Math.max(1, viewport.height);
+    c.aspect = viewport.width / viewport.height;
     c.updateProjectionMatrix();
     this.initialized = true;
     return c;
@@ -46,29 +40,13 @@ export class RaceViews {
     const visible = race.humans.filter((r) =>
       players.some((p) => p.slot === r.seat),
     );
-    // A hidden iframe can temporarily report no usable drawing area.
-    const width = Math.max(1, innerWidth),
-      height = Math.max(1, innerHeight);
-    const layout = viewports(visible.length, width, height).map((viewport) => ({
-        ...viewport,
-        width: Math.max(1, viewport.width),
-        height: Math.max(1, viewport.height),
-      })),
+    const layout = viewports(visible.length, innerWidth, innerHeight),
       renderer = this.renderer;
-    // One backing store contains all cameras; budget each actual viewport.
-    const baseDpr = Math.min(
-      ...layout.map((v) =>
-        dprFor(v.width, v.height, {
-          cap: 1.6,
-          maxPixels: visible.length > 1 ? SPLIT_VIEW_PIXELS : SINGLE_VIEW_PIXELS,
-        }),
-      ),
-    );
-    const desired = baseDpr * this.governor.sample(dt * 1000);
-    if (Math.abs(renderer.getPixelRatio() - desired) > 1e-6)
+    const desired = this.governor.sample(dt * 1000);
+    if (Math.abs(renderer.getPixelRatio() - desired) > 0.04)
       renderer.setPixelRatio(desired);
     renderer.setScissorTest(false);
-    renderer.setViewport(0, 0, width, height);
+    renderer.setViewport(0, 0, innerWidth, innerHeight);
     renderer.clear();
     renderer.setScissorTest(true);
     renderer.autoClear = true;
@@ -86,18 +64,6 @@ export class RaceViews {
       if (!label) {
         label = document.createElement("section");
         label.className = "race-view-hud";
-        for (const part of [
-          "identity",
-          "place",
-          "lap",
-          "speed",
-          "item",
-          "nitro",
-        ]) {
-          const node = document.createElement("span");
-          node.className = `race-stat race-stat-${part}`;
-          label.append(node);
-        }
         this.layer.append(label);
         this.labels.set(racer.seat, label);
       }
@@ -108,35 +74,19 @@ export class RaceViews {
         height: v.height + "px",
         borderColor: color,
       });
-      const details = {
-        identity: `${SEATS[racer.seat]?.shape || "●"} ${player?.name || `Player ${racer.seat + 1}`} · ${racer.character.name}`,
-        place: `${race.position(racer)} / ${race.racers.length}`,
-        lap: `LAP ${Math.min(racer.lap, race.laps)} / ${race.laps}`,
-        speed: racer.dnf
-          ? "DID NOT FINISH"
-          : racer.finishTime !== null
-            ? `FINISHED · ${racer.finishTime.toFixed(1)}s`
-            : race.state === "countdown"
-              ? String(race.count || "GO!")
-              : `${Math.round(Math.abs(racer.speed) * 3.6)} km/h${racer.autoDriving ? " · AUTO" : ""}`,
-        item:
-          racer.roulette > 0
-            ? "SURPRISE…"
-            : racer.item
-              ? `ITEM · ${racer.item.toUpperCase()}`
-              : `${racer.coins} COINS`,
-        nitro: `BOOST ${"●".repeat(racer.nitroRemaining)}${"○".repeat(3 - racer.nitroRemaining)}${racer.nitroCooldown > 0 ? ` · ${Math.ceil(racer.nitroCooldown)}s` : ""}`,
-      };
-      for (const [key, text] of Object.entries(details)) {
-        const node = label.querySelector(`.race-stat-${key}`);
-        if (node.textContent !== text) node.textContent = text;
-      }
+      const text = `${player?.name || `Player ${racer.seat + 1}`} · ${racer.character.name}\n${race.position(racer)} / ${race.racers.length}   ·   LAP ${Math.min(racer.lap, race.laps)} / ${race.laps}\n${racer.finishTime !== null ? "FINISHED" : race.state === "countdown" ? race.count || "GO!" : `${Math.round(Math.abs(racer.speed) * 3.6)} km/h`} ${player?.occupied === false ? " · AUTO DRIVE" : ""}`;
+      if (label.textContent !== text) label.textContent = text;
       const camera = rig.update(racer, v, dt);
       for (const [kartIndex, kart] of karts.entries())
         kart.root.visible =
           race.racers[kartIndex] === racer || rivalVisible(kart.model, camera);
-      renderer.setViewport(v.x, height - v.y - v.height, v.width, v.height);
-      renderer.setScissor(v.x, height - v.y - v.height, v.width, v.height);
+      renderer.setViewport(
+        v.x,
+        innerHeight - v.y - v.height,
+        v.width,
+        v.height,
+      );
+      renderer.setScissor(v.x, innerHeight - v.y - v.height, v.width, v.height);
       renderer.render(scene, camera);
     }
     for (const [seat, label] of this.labels)
@@ -147,7 +97,7 @@ export class RaceViews {
       }
     for (const kart of karts) kart.root.visible = true;
     renderer.setScissorTest(false);
-    renderer.setViewport(0, 0, width, height);
+    renderer.setViewport(0, 0, innerWidth, innerHeight);
   }
   hide() {
     this.layer.hidden = true;

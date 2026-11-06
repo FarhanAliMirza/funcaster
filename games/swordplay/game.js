@@ -1,5 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
-import { seededRandom } from "../../sdk/index.js";
 import * as THREE from "/vendor/three/three.module.js";
 import { consumeLaunchSplash } from "../../sdk/index.js";
 
@@ -22,10 +20,7 @@ const $ = (id) => document.getElementById(id);
 // ── Scene ──────────────────────────────────────────────────────────────────
 const canvas = $("game");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x9fd8f0);
@@ -175,7 +170,6 @@ let partyPlayers = [],
 const channel = createChannel({
   onA: (slot = 0) => {
     if (duel.state === "ready" || duel.state === "over") {
-      if (channel.link.party && duel.state === "over") return;
       if (slot === 0) startMatch();
       return;
     }
@@ -192,16 +186,7 @@ const channel = createChannel({
   },
   onPresence: (p) => {
     partyPlayers = p.slots || [];
-    if (channel.link.serverSimulation) {
-      if (channel.link.localSeats[0] === 1) {
-        $("p-tag").textContent = p.slots[1]?.name || "You";
-        $("a-tag").textContent = p.slots[0]?.name || "Rival";
-      }
-      return;
-    }
-    if (duel.state === "ready" && channel.link.party)
-      duel.rng = seededRandom(p.setup.seed);
-    duel.humanOpponent = partyPlayers.length > 1;
+    duel.humanOpponent = partyPlayers.length > 1 && partyPlayers[1].occupied;
     if (!duel.humanOpponent) duel.humanAttacks = [];
     if (
       new URLSearchParams(location.search).has("party") &&
@@ -323,10 +308,7 @@ function step(now, dt, aim) {
   sword.position.set(px, py, 3.1);
 
   // Sword orientation: the phone's attitude, 1:1.
-  if (channel.link.serverSimulation) {
-    sword.quaternion.copy(restQ);
-    sword.rotation.z = -duel.bladeAngle;
-  } else if (!lastAxes) {
+  if (!lastAxes) {
     sword.quaternion.slerp(restQ, Math.min(1, dt * 6));
   }
   if (lastAxes) {
@@ -375,7 +357,6 @@ function step(now, dt, aim) {
 function resize() {
   const w = Math.max(1, window.innerWidth);
   const h = Math.max(1, window.innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
@@ -416,16 +397,7 @@ window.__openwii = {
 channel.link.bindState(
   () => duel,
   () => {
-    if (channel.link.serverSimulation && channel.link.localSeats[0] === 1) {
-      [duel.player, duel.ai] = [duel.ai, duel.player];
-      [duel.bladeAngle, duel.aiGuard] = [duel.aiGuard, duel.bladeAngle];
-    }
     syncHud();
-    if (channel.link.serverSimulation)
-      $("overlay").classList.toggle(
-        "hide",
-        duel.state !== "ready" && duel.state !== "over",
-      );
   },
 );
 
@@ -436,26 +408,4 @@ setInterval(
       { slot: 1, score: duel.ai.points },
     ]),
   500,
-);
-
-channel.link.onSharedEvent = (e) => {
-  if (channel.link.localSeats[0] === 1) {
-    const swap = (x) => (x === "player" ? "ai" : x === "ai" ? "player" : x);
-    e = { ...e, who: swap(e.who), winner: swap(e.winner) };
-  }
-  handleEvent(e);
-};
-
-channel.link.bindReplay(
-  duel,
-  [
-    "start",
-    "update",
-    "setBlade",
-    "setOpponent",
-    "humanStrike",
-    "strikeOpponent",
-    "swing",
-  ],
-  [["init"]],
 );

@@ -1,4 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
 import { scopedStorage } from "../../sdk/index.js";
 const gameStorage = scopedStorage("funcaster.fruit-ninja");
 import { Trail } from "../../sdk/index.js";
@@ -43,10 +42,7 @@ const renderer = new THREE.WebGLRenderer({
   desynchronized: true,
   powerPreference: "high-performance",
 });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x2b1a0c);
@@ -1020,7 +1016,6 @@ inputFor(0); // always present, for the desk-testing mouse/keyboard fallback
 function resize() {
   const w = Math.max(1, window.innerWidth);
   const h = Math.max(1, window.innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.position.z = CAM_Z * Math.max(1, 16 / 9 / camera.aspect);
@@ -1098,7 +1093,6 @@ const link = new GameLink({
       ? clamp((now - inp.lastSampleAt) / 1000, 1 / 240, 0.1)
       : 1 / 60;
     inp.lastSampleAt = now;
-    inp.sampleAge = sample.party?.ageMs || 0;
     inp.pointer.update(sample, dt, now);
   },
   onCommand: (cmd, slot) => {
@@ -1128,11 +1122,7 @@ const link = new GameLink({
       link.partyStarted = true;
       game.rng = seededRandom(p.setup.seed);
       game.spawnRng = seededRandom(p.setup.seed);
-      game.configure({
-        variant: p.setup.variant,
-        seats: p.slots.length,
-        bot: p.setup.bot,
-      });
+      game.infiniteLives = true;
       game.setAspect(16 / 9);
       if (link.authority) startGame();
     }
@@ -1254,9 +1244,8 @@ function handleEvent(e) {
     link.feedback({ type: "miss" });
   } else if (e.type === "gameover") {
     audio.play("fn-gameover");
-    const best = Math.max(gameStorage.get(bestKey(), 0), e.score);
-    gameStorage.set(bestKey(), best);
-    if (link.party) link.finish(sliceScores());
+    const best = Math.max(gameStorage.get("best", 0), e.score);
+    gameStorage.set("best", best);
     showOverlay(`<h1 class="gameover">GAME OVER</h1>
       <div id="final">score <b>${e.score}</b> · best <b>${best}</b></div>
       <div class="cta"><strong>Space</strong> / <strong>A</strong> to play again</div>`);
@@ -1278,25 +1267,10 @@ const showOverlay = (html) => {
 };
 const hideOverlay = () => $("overlay").classList.add("hide");
 
-function bestKey() {
-  return link.party
-    ? `best.${link.setup?.variant || "co-op"}.${link.slots.length}`
-    : "best";
-}
-function sliceScores() {
-  return link.slots.map((p) => ({
-    slot: p.slot,
-    score:
-      link.setup?.variant === "co-op"
-        ? game.state.score
-        : game.getPlayer(p.slot).score,
-    stats: game.getPlayer(p.slot).stats,
-  }));
-}
 function syncHud() {
   $("score-v").textContent = game.state.score;
   $("best").textContent =
-    `BEST: ${Math.max(gameStorage.get(bestKey(), 0), game.state.score)}`;
+    `BEST: ${Math.max(gameStorage.get("best", 0), game.state.score)}`;
   const xs = $("lives").querySelectorAll(".x");
   for (let i = 0; i < xs.length; i += 1) {
     xs[i].classList.toggle(
@@ -1305,11 +1279,7 @@ function syncHud() {
     );
   }
   $("practice").style.display = game.infiniteLives ? "" : "none";
-  if (link.party)
-    $("practice").textContent =
-      link.setup?.variant === "race"
-        ? "SAME SEED · RACE"
-        : "BATTLE · 2 MINUTES";
+  if (link.party) $("practice").textContent = "2 MINUTE CHALLENGE";
 
   // Multiplayer scoreboard: everyone's individual score, on the shared
   // board — only shown once a second phone actually joins, so solo play's
@@ -1336,13 +1306,13 @@ function syncHud() {
 
 function startGame() {
   hideOverlay();
-  game.start(link.party ? link.timeNow + 3000 : performance.now());
+  game.start(link.party ? link.timeNow : performance.now());
   syncHud();
 }
 
 function beginPlay() {
   audio.unlock();
-  if (!link.party && game.state.phase !== "playing") startGame();
+  if (game.state.phase !== "playing") startGame();
 }
 
 /** Mirror the logic state into the scene graph. Split out so the verification
@@ -1411,18 +1381,10 @@ function frame(now) {
     if (inp.pointer.live || (slot === 0 && mouse.active)) {
       const aim = inp.pointer.sampleAt(now);
       const p = toWorld(aim.x, aim.y);
-      game.setCursor(p.x, p.y, now - Math.min(150, inp.sampleAge || 0), slot);
+      game.setCursor(p.x, p.y, now, slot);
     }
   }
 
-  if (link.party && link.partyStarted && game.state.phase === "playing") {
-    const seconds = Math.ceil((game.state.startedAt - now) / 1000);
-    if (seconds > 0) {
-      showOverlay(
-        `<h1>${seconds}</h1><p>Little wrist moves. Ready together.</p>`,
-      );
-    } else hideOverlay();
-  }
   if (!link.party || link.partyStarted)
     link.advance(dt, (tick, step) => game.update(tick, step));
   syncScene(now);
@@ -1538,7 +1500,16 @@ window.__openwii = {
 };
 
 setInterval(() => {
-  if (link.party) link.report(sliceScores());
+  if (link.party)
+    link.report(
+      link.slots.map((p) => ({
+        slot: p.slot,
+        score:
+          link.setup?.variant === "co-op"
+            ? game.state.score
+            : game.getPlayer(p.slot).score,
+      })),
+    );
 }, 500);
 
 link.bindState(

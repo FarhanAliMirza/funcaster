@@ -1,5 +1,4 @@
-import { raceMath as physicsMath } from "../../core/dmath.js";
-import { surfaceContact } from "./surface-contact.js";
+import { surfaceContact } from './surface-contact.js';
 /** Contact footprints fitted to the finished kart meshes, in metres.
  * Evidence: overnight/21-underpass-hall/model-bounds.json. The chassis is
  * 2.498m wide and 3.324m long; horizontal hover wheels widen it to 3.244m.
@@ -11,16 +10,13 @@ import { activeSurfaceTrack, TRACK_LENGTH, wrap } from "./track.js";
 export function kartFootprint(r, time = 0) {
   const frame = r.gliding
     ? {
-        right: { x: physicsMath.cos(r.heading), z: physicsMath.sin(r.heading) },
-        forward: {
-          x: physicsMath.sin(r.heading),
-          z: -physicsMath.cos(r.heading),
-        },
+        right: { x: Math.cos(r.heading), z: Math.sin(r.heading) },
+        forward: { x: Math.sin(r.heading), z: -Math.cos(r.heading) },
       }
     : roadFrame(r.s, r.lateral, r.heading, r.surfaceForward, r.surfaceNormal);
   const yaw = r.spin > 0 ? time * 15 : r.drift ? -r.drift * 0.25 : 0,
-    c = physicsMath.cos(yaw),
-    s = physicsMath.sin(yaw),
+    c = Math.cos(yaw),
+    s = Math.sin(yaw),
     right = {
       x: frame.right.x * c + frame.forward.x * s,
       z: frame.right.z * c + frame.forward.z * s,
@@ -45,37 +41,19 @@ export function kartFootprint(r, time = 0) {
  * displacement from A to B; distinct course layers never collide at a crossing.
  */
 export function kartContact(a, b, time = 0) {
-  if (a.jump || b.jump) return null;
-  if (physicsMath.hypot(b.x - a.x, b.z - a.z) > 5) return null;
+  if(a.jump||b.jump)return null;
+  if (Math.hypot(b.x - a.x, b.z - a.z) > 5) return null;
   const routeGap = Math.abs(
     wrap(b.s - a.s + TRACK_LENGTH / 2, TRACK_LENGTH) - TRACK_LENGTH / 2,
   );
   if (routeGap > 18 || ((a.gliding || b.gliding) && Math.abs(a.y - b.y) > 1.8))
     return null;
   if (activeSurfaceTrack) {
-    const frame = (r) =>
-      r.gliding
-        ? {
-            up: { x: 0, y: 1, z: 0 },
-            right: {
-              x: physicsMath.cos(r.heading),
-              y: 0,
-              z: physicsMath.sin(r.heading),
-            },
-            forward: {
-              x: physicsMath.sin(r.heading),
-              y: 0,
-              z: -physicsMath.cos(r.heading),
-            },
-          }
-        : roadFrame(
-            r.s,
-            r.lateral,
-            r.heading,
-            r.surfaceForward,
-            r.surfaceNormal,
-          );
-    return surfaceContact(a, b, frame(a), frame(b), time);
+    const frame = r => r.gliding ? {
+      up:{x:0,y:1,z:0},right:{x:Math.cos(r.heading),y:0,z:Math.sin(r.heading)},
+      forward:{x:Math.sin(r.heading),y:0,z:-Math.cos(r.heading)},
+    } : roadFrame(r.s,r.lateral,r.heading,r.surfaceForward,r.surfaceNormal);
+    return surfaceContact(a,b,frame(a),frame(b),time);
   }
   const A = kartFootprint(a, time),
     B = kartFootprint(b, time);
@@ -85,7 +63,7 @@ export function kartContact(a, b, time = 0) {
     for (let i = 0; i < 2; i++) {
       const dx = polygon[i + 1].x - polygon[i].x,
         dz = polygon[i + 1].z - polygon[i].z,
-        len = physicsMath.hypot(dx, dz),
+        len = Math.hypot(dx, dz),
         nx = -dz / len,
         nz = dx / len,
         pa = A.map((p) => p.x * nx + p.z * nz),

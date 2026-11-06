@@ -10,7 +10,5 @@
       "human approval"
     ],
     "verificationDefault": "casual"
-  },
-  "workflow": "operator CLI: npm run game:registry; docs/CREATOR-PUBLISHING.md",
-  "gallery": "/community/"
+  }
 }

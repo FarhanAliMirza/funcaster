@@ -13,8 +13,8 @@
   "duration": "Arcade rounds",
   "action": "Start slicing",
   "schemaVersion": 2,
-  "gameId": "funcaster.slice-dojo",
-  "version": "1.1.0",
+  "gameId": "funcaster.fruit-ninja",
+  "version": "1.0.0",
   "order": 2,
   "maxPlayers": 4,
   "controller": "aim",
@@ -22,9 +22,7 @@
   "verification": "verifiable",
   "scoring": {
     "direction": "higher",
-    "unit": "points",
-    "integer": true,
-    "tieBreak": "shared place"
+    "unit": "points"
   },
   "modes": {
     "solo": {
@@ -38,45 +36,10 @@
       "aiDefault": 0
     }
   },
-  "topologies": [
-    "shared",
-    "remote",
-    "hybrid",
-    "spectator"
-  ],
+  "topologies": ["shared", "remote", "hybrid", "spectator"],
   "input": {
-    "x": [
-      -1,
-      1
-    ],
-    "y": [
-      -1,
-      1
-    ],
-    "actions": [
-      "primary",
-      "left",
-      "right",
-      "confirm"
-    ]
-  },
-  "legacyIds": [
-    "funcaster.fruit-ninja"
-  ],
-  "seats": 4,
-  "engine": "classic",
-  "seatView": "shared",
-  "remote": "snapshot",
-  "roundPolicy": {
-    "kind": "timed",
-    "hardCapMs": 120000,
-    "finishWindowMs": 30000,
-    "idleMs": 30000,
-    "graceMs": 30000
-  },
-  "statsSchema": [
-    "fruit",
-    "bestCombo",
-    "bombs"
-  ]
+    "x": [-1, 1],
+    "y": [-1, 1],
+    "actions": ["primary", "left", "right", "confirm"]
+  }
 }

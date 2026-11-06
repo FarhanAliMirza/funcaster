@@ -1,14 +1,7 @@
-import { raceMath as physicsMath } from "../../core/dmath.js";
 /** Surface orientation shared by the renderer, chase camera and kart contacts. */
-import {
-  activeSurfaceTrack,
-  surfaceAt,
-  project,
-  trackAt,
-  WALL_HALF,
-} from "./track.js";
+import { activeSurfaceTrack, surfaceAt, project, trackAt, WALL_HALF } from "./track.js";
 const norm = (v) => {
-  const l = physicsMath.hypot(v.x, v.y, v.z) || 1;
+  const l = Math.hypot(v.x, v.y, v.z) || 1;
   return { x: v.x / l, y: v.y / l, z: v.z / l };
 };
 const cross = (a, b) => ({
@@ -16,15 +9,8 @@ const cross = (a, b) => ({
   y: a.z * b.x - a.x * b.z,
   z: a.x * b.y - a.y * b.x,
 });
-export function roadFrame(
-  s,
-  lateral,
-  heading,
-  direction = null,
-  normal = null,
-) {
-  if (activeSurfaceTrack)
-    return activeSurfaceTrack.frame(s, heading, lateral, direction, normal);
+export function roadFrame(s, lateral, heading, direction=null, normal=null) {
+  if (activeSurfaceTrack) return activeSurfaceTrack.frame(s, heading, lateral, direction, normal);
   // Use the centreline for horizontal travel: a very tight inside curb can
   // fold its offset ribbon, but must never turn the camera upside down.
   const a = surfaceAt(s - 0.2, 0),
@@ -37,8 +23,8 @@ export function roadFrame(
   const across = { x: d.x - c.x, y: d.y - c.y, z: d.z - c.z };
   const up = norm(cross(across, along));
   // The projected forward vector must preserve the player's horizontal heading.
-  const x = physicsMath.sin(heading),
-    z = -physicsMath.cos(heading);
+  const x = Math.sin(heading),
+    z = -Math.cos(heading);
   const forward = norm({
     x,
     y: -(up.x * x + up.z * z) / Math.max(0.1, up.y),
@@ -48,23 +34,13 @@ export function roadFrame(
 }
 export function cameraClearance(position, referenceS = null) {
   if (activeSurfaceTrack) {
-    const near = activeSurfaceTrack.project(position, referenceS),
-      p = surfaceAt(near.s, near.lateral);
-    const walls = activeSurfaceTrack.wallBounds(near.s, near.lateral);
-    if (p.glide || near.lateral < walls.min - 1 || near.lateral > walls.max + 1)
-      return position;
-    const ground = activeSurfaceTrack.support(position, p.normal) || p;
-    const n = ground.normal,
-      height =
-        (position.x - ground.x) * n.x +
-        (position.y - ground.y) * n.y +
-        (position.z - ground.z) * n.z;
-    const correction = Math.max(0, 1.25 - height);
-    return {
-      x: position.x + n.x * correction,
-      y: position.y + n.y * correction,
-      z: position.z + n.z * correction,
-    };
+    const near = activeSurfaceTrack.project(position, referenceS), p = surfaceAt(near.s, near.lateral);
+    const walls=activeSurfaceTrack.wallBounds(near.s,near.lateral);
+    if (p.glide || near.lateral<walls.min-1 || near.lateral>walls.max+1) return position;
+    const ground=activeSurfaceTrack.support(position,p.normal)||p;
+    const n = ground.normal, height = (position.x-ground.x)*n.x+(position.y-ground.y)*n.y+(position.z-ground.z)*n.z;
+    const correction = Math.max(0, 1.25-height);
+    return {x:position.x+n.x*correction,y:position.y+n.y*correction,z:position.z+n.z*correction};
   }
   // At a crossing, the nearest XZ point can belong to the road above us.
   // Continue along the racer's route layer, just as the driving projection does.
@@ -82,40 +58,24 @@ export function flightFrame(racer) {
   // chase eye over the canopy and even ahead of the driver. Retain the source
   // glide's minimum launch pace as the camera reference through interruptions.
   // Ordinary flight and the steep ramp departure still follow their descent.
-  const speed = Math.max(26, Math.abs(racer.speed || 0));
-  const forward = norm({
-    x: physicsMath.sin(racer.heading) * speed,
-    y: Number.isFinite(racer.flightV) ? racer.flightV : -speed * 0.08,
-    z: -physicsMath.cos(racer.heading) * speed,
-  });
+  const speed=Math.max(26,Math.abs(racer.speed||0));
+  const forward=norm({x:Math.sin(racer.heading)*speed,y:Number.isFinite(racer.flightV)?racer.flightV:-speed*.08,z:-Math.cos(racer.heading)*speed});
   // Follow actual descent, with an up vector perpendicular to that flight.
   // A horizontal camera behind the steep launch ramp starts inside the road.
-  const up = norm({
-    x: -forward.x * forward.y,
-    y: 1 - forward.y * forward.y,
-    z: -forward.z * forward.y,
-  });
-  return { forward, up };
+  const up=norm({x:-forward.x*forward.y,y:1-forward.y*forward.y,z:-forward.z*forward.y});
+  return {forward,up};
 }
 export function chasePose(racer) {
   const frame = racer.gliding
-    ? activeSurfaceTrack
-      ? flightFrame(racer)
-      : {
-          up: { x: 0, y: 1, z: 0 },
-          forward: {
-            x: physicsMath.sin(racer.heading),
-            y: -0.08,
-            z: -physicsMath.cos(racer.heading),
-          },
-        }
-    : roadFrame(
-        racer.s,
-        racer.lateral,
-        racer.heading,
-        racer.surfaceForward,
-        racer.surfaceNormal,
-      );
+    ? activeSurfaceTrack ? flightFrame(racer) : {
+        up: { x: 0, y: 1, z: 0 },
+        forward: {
+          x: Math.sin(racer.heading),
+          y: -0.08,
+          z: -Math.cos(racer.heading),
+        },
+      }
+    : roadFrame(racer.s, racer.lateral, racer.heading, racer.surfaceForward, racer.surfaceNormal);
   const { up: n, forward: f } = frame;
   // MK8-like composition: kart low in frame with room to read upcoming corners, road and landmarks ahead.
   const back = racer.gliding ? 8.8 : 9.6,
@@ -130,7 +90,7 @@ export function chasePose(racer) {
   );
   const ahead = surfaceAt(racer.s + 14, racer.lateral * 0.55);
   const follow = racer.gliding ? 0 : 0.45;
-  const aimHeight = racer.gliding ? 1.3 : 3.1;
+  const aimHeight=racer.gliding?1.3:3.1;
   const aim = {
     x: (racer.x + f.x * 12) * (1 - follow) + ahead.x * follow + n.x * aimHeight,
     y: (racer.y + f.y * 12) * (1 - follow) + ahead.y * follow + n.y * aimHeight,

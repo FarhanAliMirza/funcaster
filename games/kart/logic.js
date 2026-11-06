@@ -117,11 +117,6 @@ export class Race {
     this.onEvent({ type: "start" });
   }
 
-  setPedals(value) {
-    this.pedals = value
-      ? { gas: !!value.gas, brake: !!value.brake, boost: !!value.boost }
-      : null;
-  }
   setSteer(bankDeg) {
     this.steer = Math.max(-60, Math.min(60, bankDeg));
   }

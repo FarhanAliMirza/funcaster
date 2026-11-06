@@ -12,18 +12,16 @@
   "duration": "3 laps",
   "action": "Start driving",
   "schemaVersion": 2,
-  "gameId": "funcaster.time-trial",
-  "version": "1.1.0",
+  "gameId": "funcaster.kart",
+  "version": "1.0.0",
   "order": 8,
   "maxPlayers": 4,
   "controller": "wheel",
   "view": "split",
-  "verification": "verifiable",
+  "verification": "attested",
   "scoring": {
     "direction": "higher",
-    "unit": "points",
-    "integer": true,
-    "tieBreak": "shared place"
+    "unit": "points"
   },
   "modes": {
     "solo": {
@@ -37,42 +35,11 @@
       "aiDefault": 0
     }
   },
-  "topologies": [
-    "shared",
-    "remote",
-    "hybrid",
-    "spectator"
-  ],
+  "topologies": ["shared", "remote", "hybrid", "spectator"],
   "players": "1–4 players",
   "input": {
-    "x": [
-      -1,
-      1
-    ],
-    "y": [
-      -1,
-      1
-    ],
-    "actions": [
-      "primary",
-      "left",
-      "right",
-      "confirm"
-    ]
-  },
-  "legacyIds": [
-    "funcaster.kart"
-  ],
-  "seats": 4,
-  "engine": "classic",
-  "seatView": "independent",
-  "remote": "views",
-  "roundPolicy": {
-    "kind": "untilDone",
-    "hardCapMs": 300000,
-    "finishWindowMs": 30000,
-    "idleMs": 30000,
-    "graceMs": 30000
-  },
-  "statsSchema": []
+    "x": [-1, 1],
+    "y": [-1, 1],
+    "actions": ["primary", "left", "right", "confirm"]
+  }
 }

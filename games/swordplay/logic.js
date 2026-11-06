@@ -173,10 +173,7 @@ export class Duel {
           player: this.player.points,
           ai: this.ai.points,
         });
-        if (
-          Math.max(this.player.points, this.ai.points) >= WIN_POINTS &&
-          this.player.points !== this.ai.points
-        ) {
+        if (Math.max(this.player.points, this.ai.points) >= WIN_POINTS) {
           this.state = "over";
           this.winner =
             this.player.points === this.ai.points
@@ -186,11 +183,6 @@ export class Duel {
                 : "ai";
           this.onEvent({ type: "over", winner: this.winner });
         } else {
-          if (
-            this.player.points === this.ai.points &&
-            this.player.points >= WIN_POINTS
-          )
-            this.onEvent({ type: "sudden-death" });
           this.state = "point";
           this.pauseUntil = now + 1400;
         }

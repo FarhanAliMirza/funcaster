@@ -1,4 +1,3 @@
-import { raceMath as physicsMath } from "../../core/dmath.js";
 import { sourceJumpLaunch } from "./source-jump.js";
 import { stepSourceGlide } from "./glide.js";
 import { contactResponse } from "./contact-response.js";
@@ -75,9 +74,8 @@ export function topSpeed(coins = 0) {
 export function turboTier(charge) {
   return charge >= 3.4 ? 3 : charge >= 2 ? 2 : charge >= 0.8 ? 1 : 0;
 }
-export function rollItem(position, rng = Math.random, fieldSize = 8) {
-  const rear =
-    fieldSize <= 1 ? 0 : clamp((position - 1) / (fieldSize - 1), 0, 1);
+export function rollItem(position, rng = Math.random) {
+  const rear = clamp((position - 1) / 7, 0, 1);
   const weights = [
     0.42 * (1 - rear) + 0.04,
     0.36 * (1 - rear) + 0.07,
@@ -153,8 +151,6 @@ export class Race {
   } = {}) {
     this.laps = laps === 1 ? 1 : 3;
     this.finishedAt = null;
-    this.firstHumanFinish = null;
-    this.finishWindow = 30;
     this.seed = seed;
     this.rng = seeded(seed);
     this.onEvent = onEvent;
@@ -214,16 +210,14 @@ export class Race {
     this.emit("countdown", this.player, { count: 3 });
   }
   get standings() {
-    return [...this.racers].sort(
-      (a, b) =>
-        Number(!!a.dnf) - Number(!!b.dnf) ||
-        (a.finishTime !== null
-          ? b.finishTime !== null
-            ? a.finishTime - b.finishTime
-            : -1
-          : b.finishTime !== null
-            ? 1
-            : b.progress - a.progress),
+    return [...this.racers].sort((a, b) =>
+      a.finishTime !== null
+        ? b.finishTime !== null
+          ? a.finishTime - b.finishTime
+          : -1
+        : b.finishTime !== null
+          ? 1
+          : b.progress - a.progress,
     );
   }
   position(r) {
@@ -295,35 +289,9 @@ export class Race {
     const oldProgress = new Map(this.racers.map((r) => [r.id, r.progress]));
     for (const r of this.racers) {
       const input = inputs[r.seat] || {};
-      if (
-        r.seat !== null &&
-        this.humans.length > 1 &&
-        r.finishTime === null &&
-        !r.dnf
-      ) {
-        r.idleFor =
-          !input.gas && !input.brake && Math.abs(input.steer || 0) < 0.05
-            ? (r.idleFor || 0) + dt
-            : 0;
-      }
-      r.autoDriving =
-        r.seat === null ||
-        r.finishTime !== null ||
-        r.dnf ||
-        input.autopilot === true ||
-        (r.idleFor || 0) >= 15;
-    }
-    const targets = this.humans.filter((h) => !h.autoDriving);
-    this.cpuReference = targets.length
-      ? targets.reduce((sum, h) => sum + h.progress, 0) / targets.length
-      : this.player.progress;
-    for (const r of this.racers) {
-      this.move(
-        r,
-        r.autoDriving ? this.cpuInput(r) : inputs[r.seat] || {},
-        dt,
-        r.autoDriving,
-      );
+      const auto =
+        r.seat === null || r.finishTime !== null || input.autopilot === true;
+      this.move(r, auto ? this.cpuInput(r) : input, dt, auto);
     }
     this.collisions(dt, oldProgress);
     this.updateObjects(dt, oldProgress);
@@ -332,20 +300,8 @@ export class Race {
       .filter((r) => r.finishTime !== null)
       .sort((a, b) => a.finishTime - b.finishTime)
       .map((r) => r.id);
-    if (this.humans.length > 1 && this.state === "racing") {
-      if (
-        this.firstHumanFinish === null &&
-        this.humans.some((r) => r.finishTime !== null)
-      )
-        this.firstHumanFinish = this.raceTime;
-      if (
-        this.firstHumanFinish !== null &&
-        this.raceTime - this.firstHumanFinish >= this.finishWindow
-      )
-        for (const r of this.humans) if (r.finishTime === null) r.dnf = true;
-    }
     if (
-      this.humans.every((r) => r.finishTime !== null || r.dnf) &&
+      this.humans.every((r) => r.finishTime !== null) &&
       this.state === "racing"
     ) {
       this.state = "finishing";
@@ -354,8 +310,7 @@ export class Race {
     }
     if (
       this.state === "finishing" &&
-      (this.finishOrder.length === this.racers.length ||
-        (this.humans.length > 1 && this.time - this.finishedAt > 4))
+      this.finishOrder.length === this.racers.length
     ) {
       this.showResults();
     }
@@ -368,9 +323,9 @@ export class Race {
   cpuInput(r) {
     // Pure pursuit: steering derived from a point ahead in world coordinates.
     const lead = clamp(9 + Math.abs(r.speed) * 0.32, 9, 23),
-      lane = physicsMath.sin(this.raceTime * 0.19 + r.id * 2.1) * 3.5;
+      lane = Math.sin(this.raceTime * 0.19 + r.id * 2.1) * 3.5;
     const p = surfaceAt(r.s + lead, lane),
-      desired = physicsMath.atan2(p.x - r.x, -(p.z - r.z));
+      desired = Math.atan2(p.x - r.x, -(p.z - r.z));
     const error = activeSurfaceTrack
         ? activeSurfaceTrack.steeringError(r, p)
         : angle(desired - r.heading),
@@ -407,12 +362,12 @@ export class Race {
       "contactAnimation",
     ])
       r[k] = Math.max(0, (r[k] || 0) - dt);
-    r.sideVelocity = (r.sideVelocity || 0) * physicsMath.exp(-dt * 2.5);
+    r.sideVelocity = (r.sideVelocity || 0) * Math.exp(-dt * 2.5);
     if (r.itemUse) r.itemUse.age += dt;
     if (r.roulette > 0) {
       r.roulette -= dt;
       if (r.roulette <= 0) {
-        r.item = rollItem(this.position(r), this.rng, this.racers.length);
+        r.item = rollItem(this.position(r), this.rng);
         this.emit("itemReady", r, { item: r.item });
       }
     }
@@ -435,7 +390,7 @@ export class Race {
     }
     const spinning = r.spin > 0;
     const steer = spinning ? 0 : input.steer;
-    r.steer += (steer - r.steer) * (1 - physicsMath.exp(-dt * 20));
+    r.steer += (steer - r.steer) * (1 - Math.exp(-dt * 20));
     if (
       input.drift &&
       !r.lastInput.drift &&
@@ -483,9 +438,7 @@ export class Race {
         : Math.abs(r.lateral) > ROAD_HALF + 0.2);
     let max = topSpeed(r.coins);
     if (auto) {
-      const gap =
-        (this.humans.length > 1 ? this.cpuReference : this.player.progress) -
-        r.progress;
+      const gap = this.player.progress - r.progress;
       max *= r.skill * clamp(1 + gap / 1400, 0.93, 1.09);
     }
     if (r.boost > 0) max = 55;
@@ -493,7 +446,7 @@ export class Race {
     // A boost expiring over the lip must not cut airborne momentum.
     if (r.jump) max = Math.max(max, r.jump.speed);
     if (offroad && r.boost <= 0 && r.star <= 0) max *= 0.43;
-    if (spinning) r.speed *= physicsMath.exp(-5 * dt);
+    if (spinning) r.speed *= Math.exp(-5 * dt);
     else if (input.brake) {
       r.speed = Math.max(-10, r.speed - 28 * dt);
     } else if (input.gas) {
@@ -537,16 +490,12 @@ export class Race {
     } else {
       r.heading = angle(r.heading + turnAngle);
       r.x +=
-        (physicsMath.sin(r.heading) * r.speed +
-          (!r.gliding && !r.jump
-            ? physicsMath.cos(r.heading) * r.sideVelocity
-            : 0)) *
+        (Math.sin(r.heading) * r.speed +
+          (!r.gliding && !r.jump ? Math.cos(r.heading) * r.sideVelocity : 0)) *
         dt;
       r.z +=
-        (-physicsMath.cos(r.heading) * r.speed +
-          (!r.gliding && !r.jump
-            ? physicsMath.sin(r.heading) * r.sideVelocity
-            : 0)) *
+        (-Math.cos(r.heading) * r.speed +
+          (!r.gliding && !r.jump ? Math.sin(r.heading) * r.sideVelocity : 0)) *
         dt;
       near = project(r.x, r.z, r.s);
     }
@@ -604,7 +553,6 @@ export class Race {
     // Sequential eighth-lap gates prevent line oscillation, reversal or a crossing
     // between overlaid roads from awarding a lap. No teleport API in normal play.
     while (
-      !r.dnf &&
       r.finishTime === null &&
       r.progress >= r.nextCheckpoint &&
       previousProgress < r.nextCheckpoint
@@ -790,7 +738,7 @@ export class Race {
         target: target?.id,
         lateralVelocity:
           type === "green"
-            ? physicsMath.sin(angle(r.heading - trackAt(r.s).heading)) * 30
+            ? Math.sin(angle(r.heading - trackAt(r.s).heading)) * 30
             : 0,
       });
     }
@@ -926,8 +874,7 @@ export class Race {
         continue;
       }
       if (target && ["red", "blue"].includes(o.type)) {
-        o.lateral +=
-          (target.lateral - o.lateral) * (1 - physicsMath.exp(-dt * 7));
+        o.lateral += (target.lateral - o.lateral) * (1 - Math.exp(-dt * 7));
       }
       o.s = wrap(o.s + o.speed * dt, L);
       o.lateral += o.lateralVelocity * dt;

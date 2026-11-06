@@ -14,7 +14,7 @@
   "action": "Pen up / down",
   "schemaVersion": 2,
   "gameId": "funcaster.drawing",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "order": 12,
   "maxPlayers": 4,
   "controller": "aim",
@@ -22,9 +22,7 @@
   "verification": "attested",
   "scoring": {
     "direction": "higher",
-    "unit": "points",
-    "integer": true,
-    "tieBreak": "shared place"
+    "unit": "points"
   },
   "modes": {
     "solo": {
@@ -38,41 +36,10 @@
       "aiDefault": 0
     }
   },
-  "topologies": [
-    "shared",
-    "remote",
-    "hybrid",
-    "spectator"
-  ],
+  "topologies": ["shared", "remote", "hybrid", "spectator"],
   "input": {
-    "x": [
-      -1,
-      1
-    ],
-    "y": [
-      -1,
-      1
-    ],
-    "actions": [
-      "primary",
-      "left",
-      "right",
-      "confirm"
-    ]
-  },
-  "legacyIds": [
-    "funcaster.drawing"
-  ],
-  "seats": 4,
-  "engine": "classic",
-  "seatView": "shared",
-  "remote": "snapshot",
-  "roundPolicy": {
-    "kind": "turnBased",
-    "hardCapMs": 180000,
-    "finishWindowMs": 30000,
-    "idleMs": 30000,
-    "graceMs": 30000
-  },
-  "statsSchema": []
+    "x": [-1, 1],
+    "y": [-1, 1],
+    "actions": ["primary", "left", "right", "confirm"]
+  }
 }

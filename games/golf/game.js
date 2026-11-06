@@ -1,4 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
 import { GolfRound } from "./round.js";
 import * as THREE from "/vendor/three/three.module.js";
 import { consumeLaunchSplash } from "../../sdk/index.js";
@@ -25,10 +24,7 @@ const $ = (id) => document.getElementById(id);
 
 const canvas = $("game");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xa8d8ef);
@@ -131,9 +127,6 @@ scene.add(aimArrow);
 // ── Wiring ─────────────────────────────────────────────────────────────────
 const swing = new SwingDetector({ onThreshold: 130, minTravel: 22 });
 let hole = new Hole({ onEvent: handleEvent });
-import { FlightView } from "./flight-view.js";
-let flightView = null,
-  renderedBall = null;
 let partyRound = null,
   partyPlayers = [],
   roundKey = "";
@@ -148,14 +141,6 @@ const channel = createChannel({
     }
     if (!started || hole.state === "holed") startRound();
     else if (hole.state === "aim") hole.strike(cmd.power ?? 0.6);
-  },
-  onCommand: (cmd, slot) => {
-    if (!partyRound) return;
-    if (cmd.type === "extend") partyRound.extendTurn(cmd.seconds);
-    if (cmd.type === "address")
-      partyRound.address(slot, cmd.aim * 0.35, cmd.seq);
-    if (cmd.type === "release") partyRound.release(slot, cmd.power, cmd.seq);
-    if (cmd.type === "cancel") partyRound.cancelAddress(slot);
   },
   onPresence: (p) => {
     if (!new URLSearchParams(location.search).has("party")) return;
@@ -174,27 +159,8 @@ const channel = createChannel({
         ],
         seed: p.setup?.seed,
         holes: p.setup?.holes || 3,
-        course: p.setup?.course,
-        wind: p.setup?.wind,
-        skill: p.setup?.skill,
-        mode: p.setup?.golfMode,
-        readyGolf: p.setup?.readyGolf,
-        turnSeconds: p.setup?.turnSeconds ?? 45,
         onEvent: partyEvent,
       });
-      channel.link.bindReplay(
-        partyRound,
-        [
-          "step",
-          "strike",
-          "address",
-          "release",
-          "cancelAddress",
-          "presence",
-          "extendTurn",
-        ],
-        [["init", {}]],
-      );
       hole = partyRound.current.hole;
       started = true;
       $("overlay").classList.add("hide");
@@ -214,23 +180,7 @@ const channel = createChannel({
   },
 });
 
-channel.link.socket.on("golf.stroke", (event) => {
-  if (!channel.link.authority) flightView = new FlightView(event);
-});
 function partyEvent(e) {
-  if (e.type === "strike" && channel.link.authority)
-    channel.link.socket.emit("golf.stroke", {
-      slot: e.slot,
-      hole: e.hole,
-      seq: e.seq,
-      clock: channel.link.timeNow,
-      roundTime: partyRound.time,
-      ball: partyRound.lastLie,
-      pin: partyRound.current.hole.pin,
-      wind: e.wind,
-      aim: e.aim,
-      power: e.power,
-    });
   if (e.type === "results") {
     channel.link.finish?.(e.scores.filter((s) => s.slot < 4));
     $("panel").replaceChildren();
@@ -257,7 +207,7 @@ setInterval(() => {
         p.hole.state === "aim",
       caption:
         partyRound.turn === p.slot
-          ? `Your shot · wind ${Math.hypot(partyRound.course.wind?.x || 0, partyRound.course.wind?.z || 0).toFixed(1)}. Aim, hold, release.`
+          ? "Your shot. Tilt to aim, then hold and release."
           : `${partyRound.current.name || "Your friend"} is taking a shot.`,
       action: "Hold, then release",
       score: partyRound.total(p) + p.hole.strokes,
@@ -341,20 +291,16 @@ function frame(now) {
   }
 
   if (partyRound) {
-    channel.link.advance(dt, (_, step) => partyRound.step(step));
+    if (channel.link.authority && !channel.link.paused) partyRound.update(dt);
     hole = partyRound.current.hole;
-    const pin = hole.pin;
-    cup.position.set(pin.x, terrainHeight(pin.x, pin.z) + 0.02, pin.z);
-    pole.position.set(pin.x, terrainHeight(pin.x, pin.z) + 1.7, pin.z);
-    flag.position.set(pin.x + 0.55, terrainHeight(pin.x, pin.z) + 3, pin.z);
     const active = channel.poll(now, partyRound.turn);
-    if (hole.state === "aim" && !partyRound.current.ai && !partyRound.addressed)
+    if (hole.state === "aim" && !partyRound.current.ai)
       hole.aimOffset = (active.x - 0.5) * 0.7;
     syncHud();
   } else {
     const aim = channel.poll(now);
     if (hole.state === "aim") hole.aimOffset = (aim.x - 0.5) * 0.7;
-    channel.link.advance(dt, (tick, step) => hole.update(tick, step));
+    if (channel.link.authority && !channel.link.paused) hole.update(now, dt);
   }
   step(now, dt);
   renderer.render(scene, camera);
@@ -362,32 +308,7 @@ function frame(now) {
 
 /** Scene/camera sync — split out for verification. */
 function step(now, dt) {
-  let b = hole.ball;
-  if (!channel.link.authority && flightView && partyRound) {
-    const e = flightView.event;
-    if (
-      partyRound.index !== e.hole ||
-      partyRound.turn !== e.slot ||
-      (partyRound.time > e.roundTime + 0.02 && hole.state !== "flight")
-    )
-      flightView = null;
-    else if (now >= e.clock) b = flightView.sample(now);
-  }
-  if (!channel.link.authority) {
-    if (
-      !renderedBall ||
-      Math.hypot(
-        renderedBall.x - b.x,
-        renderedBall.y - b.y,
-        renderedBall.z - b.z,
-      ) > 2
-    )
-      renderedBall = { ...b };
-    else
-      for (const k of ["x", "y", "z"])
-        renderedBall[k] += (b[k] - renderedBall[k]) * (1 - Math.exp(-25 * dt));
-    b = renderedBall;
-  }
+  const b = hole.ball;
   ball.position.set(b.x, b.y + 0.16, b.z);
 
   const heading = hole.headingToHole() + hole.aimOffset;
@@ -417,7 +338,6 @@ function step(now, dt) {
 function resize() {
   const w = Math.max(1, window.innerWidth);
   const h = Math.max(1, window.innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();

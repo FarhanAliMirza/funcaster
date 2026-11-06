@@ -11,7 +11,7 @@
   "tag": "EASY TO LOVE",
   "schemaVersion": 2,
   "gameId": "funcaster.star-catch",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "order": 3,
   "maxPlayers": 4,
   "controller": "side",
@@ -19,9 +19,7 @@
   "verification": "verifiable",
   "scoring": {
     "direction": "higher",
-    "unit": "points",
-    "integer": true,
-    "tieBreak": "shared place"
+    "unit": "points"
   },
   "modes": {
     "solo": {
@@ -35,42 +33,11 @@
       "aiDefault": 0
     }
   },
-  "topologies": [
-    "shared",
-    "remote",
-    "hybrid",
-    "spectator"
-  ],
+  "topologies": ["shared", "remote", "hybrid", "spectator"],
   "players": "1–4 players",
   "input": {
-    "x": [
-      -1,
-      1
-    ],
-    "y": [
-      -1,
-      1
-    ],
-    "actions": [
-      "primary",
-      "left",
-      "right",
-      "confirm"
-    ]
-  },
-  "legacyIds": [
-    "funcaster.star-catch"
-  ],
-  "seats": 4,
-  "engine": "server",
-  "seatView": "shared",
-  "remote": "frames",
-  "roundPolicy": {
-    "kind": "timed",
-    "hardCapMs": 60000,
-    "finishWindowMs": 30000,
-    "idleMs": 30000,
-    "graceMs": 30000
-  },
-  "statsSchema": []
+    "x": [-1, 1],
+    "y": [-1, 1],
+    "actions": ["primary", "left", "right", "confirm"]
+  }
 }

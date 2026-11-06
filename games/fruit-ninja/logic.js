@@ -1,4 +1,3 @@
-import { segmentCircleEntry } from "../../core/trail.js";
 import { Trail, segmentDistance } from "../../core/trail.js";
 
 /**
@@ -89,15 +88,6 @@ export class FruitNinja {
     // `setCursor` and persist for the session (a reconnect keeps its slot's
     // running score), so this Map is never cleared, only reset in `start`.
     this.players = new Map();
-    this.spawnSerial = 0;
-    this.spawnScale = 1;
-  }
-
-  configure({ variant = "battle", seats = 1, bot = false } = {}) {
-    this.infiniteLives = variant !== "co-op";
-    this.bot = bot && variant === "co-op";
-    this.spawnScale =
-      variant === "co-op" ? 1 + 0.4 * (Math.max(1, Math.min(4, seats)) - 1) : 1;
   }
 
   setAspect(aspect) {
@@ -120,7 +110,6 @@ export class FruitNinja {
         combo: 0,
         comboUntil: 0,
         lastActiveAt: -Infinity,
-        stats: { fruit: 0, bestCombo: 0, bombs: 0 },
       };
       this.players.set(slot, p);
     }
@@ -157,7 +146,6 @@ export class FruitNinja {
       startedAt: now,
       nextSpawn: now + 900,
     });
-    this.spawnSerial = 0;
     this.fruits.length = 0;
     this.halves.length = 0;
     this.particles.length = 0;
@@ -166,7 +154,6 @@ export class FruitNinja {
     // reconnect between rounds.
     for (const p of this.players.values()) {
       p.score = 0;
-      p.stats = { fruit: 0, bestCombo: 0, bombs: 0 };
       p.combo = 0;
       p.comboUntil = 0;
       p.trail.clear();
@@ -198,7 +185,6 @@ export class FruitNinja {
       spin: rand(-2.4, 2.4),
       spinAxis: { x: rand(-1, 1), y: rand(-1, 1), z: rand(-1, 1) },
       bomb: !!isBomb,
-      sliceOrder: this.spawnSerial++,
       kind,
       id: FruitNinja.nextId++,
     });
@@ -262,10 +248,7 @@ export class FruitNinja {
   }
 
   spawnInterval(now) {
-    return (
-      Math.max(260, 780 - ((now - this.state.startedAt) / 1000) * 14) /
-      this.spawnScale
-    );
+    return Math.max(260, 780 - ((now - this.state.startedAt) / 1000) * 14);
   }
 
   bombChance(now) {
@@ -274,7 +257,7 @@ export class FruitNinja {
 
   update(now, dt) {
     this.stepDebris(dt);
-    if (this.state.phase !== "playing" || now < this.state.startedAt) return;
+    if (this.state.phase !== "playing") return;
 
     if (now >= this.state.nextSpawn) {
       const roll = this.spawnRng();
@@ -284,17 +267,6 @@ export class FruitNinja {
       this.state.nextSpawn = now + this.spawnInterval(now);
     }
 
-    if (this.bot) {
-      const p = this.getPlayer(4),
-        target = this.fruits.find((f) => !f.bomb);
-      if (target) {
-        const dx = target.x - p.cursor.x,
-          dy = target.y - p.cursor.y,
-          d = Math.hypot(dx, dy) || 1,
-          s = Math.min(1, (dt * 12) / d);
-        this.setCursor(p.cursor.x + dx * s, p.cursor.y + dy * s, now, 4);
-      }
-    }
     const floor = -this.h / 2 - 1.2;
 
     // Only blades that are actually moving (and recently — see lastActiveAt
@@ -314,7 +286,6 @@ export class FruitNinja {
     }
 
     for (let i = this.fruits.length - 1; i >= 0; i -= 1) {
-      if (this.state.phase !== "playing") break;
       const f = this.fruits[i];
       f.vy -= GRAVITY * dt;
       f.x += f.vx * dt;
@@ -323,39 +294,19 @@ export class FruitNinja {
 
       let cutBy = null;
       let cutSeg = null;
-      let cutAt = Infinity;
       for (const p of activeBlades) {
         for (const s of p.trail.segments) {
-          const t0 = s.t0 ?? p.lastActiveAt,
-            t1 = s.t1 ?? p.lastActiveAt;
-          const a = (t0 - now) / 1000,
-            b = (t1 - now) / 1000;
-          const u = segmentCircleEntry(
-            s.x1 - (f.x + f.vx * a),
-            s.y1 - (f.y + f.vy * a - (GRAVITY * a * a) / 2),
-            s.x2 - (f.x + f.vx * b),
-            s.y2 - (f.y + f.vy * b - (GRAVITY * b * b) / 2),
-            f.r,
-          );
-          if (u === null) continue;
-          const at = t0 + (t1 - t0) * u;
-          const before = cutAt;
-          const priority = (p.slot - ((f.sliceOrder || 0) % 4) + 4) % 4;
-          const oldPriority = cutBy
-            ? (cutBy.slot - ((f.sliceOrder || 0) % 4) + 4) % 4
-            : Infinity;
-          if (at < before || (at === before && priority < oldPriority)) {
-            cutBy = p;
-            cutSeg = s;
-            cutAt = at;
-          }
+          if (segmentDistance(f.x, f.y, s.x1, s.y1, s.x2, s.y2) > f.r) continue;
+          cutBy = p;
+          cutSeg = s;
+          break;
         }
+        if (cutBy) break;
       }
 
       if (cutBy) {
         this.fruits.splice(i, 1);
         if (f.bomb) {
-          cutBy.stats.bombs++;
           this.explode(f);
           if (this.infiniteLives) {
             // Practice: the blast costs points, not the run.
@@ -388,8 +339,6 @@ export class FruitNinja {
           );
           cutBy.combo = now < cutBy.comboUntil ? cutBy.combo + 1 : 1;
           cutBy.comboUntil = now + 260;
-          cutBy.stats.fruit++;
-          cutBy.stats.bestCombo = Math.max(cutBy.stats.bestCombo, cutBy.combo);
           // Mirrored onto shared state for back-compat (single-player reads
           // state.combo directly) and so the HUD's combo banner always shows
           // whoever most recently extended a streak.

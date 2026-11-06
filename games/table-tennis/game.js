@@ -1,5 +1,3 @@
-import { dprFor, viewPixelBudget } from "../../core/pixel-budget.js";
-import { seededRandom } from "../../sdk/index.js";
 import * as THREE from "/vendor/three/three.module.js";
 import { consumeLaunchSplash } from "../../sdk/index.js";
 
@@ -18,10 +16,7 @@ const $ = (id) => document.getElementById(id);
 
 const canvas = $("game");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const pixelBudget = viewPixelBudget();
-renderer.setPixelRatio(
-  dprFor(innerWidth, innerHeight, { maxPixels: pixelBudget }),
-);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1b2b45);
@@ -113,9 +108,6 @@ function makePaddle(colour) {
 }
 const paddle = makePaddle(0xd23c3c);
 scene.add(paddle);
-const partnerPaddle = makePaddle(0xef5da8);
-partnerPaddle.visible = false;
-scene.add(partnerPaddle);
 const aiPaddle = makePaddle(0x2f6fe4);
 aiPaddle.position.set(0, TABLE.HEIGHT + 0.18, AI_Z);
 scene.add(aiPaddle);
@@ -147,30 +139,13 @@ let partyPlayers = [];
 const channel = createChannel({
   onA: (slot = 0) => {
     if (rally.state === "ready" || rally.state === "over") {
-      if (channel.link.party && rally.state === "over") return;
       if (slot === 0) startGame();
-    } else if (slot === 0 || rally.coop) rally.swing(350);
-    else rally.swingOpponent(0.7);
+    } else if (slot === 0) rally.swing(350);
+    else rally.opponentBoost = 0.7;
   },
   onPresence: (p) => {
     partyPlayers = p.slots || [];
-    if (channel.link.serverSimulation) {
-      if (channel.link.localSeats[0] === 1 && p.setup.tennisMode !== "coop") {
-        $("p-tag").textContent = p.slots[1]?.name || "You";
-        $("a-tag").textContent = p.slots[0]?.name || "Rival";
-      }
-      return;
-    }
-    if (rally.state === "ready" && channel.link.party) {
-      rally.rng = seededRandom(p.setup.seed);
-      rally.winScore = p.setup.winScore || 7;
-      rally.coop = p.setup.tennisMode === "coop";
-    }
-    rally.humanOpponent = partyPlayers.length > 1 && !rally.coop;
-    if (rally.coop) {
-      $("a-tag").textContent = "Computer";
-      $("p-tag").textContent = "Your team";
-    }
+    rally.humanOpponent = partyPlayers.length > 1 && partyPlayers[1].occupied;
     if (
       new URLSearchParams(location.search).has("party") &&
       rally.state === "ready"
@@ -207,7 +182,7 @@ function handleEvent(e) {
   if (e.type === "over" && channel.link.party)
     channel.link.finish([
       { slot: 0, score: rally.score.player },
-      { slot: 1, score: rally.coop ? rally.score.player : rally.score.ai },
+      { slot: 1, score: rally.score.ai },
     ]);
   switch (e.type) {
     case "hit":
@@ -271,8 +246,7 @@ function frame(now) {
     partyPlayers[1].occupied
   ) {
     const other = channel.poll(now, 1);
-    if (rally.coop) rally.setPartner(other.x, other.y);
-    else rally.setOpponent(other.x, other.y);
+    rally.setOpponent(other.x, other.y);
   }
   channel.link.advance(dt, (tick, step) => rally.update(tick, step));
   step(now, dt);
@@ -281,8 +255,6 @@ function frame(now) {
 
 /** Scene sync — split out for verification. */
 function step(now, dt) {
-  partnerPaddle.visible = rally.coop;
-  partnerPaddle.position.set(rally.partner.x, rally.partner.y, PLAYER_Z + 0.05);
   paddle.position.set(rally.paddle.x, rally.paddle.y, PLAYER_Z);
   paddle.rotation.z = -rally.paddle.x * 0.4;
   aiPaddle.position.x = rally.aiPaddle.x;
@@ -306,7 +278,6 @@ function step(now, dt) {
 function resize() {
   const w = Math.max(1, window.innerWidth);
   const h = Math.max(1, window.innerHeight);
-  renderer.setPixelRatio(dprFor(w, h, { maxPixels: pixelBudget }));
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
@@ -344,27 +315,7 @@ window.__openwii = {
 channel.link.bindState(
   () => rally,
   () => {
-    if (
-      channel.link.serverSimulation &&
-      channel.link.localSeats[0] === 1 &&
-      !rally.coop
-    ) {
-      [rally.score.player, rally.score.ai] = [
-        rally.score.ai,
-        rally.score.player,
-      ];
-      [rally.paddle, rally.aiPaddle] = [rally.aiPaddle, rally.paddle];
-      rally.paddle.x *= -1;
-      rally.aiPaddle.x *= -1;
-      rally.ball.x *= -1;
-      rally.ball.z *= -1;
-    }
     syncHud();
-    if (channel.link.serverSimulation)
-      $("overlay").classList.toggle(
-        "hide",
-        rally.state !== "ready" && rally.state !== "over",
-      );
   },
 );
 
@@ -372,29 +323,7 @@ setInterval(
   () =>
     channel.link.report([
       { slot: 0, score: rally.score.player },
-      { slot: 1, score: rally.coop ? rally.score.player : rally.score.ai },
+      { slot: 1, score: rally.score.ai },
     ]),
   500,
-);
-
-channel.link.onSharedEvent = (e) => {
-  if (channel.link.localSeats[0] === 1 && !rally.coop) {
-    const swap = (x) => (x === "player" ? "ai" : x === "ai" ? "player" : x);
-    e = { ...e, who: swap(e.who), by: swap(e.by), winner: swap(e.winner) };
-  }
-  handleEvent(e);
-};
-
-channel.link.bindReplay(
-  rally,
-  [
-    "start",
-    "update",
-    "setPaddle",
-    "setOpponent",
-    "swing",
-    "swingOpponent",
-    "setPartner",
-  ],
-  [["init"]],
 );

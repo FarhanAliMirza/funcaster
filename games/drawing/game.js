@@ -1,5 +1,3 @@
-import { renderScale } from "../../core/render-scale.js";
-import { resizeCanvas, viewPixelBudget } from "../../core/pixel-budget.js";
 import { consumeLaunchSplash } from "../../sdk/index.js";
 
 // Carry the menu's launch banner across the navigation, then fade it out.
@@ -17,7 +15,6 @@ import { Sketch, TOOLBAR, SIZES } from "./logic.js";
 const $ = (id) => document.getElementById(id);
 const canvas = $("game");
 const ctx = canvas.getContext("2d");
-const pixelBudget = viewPixelBudget();
 
 const PAPER = "#fbfaf4";
 const sketch = new Sketch({ onEvent: handleEvent });
@@ -38,9 +35,11 @@ function penFor(slot) {
 let vw = 1;
 let vh = 1;
 function layout() {
-  vw = Math.max(1, window.innerWidth);
-  vh = Math.max(1, window.innerHeight);
-  const dpr = resizeCanvas(canvas, vw, vh, { maxPixels: pixelBudget });
+  const dpr = Math.min(window.devicePixelRatio, 2);
+  vw = window.innerWidth;
+  vh = window.innerHeight;
+  canvas.width = vw * dpr;
+  canvas.height = vh * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 window.addEventListener("resize", layout);
@@ -255,17 +254,15 @@ function frame(now) {
         continue;
       ctx.fillStyle = seat.color;
       ctx.beginPath();
-      ctx.arc(px(point.x), py(point.y), 8 * renderScale(vh), 0, Math.PI * 2);
+      ctx.arc(px(point.x), py(point.y), 8, 0, Math.PI * 2);
       ctx.fill();
-      ctx.font = `bold ${16 * renderScale(vh)}px system-ui`;
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText(seat.name, px(point.x) + 14 * renderScale(vh), py(point.y));
+      ctx.font = "bold 14px system-ui";
+      ctx.fillText(seat.name, px(point.x) + 14, py(point.y));
     }
 
   if (sketchTurn) {
     ctx.fillStyle = "#211b38";
-    ctx.font = `bold ${24 * renderScale(vh)}px system-ui`;
+    ctx.font = "bold 24px system-ui";
     ctx.textAlign = "center";
     const drawer =
       channel.link.slots.find((s) => s.slot === sketchTurn.drawer)?.name ||
@@ -273,7 +270,7 @@ function frame(now) {
     ctx.fillText(
       `${drawer} draws · ${sketchTurn.label} · ${sketchTurn.seconds}s`,
       vw / 2,
-      42 * renderScale(vh),
+      42,
     );
     ctx.textAlign = "left";
   }

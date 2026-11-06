@@ -1,5 +1,4 @@
-import { raceMath as physicsMath } from "../../core/dmath.js";
-import { createSurfaceTrack } from "./surface-track.js";
+import { createSurfaceTrack } from './surface-track.js';
 /** Original stadium reconstruction, traced by eye from the research map.
  * Pure geometry shared by simulation, drawing, minimap and tests. Metres. */
 export let ROAD_HALF = 10;
@@ -39,8 +38,7 @@ const N = CONTROL_POINTS.length,
   SUB = 32;
 export const wrap = (s, L) => ((s % L) + L) % L;
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-export const angle = (a) =>
-  physicsMath.atan2(physicsMath.sin(a), physicsMath.cos(a));
+export const angle = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 function cat(a, b, c, d, t) {
   return (
     0.5 *
@@ -70,13 +68,13 @@ for (let i = 0; i < N; i++) {
     // The course has no below-ground section; flatten that numerical undershoot.
     p.y = Math.max(0, p.y);
     if (raw.length)
-      length += physicsMath.hypot(p.x - raw.at(-1).x, p.z - raw.at(-1).z);
+      length += Math.hypot(p.x - raw.at(-1).x, p.z - raw.at(-1).z);
     p.s = length;
     p.control = i + j / SUB;
     raw.push(p);
   }
 }
-length += physicsMath.hypot(raw[0].x - raw.at(-1).x, raw[0].z - raw.at(-1).z);
+length += Math.hypot(raw[0].x - raw.at(-1).x, raw[0].z - raw.at(-1).z);
 export let TRACK_LENGTH = length;
 // Exact sampled control indices (the first pass records before the preceding edge).
 for (let i = 0; i < N; i++) controlDistances[i] = raw[i * SUB].s;
@@ -113,18 +111,18 @@ export function trackAt(distance) {
     az = b.z - prev.z,
     bx = next.x - a.x,
     bz = next.z - a.z,
-    al = physicsMath.hypot(ax, az),
-    bl = physicsMath.hypot(bx, bz);
+    al = Math.hypot(ax, az),
+    bl = Math.hypot(bx, bz);
   const vx = (ax / al) * (1 - t) + (bx / bl) * t,
     vz = (az / al) * (1 - t) + (bz / bl) * t,
-    vl = physicsMath.hypot(vx, vz),
+    vl = Math.hypot(vx, vz),
     tx = vx / vl,
     tz = vz / vl;
   const control = i === raw.length - 1 ? N : b.control;
   const c = a.control + t * (control - a.control);
   const anti = s >= SECTIONS.antiStart && s < SECTIONS.antiEnd;
   const bank = anti
-    ? physicsMath.sin(
+    ? Math.sin(
         Math.PI *
           clamp(
             (s - SECTIONS.antiStart) / (SECTIONS.antiEnd - SECTIONS.antiStart),
@@ -141,7 +139,7 @@ export function trackAt(distance) {
     tz,
     rx: -tz,
     rz: tx,
-    heading: physicsMath.atan2(tx, -tz),
+    heading: Math.atan2(tx, -tz),
     bank,
     anti,
     glide: s >= SECTIONS.glideStart && s < SECTIONS.glideEnd,
@@ -161,8 +159,7 @@ export function surfaceAt(s, lateral = 0) {
 }
 /** Local projection avoids jumping between crossing roads. Global only at spawn. */
 export function project(x, z, previousS = null) {
-  if (activeSurfaceTrack)
-    return activeSurfaceTrack.project({ x, y: 0, z }, previousS, true);
+  if (activeSurfaceTrack) return activeSurfaceTrack.project({x,y:0,z}, previousS, true);
   let best = null;
   const center = previousS === null ? 0 : indexAt(wrap(previousS, length));
   const count = previousS === null ? raw.length : 85;

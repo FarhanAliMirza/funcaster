@@ -27,15 +27,12 @@ export class Rally {
     rng = Math.random,
     aiSkill = 0.8,
     winScore = WIN_SCORE,
-    coop = false,
   } = {}) {
     this.onEvent = onEvent;
     this.rng = rng;
     this.aiSkill = aiSkill;
     this.winScore = Math.max(3, Math.min(21, winScore));
     this.humanOpponent = false;
-    this.coop = coop;
-    this.partner = { x: 0, y: TABLE.HEIGHT + 0.15 };
     this.opponentBoost = 0;
 
     this.state = "ready"; // ready | rally | point | over
@@ -94,13 +91,6 @@ export class Rally {
     this.aiPaddle.y =
       TABLE.HEIGHT + 0.05 + (1 - Math.max(0, Math.min(1, ny))) * 0.7;
   }
-  setPartner(nx, ny) {
-    this.partner.x = (nx - 0.5) * (TABLE.WIDTH + 0.7);
-    this.partner.y = TABLE.HEIGHT + 0.05 + (1 - ny) * 0.7;
-  }
-  swingOpponent(value) {
-    this.opponentBoost = Math.max(0, Math.min(1, value));
-  }
   /** A swing just happened; the next return gets its pace. */
   swing(peakDps) {
     this.swingBoost = Math.min(1, peakDps / 500);
@@ -110,11 +100,7 @@ export class Rally {
     this.score[who] += 1;
     this.longestRally = Math.max(this.longestRally, this.hits);
     this.onEvent({ type: "point", who, why, score: { ...this.score } });
-    if (
-      this.score[who] >= this.winScore &&
-      (!(this.humanOpponent || this.coop) ||
-        Math.abs(this.score.player - this.score.ai) >= 2)
-    ) {
+    if (this.score[who] >= this.winScore) {
       this.state = "over";
       this.winner = who;
       this.ballLive = false;
@@ -124,15 +110,7 @@ export class Rally {
     this.state = "point";
     this.ballLive = false;
     this.pauseUntil = now + 1200;
-    const total = this.score.player + this.score.ai;
-    const deuce =
-      Math.min(this.score.player, this.score.ai) >= this.winScore - 1;
-    this.nextServer =
-      this.humanOpponent || this.coop
-        ? (deuce ? total : Math.floor(total / 2)) % 2 === 0
-          ? "player"
-          : "ai"
-        : who;
+    this.nextServer = who; // point winner serves
   }
 
   /** Return the ball from a paddle at (px, py) toward the other side. */
@@ -183,15 +161,14 @@ export class Rally {
 
     // Player return plane.
     if (b.vz > 0 && prevZ < PLAYER_Z && b.z >= PLAYER_Z) {
-      const paddle =
-        this.coop &&
-        Math.hypot(b.x - this.partner.x, b.y - this.partner.y) <
-          Math.hypot(b.x - this.paddle.x, b.y - this.paddle.y)
-          ? this.partner
-          : this.paddle;
-      const dist = Math.hypot(b.x - paddle.x, b.y - paddle.y);
+      const dist = Math.hypot(b.x - this.paddle.x, b.y - this.paddle.y);
       if (dist < REACH) {
-        this.hitBall(true, paddle.x, (this.rng() - 0.5) * 0.8, this.swingBoost);
+        this.hitBall(
+          true,
+          this.paddle.x,
+          (this.rng() - 0.5) * 0.8,
+          this.swingBoost,
+        );
       } else {
         this.scorePoint("ai", "missed return", now);
         return;
