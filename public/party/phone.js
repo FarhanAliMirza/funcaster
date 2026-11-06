@@ -28,7 +28,6 @@ let code =
   joinPending = false,
   retryTimer = null,
   sensorTimeout = null,
-  gravity = null,
   latency = null;
 let preferenceStorage;
 try {
@@ -50,7 +49,6 @@ let raceStatus = null,
   playStatus = null,
   shotStarted = 0;
 const isWheel = () => gameById(state?.game).mode === "wheel";
-const landscape = () => matchMedia("(orientation: landscape)").matches;
 function releasePedals() {
   if (shotStarted)
     socket.emit("action", { action: "cancel", seq: shotSequence });
@@ -88,8 +86,8 @@ function syncSettings() {
   $("range-middle").textContent = wheel ? "Default" : "Balanced";
   $("range-high").textContent = wheel ? "Quicker" : "Extra lively";
   $("settings-note").textContent = wheel
-    ? "Saved for racing only. Lower it for gentler steering. Recenter whenever you change your grip."
-    : "Calibration filters your phone’s natural wobble. Recenter whenever you change your grip.";
+    ? "Saved for racing only. Lower it for gentler steering. Center steering whenever you change your grip."
+    : "Only wheel-like rotation steers. Forward, backward and sideways tilt are ignored.";
 }
 function setSensitivity(value) {
   const wheel = isWheel();
@@ -227,7 +225,7 @@ function acceptIdentity(answer) {
   status("You’re connected", true);
   if (started) {
     if (mode === "touch") setReady(true);
-    else calibrate();
+    else startMotion();
   }
 }
 socket.on("promoted", (answer) => {
@@ -311,19 +309,18 @@ socket.on("ended", () => {
   $("join-view").hidden = false;
   message("That party has ended. Scan the new code on the big screen.");
 });
-function calibrate() {
+function startMotion() {
   releasePedals();
   motion.reset();
   wheelMotion.reset();
   latest = null;
   setReady(false);
-  $("calibration-track").hidden = false;
   $("sensor-message").hidden = true;
   $("retry-sensors").hidden = true;
   render();
   clearTimeout(sensorTimeout);
   sensorTimeout = setTimeout(() => {
-    if (!ready && mode === "motion" && (!isWheel() || landscape())) {
+    if (!ready && mode === "motion") {
       sensorProblem(
         "No motion yet. Allow Motion & Orientation in your browser, or play with touch.",
       );
@@ -341,15 +338,12 @@ function sensorProblem(text) {
 function sensor(sample) {
   if (!started || mode !== "motion" || document.hidden) return;
   lastSample = performance.now();
-  if (isWheel() && !landscape()) return;
   const result = (isWheel() ? wheelMotion : motion).update(sample, lastSample);
   if (!result) return;
   latest = result;
-  $("calibration-progress").style.width = `${result.progress * 100}%`;
   if (result.ready && !ready) {
     setReady(true);
     clearTimeout(sensorTimeout);
-    $("calibration-track").hidden = true;
     $("sensor-message").hidden = true;
     $("retry-sensors").hidden = true;
     buzz([15, 35, 25]);
@@ -365,33 +359,16 @@ function orientation(event) {
     screenAngle: screen.orientation?.angle || window.orientation || 0,
   });
 }
-function acceleration(event) {
-  if (!started || mode !== "motion") return;
-  let a = event.acceleration;
-  if (!a || ![a.x, a.y, a.z].every(Number.isFinite)) {
-    const g = event.accelerationIncludingGravity;
-    if (!g || ![g.x, g.y, g.z].every(Number.isFinite)) return;
-    if (!gravity) gravity = { ...g, x: g.x, y: g.y, z: g.z };
-    a = {};
-    for (const k of ["x", "y", "z"]) {
-      gravity[k] += (g[k] - gravity[k]) * 0.08;
-      a[k] = g[k] - gravity[k];
-    }
-  }
-  if (!isWheel() && motion.flick(a, performance.now())) lastPulse = true;
-}
 window.addEventListener("deviceorientation", orientation);
-window.addEventListener("devicemotion", acceleration);
 async function permission() {
   if (!window.isSecureContext)
     throw Error(
       "Motion needs a secure invite link. You can still play with touch.",
     );
-  // Request both permissions synchronously inside the tap's user activation.
+  // Request orientation synchronously inside the tap's user activation.
   const requests = [];
-  for (const Ctor of [window.DeviceOrientationEvent, window.DeviceMotionEvent])
-    if (typeof Ctor?.requestPermission === "function")
-      requests.push(Ctor.requestPermission());
+  if (typeof window.DeviceOrientationEvent?.requestPermission === "function")
+    requests.push(window.DeviceOrientationEvent.requestPermission());
   const decisions = await Promise.allSettled(requests);
   if (
     decisions.some((d) => d.status === "fulfilled" && d.value !== "granted") ||
@@ -432,7 +409,7 @@ $("enable").onclick = async () => {
     $("join-view").hidden = true;
     $("play-view").hidden = false;
     lastSample = 0;
-    calibrate();
+    startMotion();
     keepAwake();
     setTimeout(genericFallback, 1500);
   } catch (error) {
@@ -451,7 +428,6 @@ function beginTouch() {
   $("play-view").hidden = false;
   $("sensor-message").hidden = true;
   $("retry-sensors").hidden = true;
-  $("calibration-track").hidden = true;
   clearTimeout(sensorTimeout);
   setReady(true);
   keepAwake();
@@ -466,10 +442,7 @@ function touch(event) {
       -1,
       Math.min(1, ((event.clientX - r.left) / r.width - 0.5) * 2.4),
     ),
-    y: Math.max(
-      -1,
-      Math.min(1, ((event.clientY - r.top) / r.height - 0.5) * 2.4),
-    ),
+    y: 0,
   };
 }
 $("motion-pad").onpointerdown = (event) => {
@@ -491,8 +464,6 @@ $("motion-pad").onkeydown = (event) => {
   const moves = {
     ArrowLeft: [-0.15, 0],
     ArrowRight: [0.15, 0],
-    ArrowUp: [0, -0.15],
-    ArrowDown: [0, 0.15],
   };
   if (moves[event.key]) {
     event.preventDefault();
@@ -512,7 +483,7 @@ $("recenter").onclick = () => {
     $("touch-steer").value = "0";
     latest = { x: 0, y: 0 };
     setReady(true);
-  } else calibrate();
+  } else startMotion();
 };
 function render() {
   if (identity?.queued) {
@@ -525,12 +496,11 @@ function render() {
   const g = gameById(state.game),
     self = state.players.find((p) => p.slot === identity.slot),
     active = state.active.includes(identity.slot);
-  const wheel = g.mode === "wheel",
-    rotate = wheel && mode === "motion" && !landscape();
+  const wheel = g.mode === "wheel";
   document.body.classList.toggle("wheel-mode", wheel);
   $("motion-pad").hidden = wheel;
-  $("wheel-controls").hidden = !wheel || rotate;
-  $("rotate-phone").hidden = !rotate;
+  $("wheel-controls").hidden = !wheel;
+  $("rotate-phone").hidden = true;
   $("touch-steer-wrap").hidden = mode !== "touch";
   $("classic-action").hidden =
     !g.classic ||
@@ -613,7 +583,7 @@ function render() {
   $("switch-mode").textContent =
     mode === "touch" ? "Try motion controls" : "Use touch controls";
   $("phone-phase").textContent = !ready
-    ? "FIND YOUR BALANCE"
+    ? "CONNECTING MOTION"
     : state.phase === "practice"
       ? "A LITTLE WARM-UP"
       : state.phase === "playing"
@@ -621,13 +591,9 @@ function render() {
         : state.phase === "results"
           ? "NICELY PLAYED"
           : "YOU’RE IN";
-  if (rotate) {
-    $("phone-title").textContent = "Take the wheel.";
-    $("phone-hint").textContent =
-      "Rotate sideways, then hold your comfortable driving grip still.";
-  } else if (!ready && mode === "motion") {
-    $("phone-title").innerHTML = "Hold comfy.<br>Stay still.";
-    $("phone-hint").textContent = "We’re finding your natural grip.";
+  if (!ready && mode === "motion") {
+    $("phone-title").textContent = "Connecting motion…";
+    $("phone-hint").textContent = "Your steering will be ready immediately.";
   } else if (!state.hostConnected) {
     $("phone-title").textContent = "Keep your spot.";
     $("phone-hint").textContent = "The big screen is reconnecting. Hang tight.";
@@ -752,7 +718,7 @@ socket.on("state", (next) => {
       latest = { x: 0, y: 0 };
       $("touch-steer").value = "0";
     }
-    if (started && mode === "motion" && oldGame !== next.game) calibrate();
+    if (started && mode === "motion" && oldGame !== next.game) startMotion();
   }
   offset = state.serverTime - Date.now();
   if (identity) {
@@ -772,8 +738,7 @@ function frame(time) {
       `Release to shoot · ${Math.round(Math.min(1, (time - shotStarted) / 1600) * 100)}%`;
   if (latest) {
     $("steering-dot").style.left = `${50 + latest.x * 45}%`;
-    $("motion-dot").style.transform =
-      `translate(${latest.x * 85}px,${(gameById(state?.game).mode === "aim" ? latest.y : 0) * 65}px)`;
+    $("motion-dot").style.transform = `translate(${latest.x * 85}px,0)`;
   }
   if (identity && state) {
     const remaining = Math.max(
@@ -856,18 +821,18 @@ document.addEventListener("visibilitychange", () => {
     wake?.release().catch(() => {});
   } else if (started) {
     keepAwake();
-    if (mode === "motion") calibrate();
+    if (mode === "motion") startMotion();
     else setReady(true);
   }
 });
 matchMedia("(orientation: landscape)").addEventListener("change", () => {
   if (!started) return;
   releasePedals();
-  if (mode === "motion") calibrate();
+  if (mode === "motion") startMotion();
   else render();
 });
 window.addEventListener("orientationchange", () => {
-  if (started && mode === "motion") setTimeout(calibrate, 150);
+  if (started && mode === "motion") setTimeout(startMotion, 150);
 });
 window.addEventListener("blur", releasePedals);
 $("tune").onclick = () => {
@@ -890,7 +855,7 @@ $("switch-mode").onclick = async () => {
       await permission();
       mode = "motion";
       lastSample = 0;
-      calibrate();
+      startMotion();
       setTimeout(genericFallback, 1500);
     } catch (error) {
       $("sensor-message").textContent = error.message;
@@ -1098,9 +1063,7 @@ $("queue-leave").onclick = () => {
 };
 const leaveParty = $("leave").onclick;
 holdButton($("leave"), leaveParty);
-holdButton($("recenter"), $("recenter").onclick, 650);
 $("leave").textContent = "Hold to leave the party";
-$("recenter").textContent = "Hold to recenter";
 for (const id of ["remote-skin", "large-targets", "calm-phone"]) {
   try {
     const value = localStorage.getItem(`funcaster.${id}`);

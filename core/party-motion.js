@@ -1,100 +1,163 @@
-import { axesFromSample, dot, clamp, DEG } from "./orientation.js";
+import { axesFromSample, clamp, DEG } from "./orientation.js";
 
-// Relative body axes keep the neutral grip away from Euler wrap/gimbal problems.
-// The browser already fuses gyro and accelerometer for orientation; acceleration
-// is separately used for an optional flick, never as an absolute position sensor.
+const normalizeQuaternion = (q) => {
+  const length = Math.hypot(...q);
+  if (!Number.isFinite(length) || length < 1e-9) return null;
+  return q.map((value) => value / length);
+};
+
+/** Convert the device-to-world body axes into an [x, y, z, w] quaternion. */
+function quaternionFromAxes(axes) {
+  const m00 = axes.x.x,
+    m01 = axes.y.x,
+    m02 = axes.z.x,
+    m10 = axes.x.y,
+    m11 = axes.y.y,
+    m12 = axes.z.y,
+    m20 = axes.x.z,
+    m21 = axes.y.z,
+    m22 = axes.z.z;
+  const trace = m00 + m11 + m22;
+  let x, y, z, w;
+  if (trace > 0) {
+    const s = Math.sqrt(trace + 1) * 2;
+    w = 0.25 * s;
+    x = (m21 - m12) / s;
+    y = (m02 - m20) / s;
+    z = (m10 - m01) / s;
+  } else if (m00 > m11 && m00 > m22) {
+    const s = Math.sqrt(1 + m00 - m11 - m22) * 2;
+    w = (m21 - m12) / s;
+    x = 0.25 * s;
+    y = (m01 + m10) / s;
+    z = (m02 + m20) / s;
+  } else if (m11 > m22) {
+    const s = Math.sqrt(1 + m11 - m00 - m22) * 2;
+    w = (m02 - m20) / s;
+    x = (m01 + m10) / s;
+    y = 0.25 * s;
+    z = (m12 + m21) / s;
+  } else {
+    const s = Math.sqrt(1 + m22 - m00 - m11) * 2;
+    w = (m10 - m01) / s;
+    x = (m02 + m20) / s;
+    y = (m12 + m21) / s;
+    z = 0.25 * s;
+  }
+  return normalizeQuaternion([x, y, z, w]);
+}
+
+function quaternionFromSample(sample) {
+  if (
+    sample?.quat?.length === 4 &&
+    sample.quat.every(Number.isFinite) &&
+    Math.abs(Math.hypot(...sample.quat) - 1) <= 0.05
+  )
+    return normalizeQuaternion(sample.quat);
+  if (
+    !sample ||
+    ![sample.alpha, sample.beta, sample.gamma].every(Number.isFinite)
+  )
+    return null;
+  return quaternionFromAxes(axesFromSample(sample));
+}
+
+/** `inverse(reference) * current`, expressed in the reference phone frame. */
+function relativeQuaternion(reference, current) {
+  const [ax, ay, az, aw] = reference,
+    [bx, by, bz, bw] = current;
+  return [
+    aw * bx - ax * bw - ay * bz + az * by,
+    aw * by + ax * bz - ay * bw - az * bx,
+    aw * bz - ax * by + ay * bx - az * bw,
+    aw * bw + ax * bx + ay * by + az * bz,
+  ];
+}
+
+const wrapDegrees = (value) => {
+  let result = value;
+  while (result > 180) result -= 360;
+  while (result <= -180) result += 360;
+  return result;
+};
+
+/**
+ * One-dimensional phone steering.
+ *
+ * The first valid attitude is the center immediately: there is no stillness
+ * gate and no prescribed grip. Later attitudes are decomposed into swing and
+ * twist in that first phone frame. Swing changes where the screen faces
+ * (forward/back or side-to-side tilt) and is discarded. Only twist around the
+ * axis perpendicular to the screen becomes steering.
+ */
 export class PartyMotion {
-  constructor({ sensitivity = 1.25 } = {}) {
-    this.sensitivity = clamp(sensitivity, 0.6, 2.4);
+  constructor({
+    sensitivity = 1.25,
+    minSensitivity = 0.6,
+    maxSensitivity = 2.4,
+    fullTurn = 24,
+    exponent = 0.9,
+    responseRate = 28,
+    deadzone = 0.8,
+  } = {}) {
+    this.minSensitivity = minSensitivity;
+    this.maxSensitivity = maxSensitivity;
+    this.fullTurn = fullTurn;
+    this.exponent = exponent;
+    this.responseRate = responseRate;
+    this.deadzone = deadzone;
+    this.sensitivity = clamp(
+      Number.isFinite(sensitivity) ? sensitivity : 1.25,
+      minSensitivity,
+      maxSensitivity,
+    );
     this.reset();
   }
+
   reset() {
     this.neutral = null;
-    this.buffer = [];
-    this.started = null;
-    this.progress = 0;
-    this.noise = 0.8;
     this.x = 0;
-    this.y = 0;
     this.last = null;
-    this.lastFlick = -Infinity;
   }
+
   setSensitivity(value) {
-    if (Number.isFinite(value)) this.sensitivity = clamp(value, 0.6, 2.4);
+    if (Number.isFinite(value))
+      this.sensitivity = clamp(value, this.minSensitivity, this.maxSensitivity);
   }
+
   update(sample, time) {
-    if (
-      !Number.isFinite(time) ||
-      !sample ||
-      !(
-        (sample.quat?.length === 4 && sample.quat.every(Number.isFinite)) ||
-        [sample.alpha, sample.beta, sample.gamma].every(Number.isFinite)
-      )
-    )
-      return null;
-    const axes = axesFromSample(sample);
+    if (!Number.isFinite(time)) return null;
+    const attitude = quaternionFromSample(sample);
+    if (!attitude) return null;
+
     if (!this.neutral) {
-      if (this.started === null) this.started = time;
-      const previous = this.buffer.at(-1);
-      const movement = previous
-        ? Math.acos(clamp(dot(previous.axes.z, axes.z), -1, 1)) / DEG
-        : 0;
-      if (movement > 2.5) this.buffer = [];
-      this.buffer.push({ axes, time });
-      while (this.buffer.length > 100) this.buffer.shift();
-      const span = time - this.buffer[0].time;
-      this.progress = clamp(span / 850, 0, 1);
-      const noise = Math.max(
-        ...this.buffer.map(
-          (s) => Math.acos(clamp(dot(s.axes.z, axes.z), -1, 1)) / DEG,
-        ),
-      );
-      if (
-        (span >= 850 && this.buffer.length >= 6 && noise < 4) ||
-        time - this.started > 5000
-      ) {
-        this.neutral = axes;
-        this.noise = clamp(noise * 0.7, 0.65, 3);
-        this.progress = 1;
-        this.last = time;
-      }
-      return { x: 0, y: 0, ready: !!this.neutral, progress: this.progress };
+      this.neutral = attitude;
+      this.last = time;
+      return { x: 0, y: 0, ready: true, progress: 1 };
     }
-    const z = dot(axes.z, this.neutral.z);
-    let horizontal = Math.atan2(dot(axes.z, this.neutral.x), z) / DEG;
-    let vertical = -Math.atan2(dot(axes.z, this.neutral.y), z) / DEG;
-    const angle = (Number(sample.screenAngle) || 0) * DEG;
-    const hx = horizontal * Math.cos(angle) + vertical * Math.sin(angle);
-    const vy = vertical * Math.cos(angle) - horizontal * Math.sin(angle);
-    const response = (v) => {
-      const magnitude = Math.max(0, Math.abs(v) - this.noise);
-      return (
-        Math.sign(v) *
-        Math.pow(clamp(magnitude / (24 / this.sensitivity), 0, 1), 0.9)
+
+    const relative = relativeQuaternion(this.neutral, attitude);
+    // Swing-twist decomposition around local Z only needs the quaternion's
+    // z/w pair. At the one singular pose (an exact 180-degree screen flip),
+    // twist is undefined, so retain the last stable steering value.
+    const twistLength = Math.hypot(relative[2], relative[3]);
+    if (twistLength < 1e-6)
+      return { x: clamp(this.x, -1, 1), y: 0, ready: true, progress: 1 };
+    const twist = wrapDegrees(
+      (2 * Math.atan2(relative[2] / twistLength, relative[3] / twistLength)) /
+        DEG,
+    );
+    const magnitude = Math.max(0, Math.abs(twist) - this.deadzone);
+    const fullTurn = this.fullTurn / this.sensitivity;
+    const target =
+      -Math.sign(twist) *
+      Math.pow(
+        clamp(magnitude / Math.max(1, fullTurn - this.deadzone), 0, 1),
+        this.exponent,
       );
-    };
     const dt = clamp((time - this.last) / 1000, 0.001, 0.1);
     this.last = time;
-    // Approximately 35 ms smoothing at rest; large deliberate moves respond faster.
-    const mix = 1 - Math.exp(-dt * (28 + Math.abs(hx) * 1.2));
-    this.x += (response(hx) - this.x) * mix;
-    this.y += (response(vy) - this.y) * mix;
-    return {
-      x: clamp(this.x, -1, 1),
-      y: clamp(this.y, -1, 1),
-      ready: true,
-      progress: 1,
-    };
-  }
-  flick(acceleration, time) {
-    if (!this.neutral || !acceleration || time - this.lastFlick < 1100)
-      return false;
-    const { x, y, z } = acceleration;
-    if (![x, y, z].every(Number.isFinite)) return false;
-    if (Math.hypot(x, y, z) > 7.5) {
-      this.lastFlick = time;
-      return true;
-    }
-    return false;
+    this.x += (target - this.x) * (1 - Math.exp(-dt * this.responseRate));
+    return { x: clamp(this.x, -1, 1), y: 0, ready: true, progress: 1 };
   }
 }
