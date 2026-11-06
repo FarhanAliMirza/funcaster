@@ -23,8 +23,6 @@ export class GameLink {
     });
     document.body.classList.add("arcade-game");
     document.body.dataset.game = location.pathname.split("/")[2];
-    if (this.party && params.get("shell") === "os")
-      document.body.dataset.shell = "os";
     const skin = document.createElement("link");
     skin.rel = "stylesheet";
     skin.href = "/games/shared/arcade-hud.css";
