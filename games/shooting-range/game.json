@@ -1,0 +1,78 @@
+{
+  "id": "shooting-range",
+  "title": "Shooting Range",
+  "verb": "Aim with a little tilt.",
+  "detail": "Find a target. Tap Fire. Beat your best.",
+  "color": "#a35f35",
+  "bg": "#f6e6c9",
+  "icon": "◎",
+  "mode": "aim",
+  "classic": true,
+  "players": "1–4 players",
+  "tag": "NICE SHOT",
+  "duration": "Target challenge",
+  "action": "Fire",
+  "schemaVersion": 2,
+  "gameId": "funcaster.shooting-range",
+  "version": "1.1.0",
+  "order": 10,
+  "maxPlayers": 4,
+  "controller": "aim",
+  "view": "split",
+  "verification": "verifiable",
+  "scoring": {
+    "direction": "higher",
+    "unit": "points",
+    "integer": true,
+    "tieBreak": "shared place"
+  },
+  "modes": {
+    "solo": {
+      "minHumans": 1,
+      "maxHumans": 1,
+      "aiDefault": 0
+    },
+    "multiplayer": {
+      "minHumans": 2,
+      "maxHumans": 4,
+      "aiDefault": 0
+    }
+  },
+  "topologies": [
+    "shared",
+    "remote",
+    "hybrid",
+    "spectator"
+  ],
+  "input": {
+    "x": [
+      -1,
+      1
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "actions": [
+      "primary",
+      "left",
+      "right",
+      "confirm"
+    ]
+  },
+  "legacyIds": [
+    "funcaster.shooting-range"
+  ],
+  "seats": 4,
+  "engine": "classic",
+  "seatView": "independent",
+  "remote": "views",
+  "roundPolicy": {
+    "kind": "timed",
+    "hardCapMs": 120000,
+    "finishWindowMs": 30000,
+    "idleMs": 30000,
+    "graceMs": 30000
+  },
+  "statsSchema": []
+}
