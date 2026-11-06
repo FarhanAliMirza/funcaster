@@ -4,6 +4,19 @@ Updated **6 November 2026**. The owner explicitly requested PR delivery and merg
 
 This is the current checklist. The previous scenario book and dated audits are preserved in [plan-history.md](plan-history.md); their unchecked boxes and approval-blocked notes are historical, not outstanding implementation tasks. Detailed behavior is recorded in [IMPLEMENTATION.md](docs/IMPLEMENTATION.md), with [engineering evidence](docs/RELEASE-2026-11-06.md) and the [UI review](docs/UI-REVIEW-2026-11-06.md).
 
+## Web3 branch work (6 November 2026)
+
+The owner has started the [Web3 master handoff](docs/plans/web3/build-guide/26-codex-master-prompt-and-handoff.md). This is an explicit exception to the older deferred-Web3/main-only statements below: **all Web3 implementation and commits stay on `web3/integrations`; never merge into `main`**. Games and motion behavior stay unchanged, with partners off by default.
+
+- [x] Pull `main` (`404abb1`), create integration branch, record clean software baseline (587 tests).
+- [x] Foundation S0–S6: opt-in mock module, parity gates, durable worker queue, phone identity, nicknames and read-only APIs. **620 tests pass**; live G0–G5 remain pending. Status and evidence: [docs/web3/progress.md](docs/web3/progress.md).
+- [ ] Remaining owner setup: platform accounts, YouTube audit, outstanding role/Arkiv funding and HTTPS staging. Exact resume checklist: [docs/web3/human-setup.md](docs/web3/human-setup.md). Accounts and hosting details are deferred by the owner; Vercel is tentative. No hosting budget or domain is chosen.
+- [x] Arc Studio login and initial faucet funding verified: 0.77 SepETH registrar balance and 20 Arc test USDC.
+- [x] `funcaster.eth` registered on Sepolia; owner, expiry (6 November 2027), permissions and transaction receipts verified. [ENS evidence](docs/web3/ens-evidence.md).
+- [x] G0 preparation: ENS bootstrap/permissions/expiry pass on a disposable Sepolia fork; Arc token domains/payee guards/code checks and local native authorization/balance-floor tests pass; Tiramisu anonymous reads and Swarm synthetic uploads pass. Evidence and limitations: [G0 progress](docs/web3/progress.md).
+- [ ] G0 live gate: owner-executed parent/play bootstrap and funded transactions, Arkiv write/limit/cost checks, SDK cross-write/Hall build, and Swarm retention observations remain pending. Live integrations remain disabled.
+- [ ] Production Arkiv implementation starts **6 November**, after K0 scratch verification.
+
 ## North star and direction (6 November 2026)
 
 **Read this section first, then the document map. It is written for any person or agent who joins the project.**

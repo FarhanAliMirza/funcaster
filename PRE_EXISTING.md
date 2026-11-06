@@ -17,3 +17,7 @@ The latest continuation expands the party branch after commit `8bd3e44`, which h
 The active kart renderer constructs original robot drivers, vehicles, course presentation and items with code and SVG. It does not fetch the historical extracted character/course/audio/font packs. The server returns 404 for the extracted asset paths and pipeline; the container excludes the legacy packs. Some internal IDs and URLs remain for compatibility with existing rules and tests.
 
 The historical fixtures are retained locally for provenance and regression tests. They are not the public release’s artwork. Stable hosting, a final launch tag and physical-device acceptance remain pending. No partner-track integration is included in this pass.
+## 2026-11-06 — Web3 foundation baseline (S0)
+
+Main `404abb1` passes `npm run check` on macOS / Node v22.17.0: 313 unit, 106 party and 168 OS tests (587 total). Full output: [baseline-check.txt](docs/web3/baseline-check.txt). The documented Windows CRLF catalog and symlink EPERM failures were not observed here. No baseline failures were fixed.
+

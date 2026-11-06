@@ -78,7 +78,7 @@ Format: **ID, task, spec, depends on, hours, acceptance**. Acceptance is checkab
 
 ### M: Spectator prediction market ([10](10-prediction-market.md), [11](11-prediction-market-ui.md))
 
-**The largest lane (about 190 hours; Tier 1 about 125).** Start it only after the pot (A lane) and host enforcement (E5) work. Tasks M0 to M11 are in [10](10-prediction-market.md) section 11 and the UI tasks P1 to P9 in [11](11-prediction-market-ui.md) section 11. **Tier 1:** M0 to M6 with the Winner template only, a minimal phone page (P1 to P3), the Predictions window (P5, P6) and the Game Properties row (P8). **Schedule:** M0 to M2 can start on D4 (Fri 6 Nov) beside A4; M3 to M6 on D5 to D7; the phone page and window on D6 to D8 (the booth opens D8, so a Tier 1 slice should be demo-able on 6 Nov); tier 2 and 3 after. **Cut order:** layer C, the play token, the odds chart, Beat-the-line, the seed commit, the wizard. **Never cut:** the invariants, the close rule, agree-or-void, the exclusion of seated players, pull claims.
+**The largest lane (about 190 hours; Tier 1 about 125).** Start it only after the pot (A lane) and host enforcement (E5) work. Tasks M0 to M11 are in [10](10-prediction-market.md) section 11 and the UI tasks P1 to P9 in [11](11-prediction-market-ui.md) section 11. **Tier 1:** M0 to M6 with the Winner template only, a minimal phone page (P1 to P3), the Predictions window (P5, P6) and the Game Properties row (P8). **Schedule:** M0 to M2 can start on D4 (Fri 30 Oct) beside A4; M3 to M6 on D5 to D7; the phone page and window on D6 to D8 (the booth opens D8, so a Tier 1 slice should be demo-able on 6 Nov); tier 2 and 3 after. **Cut order:** layer C, the play token, the odds chart, Beat-the-line, the seed commit, the wizard. **Never cut:** the invariants, the close rule, agree-or-void, the exclusion of seated players, pull claims.
 
 
 ### Q: QA and evidence
@@ -102,7 +102,7 @@ Format: **ID, task, spec, depends on, hours, acceptance**. Acceptance is checkab
 | Tue 27 Oct | D1 | S0, S1; E0, A0 spikes; A1 (Studio setup, a human logs in) | Spike results recorded; Studio app exists; baseline saved |
 | Wed 28 Oct | D2 | S2 (module, mock, parity tests); E1, E2; A2 begins (Studio turns run in the background); U1 | Mock mode shows a named party and a staked flow in demo scenarios |
 | Thu 29 Oct | D3 | S3, S4, S5; E3; A2 continues, A3; U2 | A real party name resolves; the worker runs; a phone binds |
-| Fri 6 Nov | D4 | E4; A4, A5; U3, U4; **merge `main` into the branch** | A seat is minted for a phone; a testnet pot completes by script |
+| Fri 30 Oct | D4 | E4; A4, A5; U3, U4; **merge `main` into the branch** | A seat is minted for a phone; a testnet pot completes by script |
 | Sat 31 Oct | D5 | E5; A6; U5, U7; Funcaster OS rehearsal 1 happens on `main` | Host delegation enforced on chain; cooperative settlement works |
 | 6 Nov | D6 | `main` freezes; **merge `main` into the branch again**; E6; A7; U8; fix parity if main moved | Full stake flow on mock and on testnet; parity green |
 | 6 Nov | D7 | E8; A10 start; U6, U9; **K0 spike and `/arkiv/friction.md` started in a scratch repo (no project code before 6 Nov)**; hosted instance deploy of the branch | Tests green on the hosted instance |

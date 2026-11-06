@@ -86,7 +86,7 @@ Completed code does not complete an acceptance gate that requires physical devic
 | Tue 27 Oct | D6 | SH6 game host, game window, loading, results; VP3; PH8 | A full round plays inside the shell window |
 | Wed 28 Oct | D7 | SH7 MVE windows; VP4 harness; QA2 first pass | **Checkpoint 2:** join, properties, start, game, results, desktop on one laptop and two real phones, plus the pointer |
 | Thu 29 Oct | D8 | SH8 boot, who, attract; HO1 staging live; HO2; HO3 | The hosted staging URL loads over cellular |
-| Fri 6 Nov | D9 | SH9 mascot and audio; SH10; VP5; QA2 second pass; fixes | Full build feature-complete |
+| Fri 30 Oct | D9 | SH9 mascot and audio; SH10; VP5; QA2 second pass; fixes | Full build feature-complete |
 | Sat 31 Oct | D10 | **Rehearsal 1** on a real TV with friends; a one-hour soak; bug triage | **Checkpoint 3:** the P0 bug list is empty or owned |
 | 6 Nov | D11 | **Freeze**: P0 fixes only; **Rehearsal 2** using the runbook and both fallbacks; deploy to the hosted instance; tag the release | Build tagged; hosted instance verified over cellular; LAN fallback verified; classic dashboard verified |
 | 6 Nov | D12 | No code. Pack the kit, charge everything, issue the offline certificate, print signage, dry-run the runbook | Kit ready |
