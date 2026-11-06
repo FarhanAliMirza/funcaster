@@ -48,7 +48,6 @@ class FakePhone {
     this.fixture = fixture;
     this.code = code;
     this.sequence = 0;
-    this.pointerSequence = 0;
   }
   async join() {
     this.socket = await this.fixture.connect();
@@ -69,12 +68,6 @@ class FakePhone {
       seq: ++this.sequence,
       ...packet,
     });
-  }
-  pointer(packet = { q: [0, 0, 0, 1] }) {
-    this.socket.emit("pointer", { seq: ++this.pointerSequence, ...packet });
-  }
-  button(button = "A", pressed = true) {
-    this.socket.emit("shell-button", { button, pressed });
   }
   disconnect() {
     this.socket.disconnect();

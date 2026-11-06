@@ -18,31 +18,15 @@ const CERT_DIR = path.join(__dirname, "..", "certs");
 const KEY_PATH = path.join(CERT_DIR, "key.pem");
 const CRT_PATH = path.join(CERT_DIR, "cert.pem");
 
-/** Prefer real LAN adapters over WSL/Hyper-V virtual NICs for QR URLs and certs. */
-const PREFER_IFACE = /^(Wi-?Fi|WLAN|Ethernet|en\d+)/i;
-const SKIP_IFACE = /^(Loopback|vEthernet|Npcap|VMware|VirtualBox|TAP-|Bluetooth|Hyper-V)/i;
-
-function ifaceRank(name) {
-  if (PREFER_IFACE.test(name)) return 0;
-  if (SKIP_IFACE.test(name)) return 2;
-  return 1;
-}
-
-/** Every non-internal IPv4 address, best LAN candidate first. */
+/** Every non-internal IPv4 address, so the cert covers whichever LAN IP is live. */
 function localAddresses() {
-  const entries = [];
-  for (const [name, ifaces] of Object.entries(os.networkInterfaces())) {
+  const out = [];
+  for (const ifaces of Object.values(os.networkInterfaces())) {
     for (const iface of ifaces || []) {
-      if (iface.family === "IPv4" && !iface.internal)
-        entries.push({ name, address: iface.address });
+      if (iface.family === "IPv4" && !iface.internal) out.push(iface.address);
     }
   }
-  entries.sort(
-    (a, b) =>
-      ifaceRank(a.name) - ifaceRank(b.name) ||
-      a.address.localeCompare(b.address),
-  );
-  return entries.map((e) => e.address);
+  return out;
 }
 
 /** Does the existing cert still cover every address we're about to serve on? */
