@@ -1,0 +1,284 @@
+{
+  "at": "2026-11-06",
+  "buildId": "327f6861c3c296a9",
+  "smoke": false,
+  "dprProbe": false,
+  "compact": false,
+  "representative": true,
+  "samples": [
+    {
+      "game": "mario-kart",
+      "players": 4,
+      "dpr": 1,
+      "active": 4,
+      "viewport": "hd",
+      "screenshot": "mario-kart-4p-hd.png",
+      "outer": {
+        "width": 1280,
+        "height": 720,
+        "scrollWidth": 1280,
+        "scrollHeight": 720
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": null,
+          "viewport": [
+            1280,
+            720
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            1280,
+            720
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "game",
+              "width": 1280,
+              "height": 720,
+              "pixels": 921600,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [
+        "http://127.0.0.1:60040/audio/mk-music.mp3",
+        "http://127.0.0.1:60040/audio/mk-engine.mp3",
+        "http://127.0.0.1:60040/audio/mk-countdown.mp3",
+        "http://127.0.0.1:60040/audio/mk-music.wav",
+        "http://127.0.0.1:60040/audio/mk-engine.wav",
+        "http://127.0.0.1:60040/audio/mk-countdown.wav",
+        "http://127.0.0.1:60040/audio/mk-engine.ogg",
+        "http://127.0.0.1:60040/audio/mk-music.ogg",
+        "http://127.0.0.1:60040/audio/mk-countdown.ogg",
+        "http://127.0.0.1:60040/assets/audio/mk-engine.mp3",
+        "http://127.0.0.1:60040/assets/audio/mk-music.mp3",
+        "http://127.0.0.1:60040/assets/audio/mk-countdown.mp3",
+        "http://127.0.0.1:60040/assets/audio/mk-engine.wav",
+        "http://127.0.0.1:60040/assets/audio/mk-music.wav",
+        "http://127.0.0.1:60040/assets/audio/mk-countdown.wav",
+        "http://127.0.0.1:60040/assets/audio/mk-engine.ogg",
+        "http://127.0.0.1:60040/assets/audio/mk-music.ogg",
+        "http://127.0.0.1:60040/assets/audio/mk-countdown.ogg"
+      ],
+      "consoleWarnings": []
+    },
+    {
+      "game": "star-catch",
+      "players": 4,
+      "dpr": 1,
+      "active": 4,
+      "viewport": "hd",
+      "screenshot": "star-catch-4p-hd.png",
+      "outer": {
+        "width": 1280,
+        "height": 720,
+        "scrollWidth": 1280,
+        "scrollHeight": 720
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 113.90625,
+            "bottom": 99.53125,
+            "height": 506.5625
+          },
+          "viewport": [
+            1280,
+            720
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            1280,
+            720
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 1280,
+              "height": 720,
+              "pixels": 921600,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "drawing",
+      "players": 4,
+      "dpr": 1,
+      "active": 4,
+      "viewport": "hd",
+      "screenshot": "drawing-4p-hd.png",
+      "outer": {
+        "width": 1280,
+        "height": 720,
+        "scrollWidth": 1280,
+        "scrollHeight": 720
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": null,
+          "viewport": [
+            1280,
+            720
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            1280,
+            720
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "game",
+              "width": 1280,
+              "height": 720,
+              "pixels": 921600,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "golf",
+      "players": 1,
+      "dpr": 1,
+      "active": 1,
+      "viewport": "hd",
+      "screenshot": "golf-1p-hd.png",
+      "outer": {
+        "width": 1280,
+        "height": 720,
+        "scrollWidth": 1280,
+        "scrollHeight": 720
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": null,
+          "viewport": [
+            1280,
+            720
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": {
+            "finite": true
+          },
+          "aimRoundtrip": null,
+          "document": [
+            1280,
+            720
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "game",
+              "width": 1280,
+              "height": 720,
+              "pixels": 921600,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    }
+  ],
+  "failures": [],
+  "zeroSizes": [
+    {
+      "game": "mario-kart",
+      "players": 4,
+      "checks": [
+        {
+          "viewport": [
+            1280,
+            720
+          ],
+          "canvasFinite": true,
+          "cameraFinite": null
+        }
+      ]
+    },
+    {
+      "game": "drawing",
+      "players": 4,
+      "checks": [
+        {
+          "viewport": [
+            0,
+            0
+          ],
+          "canvasFinite": true,
+          "cameraFinite": null
+        }
+      ]
+    },
+    {
+      "game": "golf",
+      "players": 1,
+      "checks": [
+        {
+          "viewport": [
+            0,
+            0
+          ],
+          "canvasFinite": true,
+          "cameraFinite": true
+        }
+      ]
+    }
+  ],
+  "unverified": [
+    "Physical iPhone and Android sensor/multitouch behavior",
+    "Visual review of every exported screenshot"
+  ]
+}

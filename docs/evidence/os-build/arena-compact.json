@@ -1,0 +1,339 @@
+{
+  "at": "2026-11-06",
+  "buildId": "79c5611dc8053dff",
+  "smoke": false,
+  "dprProbe": false,
+  "compact": true,
+  "samples": [
+    {
+      "game": "star-catch",
+      "players": 1,
+      "dpr": 1,
+      "active": 1,
+      "viewport": "compact",
+      "screenshot": "star-catch-1p-compact.png",
+      "outer": {
+        "width": 640,
+        "height": 360,
+        "scrollWidth": 640,
+        "scrollHeight": 360
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 98.765625,
+            "bottom": 60.375,
+            "height": 200.859375
+          },
+          "viewport": [
+            640,
+            360
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            640,
+            360
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 640,
+              "height": 360,
+              "pixels": 230400,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "neon-drift",
+      "players": 1,
+      "dpr": 1,
+      "active": 1,
+      "viewport": "compact",
+      "screenshot": "neon-drift-1p-compact.png",
+      "outer": {
+        "width": 640,
+        "height": 360,
+        "scrollWidth": 640,
+        "scrollHeight": 360
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 98.765625,
+            "bottom": 60.375,
+            "height": 200.859375
+          },
+          "viewport": [
+            640,
+            360
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            640,
+            360
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 640,
+              "height": 360,
+              "pixels": 230400,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "bubble-burst",
+      "players": 1,
+      "dpr": 1,
+      "active": 1,
+      "viewport": "compact",
+      "screenshot": "bubble-burst-1p-compact.png",
+      "outer": {
+        "width": 640,
+        "height": 360,
+        "scrollWidth": 640,
+        "scrollHeight": 360
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 98.765625,
+            "bottom": 60.375,
+            "height": 200.859375
+          },
+          "viewport": [
+            640,
+            360
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            640,
+            360
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 640,
+              "height": 360,
+              "pixels": 230400,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "star-catch",
+      "players": 4,
+      "dpr": 1,
+      "active": 4,
+      "viewport": "compact",
+      "screenshot": "star-catch-4p-compact.png",
+      "outer": {
+        "width": 640,
+        "height": 360,
+        "scrollWidth": 640,
+        "scrollHeight": 360
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 98.765625,
+            "bottom": 60.375,
+            "height": 200.859375
+          },
+          "viewport": [
+            640,
+            360
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            640,
+            360
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 640,
+              "height": 360,
+              "pixels": 230400,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "neon-drift",
+      "players": 4,
+      "dpr": 1,
+      "active": 4,
+      "viewport": "compact",
+      "screenshot": "neon-drift-4p-compact.png",
+      "outer": {
+        "width": 640,
+        "height": 360,
+        "scrollWidth": 640,
+        "scrollHeight": 360
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 98.765625,
+            "bottom": 60.375,
+            "height": 200.859375
+          },
+          "viewport": [
+            640,
+            360
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            640,
+            360
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 640,
+              "height": 360,
+              "pixels": 230400,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    },
+    {
+      "game": "bubble-burst",
+      "players": 4,
+      "dpr": 1,
+      "active": 4,
+      "viewport": "compact",
+      "screenshot": "bubble-burst-4p-compact.png",
+      "outer": {
+        "width": 640,
+        "height": 360,
+        "scrollWidth": 640,
+        "scrollHeight": 360
+      },
+      "views": [
+        {
+          "tableFits": null,
+          "playable": {
+            "top": 98.765625,
+            "bottom": 60.375,
+            "height": 200.859375
+          },
+          "viewport": [
+            640,
+            360
+          ],
+          "devicePixelRatio": 1,
+          "menuOverlap": [],
+          "camera": null,
+          "aimRoundtrip": null,
+          "document": [
+            640,
+            360
+          ],
+          "overflow": false,
+          "scrolling": [],
+          "wide": [],
+          "smallText": [],
+          "invalid": [],
+          "canvases": [
+            {
+              "id": "",
+              "width": 640,
+              "height": 360,
+              "pixels": 230400,
+              "finite": true
+            }
+          ],
+          "fills": true
+        }
+      ],
+      "errors": [],
+      "expectedAudioProbes": [],
+      "consoleWarnings": []
+    }
+  ],
+  "failures": [],
+  "zeroSizes": [],
+  "unverified": [
+    "Physical iPhone and Android sensor/multitouch behavior",
+    "Visual review of every exported screenshot"
+  ]
+}

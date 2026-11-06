@@ -1,0 +1,10 @@
+{
+ "files": {
+  "Fonts/tahoma.ttf": {"family": "Tahoma", "style": "Regular", "weightClass": 400, "bytes": 383804, "glyphs": 2036, "fsType": 8, "copyright": "2004 Microsoft Corporation"},
+  "Fonts/framdit.ttf": {"family": "Franklin Gothic Medium", "style": "Italic", "weightClass": 400, "bytes": 152844, "glyphs": 660, "fsType": 8, "note": "Pillow getname() = ('Franklin Gothic Medium','Italic'); this is the XP Start-button face"}
+ },
+ "fontFace": "@font-face{font-family:'Tahoma XP';src:url(fonts/tahoma.ttf) format('truetype');font-weight:400;font-style:normal;font-display:swap} @font-face{font-family:'Franklin Gothic XP';src:url(fonts/framdit.ttf) format('truetype');font-weight:400;font-style:italic}",
+ "bold": "No Tahoma Bold (tahomabd.ttf) supplied; only Regular 400. font-weight:700 triggers faux-bold smear in browsers; either accept it, or avoid bold (XP caption bars used Trebuchet MS Bold, not supplied -> fall back to 'Trebuchet MS', Tahoma). Franklin Gothic is italic-only, use font-style:italic and never request bold.",
+ "licence": "Proprietary Microsoft fonts (fsType 8 = editable embedding permitted technically, but EULA forbids redistribution). Fine for local/hackathon demo; do not publish in a public repo/CDN without checking docs/plans/xp-assets-and-licensing.md. Fallback stack: Tahoma, Verdana, 'Segoe UI', sans-serif.",
+ "xpMetrics": "XP UI text = Tahoma 11px (8pt) regular, no antialiasing smoothing (use -webkit-font-smoothing:auto; image-rendering:pixelated for sprites)."
+}
