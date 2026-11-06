@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ready to play? · Funcaster</title>
+    <link rel="stylesheet" href="/party/party.css" />
+    <link rel="stylesheet" href="/party/arcade.css" />
+    <link rel="stylesheet" href="/party/layout.css" />
+    <style>
+      main {
+        max-width: 680px;
+        margin: 8vh auto;
+        padding: 24px;
+      }
+      li {
+        padding: 14px 0;
+        line-height: 1.6;
+      }
+      button {
+        min-height: 52px;
+      }
+      #sensor-note {
+        padding: 16px;
+        background: #eeeaff;
+        border-radius: 16px;
+      }
+    </style>
+  </head>
+  <body class="utility-page">
+    <main>
+      <a class="brand" href="/">funcaster.</a>
+      <h1>A quick warm-up.</h1>
+      <p>Check the screen or phone you’ll use to play.</p>
+      <ul id="checks"></ul>
+      <button id="check-motion" class="primary-button">
+        Check phone motion ↗
+      </button>
+      <p id="sensor-note" role="status">
+        Hold your phone with both hands. Make a small tilt; no swinging needed.
+      </p>
+      <a href="/controller" class="secondary-button">Join a party</a>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/party/self-test.js"></script>
+  </body>
+</html>

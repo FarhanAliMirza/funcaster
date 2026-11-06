@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Kart sequencing lab · Funcaster</title
+  ><style>
+    body {
+      background: #14251f;
+      color: #fff1d6;
+      font: 18px system-ui;
+      margin: 28px;
+    }
+    button,
+    input {
+      font: inherit;
+      padding: 14px;
+      margin: 6px;
+    }
+    canvas {
+      display: block;
+      background: #213a2e;
+      width: 100%;
+      height: 45vh;
+    }
+    output {
+      display: block;
+      padding: 16px;
+    }
+    label {
+      display: block;
+    }
+    #phone {
+      touch-action: none;
+    }
+    input[type="range"] {
+      width: 80%;
+    }
+  </style>
+  <h1>Kart sequencing lab</h1>
+  <p>
+    Experimental S3 gate. Touch or keyboard test only; remote racing remains
+    disabled in the arcade.
+  </p>
+  <section id="join">
+    <button id="create">Create lab</button
+    ><label>Lab code <input id="code" maxlength="8" /></label
+    ><button id="screen">Join as second screen</button
+    ><button id="controller">Join as phone</button>
+  </section>
+  <section id="view" hidden>
+    <h2 id="identity"></h2>
+    <button id="start">Start next seeded race</button
+    ><label
+      >Injected delivery delay
+      <input id="delay" type="range" min="0" max="500" value="0" /> ms
+      (0–500)</label
+    ><canvas aria-label="Sequenced race map"></canvas>
+  </section>
+  <section id="phone" hidden>
+    <h2 id="seat"></h2>
+    <label
+      >Steer
+      <input
+        id="steer"
+        type="range"
+        min="-1"
+        max="1"
+        step=".01"
+        value="0" /></label
+    ><button id="brake">Hold Brake</button
+    ><button id="gas">Hold Accelerate</button>
+  </section>
+  <output id="status"
+    >Open two screens and one phone. A missing phone drives on
+    autopilot.</output
+  >
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/lab.js"></script>
+</html>

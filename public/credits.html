@@ -1,0 +1,53 @@
+<!doctype html><meta charset="utf-8" /><meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+/><title>Credits · Funcaster</title
+><link rel="stylesheet" href="/party/fonts.css" /><style>
+  body {
+    font:
+      16px/1.7 Poppins,
+      Hind,
+      sans-serif;
+    background: #0d1424;
+    color: #fff5dc;
+    margin: 16px auto;
+    max-width: 900px;
+    padding: 24px;
+  }
+  h1 {
+    font:
+      400 clamp(28px, 6vw, 42px)/1.2 Bungee,
+      system-ui;
+  }
+  ul {
+    padding-left: 24px;
+  }
+  a {
+    color: #f7c600;
+  }
+  li {
+    overflow-wrap: anywhere;
+    margin: 18px 0;
+  }</style
+><a href="/">← Game room</a>
+<h1>Made for a little play.</h1>
+<p>
+  Original code artwork and synthesized sound by Funcaster project contributors.
+  Font licences are included with the files.
+</p>
+<ul id="credits"></ul>
+<script type="module">
+  const list = document.querySelector("#credits");
+  const entries = await fetch("/assets/CREDITS.json").then((r) => r.json());
+  for (const e of entries) {
+    const li = document.createElement("li");
+    li.textContent = e.file + " · " + e.author + " · " + e.licence;
+    if (e.sourceUrl) {
+      const a = document.createElement("a");
+      a.href = e.sourceUrl;
+      a.textContent = " Source";
+      li.append(a);
+    }
+    list.append(li);
+  }
+</script>

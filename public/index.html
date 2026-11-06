@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f5ef" />
+    <title>Funcaster — A little motion. A lot of fun.</title>
+    <link rel="stylesheet" href="/party/party.css" />
+    <link rel="stylesheet" href="/party/arcade.css" />
+    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0d1424" />
+    <meta property="og:image" content="/og-default.png" />
+    <meta property="og:title" content="Funcaster · Scan. Tilt. Play." />
+    <link rel="stylesheet" href="/party/layout.css" />
+  </head>
+  <body class="host-page">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Funcaster home"
+        ><span class="brand-mark">c<span>✦</span></span
+        >funcaster<span class="brand-period">.</span></a
+      >
+      <div class="header-right">
+        <span class="live-pill"><i></i> PHONE-POWERED PLAY</span
+        ><button
+          id="sound"
+          class="icon-button"
+          aria-label="Turn sound on"
+          title="Sound"
+        >
+          ♪</button
+        ><button
+          id="fullscreen"
+          class="icon-button"
+          aria-label="Enter fullscreen"
+          title="Fullscreen"
+        >
+          ⛶
+        </button>
+      </div>
+    </header>
+    <main id="lobby" class="lobby-shell">
+      <section class="welcome">
+        <div class="eyebrow">
+          <span class="spark">✳</span> BOMBAY ARCADE / EST. 2099
+        </div>
+        <h1>NEXT STOP:<br /><span>GOOD TIMES.</span></h1>
+        <p>
+          Pick a game, grab a friend, and make a little<br
+            class="desktop-break"
+          />
+          room for some friendly competition.
+        </p>
+        <div class="hero-foot">
+          <span class="mini-phones"><i></i><i></i><i></i></span
+          ><span><b>1–4 players</b><br />One screen. Everyone’s invited.</span>
+        </div>
+        <div class="hero-doodle" aria-hidden="true">✷</div>
+      </section>
+      <aside class="join-card">
+        <div class="join-card-head">
+          <span class="step-label">01 / JOIN THE PARTY</span
+          ><span class="join-badge">NO APP NEEDED</span>
+        </div>
+        <h2>Scan. Tilt. Play.</h2>
+        <p>Your phone is the controller.</p>
+        <div class="qr-wrap">
+          <img
+            id="qr"
+            alt="Scan this QR code to join the party"
+            width="200"
+            height="200"
+            hidden
+          />
+          <div id="qr-loading" role="status">Setting up your party…</div>
+          <span class="qr-corner a"></span><span class="qr-corner b"></span>
+        </div>
+        <div class="room-label">
+          PARTY CODE <strong id="room-code">••••••</strong>
+        </div>
+        <button id="copy-link" class="text-button">Copy invite link ↗</button>
+        <p id="pair-note" class="pair-note">Works with your phone’s browser.</p>
+      </aside>
+      <section class="player-section">
+        <div class="section-heading">
+          <h2>Your crew, all aboard <span id="player-count">0 / 4</span></h2>
+          <span id="crew-hint">Scan to claim your color</span>
+        </div>
+        <div class="player-slots" id="players"></div>
+      </section>
+      <section class="game-section">
+        <div class="section-heading">
+          <div>
+            <span class="step-label">02 / THE ARCADE LINE</span>
+            <h2>Pick your next stop.</h2>
+          </div>
+          <span class="round-tag">One QR. Every game. ↗</span>
+        </div>
+        <div id="games" class="game-grid"></div>
+        <section class="match-options" aria-label="Match setup">
+          <div class="how-to">
+            <span id="game-grip" aria-hidden="true">↝</span>
+            <div>
+              <strong id="game-how-title">Make a little room.</strong>
+              <p id="game-how-detail">Choose a game to see its controls.</p>
+            </div>
+          </div>
+          <div class="setup-fields">
+            <label
+              >Players<select id="match-mode">
+                <option value="auto">Everyone who joins</option>
+                <option value="solo">Solo</option>
+                <option value="multiplayer">Multiplayer · 2+ players</option>
+              </select></label
+            >
+            <label id="cpu-field" hidden
+              ><span id="cpu-label">Computer racers</span
+              ><select id="cpu-count">
+                <option value="auto">Solo only</option>
+                <option value="0">None</option>
+                <option value="2">2 racers</option>
+                <option value="4">4 racers</option>
+                <option value="7">Fill the grid</option>
+              </select></label
+            >
+            <label id="laps-field" hidden
+              >Race length<select id="race-laps">
+                <option value="1">1 lap · quick round</option>
+                <option value="3">3 laps</option>
+              </select></label
+            >
+            <label id="holes-field" hidden
+              >Course<select id="golf-holes">
+                <option value="1">1 hole</option>
+                <option value="3" selected>3 holes</option>
+                <option value="6">6 holes</option>
+              </select></label
+            >
+            <label id="variant-field" hidden
+              >Slice together<select id="slice-variant">
+                <option value="co-op">Co-op · shared score</option>
+                <option value="battle">Battle · highest score</option>
+                <option value="race">Race · same fruit</option>
+              </select></label
+            >
+            <label id="rotation-field" hidden
+              >When friends are waiting<select id="crew-rotation">
+                <option value="winner">Winner stays</option>
+                <option value="pick">Pick two players</option>
+                <option value="bracket">Mini tournament</option>
+              </select></label
+            >
+            <label id="drawing-field" hidden
+              >Drawing mode<select id="drawing-mode">
+                <option value="guess">Draw &amp; guess · take turns</option>
+                <option value="free">Free draw · everyone paints</option>
+                <option value="vote">Draw, then vote</option>
+              </select></label
+            >
+            <label id="pair-first-field" hidden
+              >First player<select id="pair-first"></select
+            ></label>
+            <label id="pair-second-field" hidden
+              >Second player<select id="pair-second"></select
+            ></label>
+          </div>
+        </section>
+        <div class="start-row">
+          <p id="start-hint" role="status">
+            Choose a game. We’ll start when everyone is ready.
+          </p>
+          <button id="start" class="primary-button" disabled>
+            Let’s play <span>↗</span>
+          </button>
+        </div>
+      </section>
+      <footer>
+        <span>LESS SCROLLING. MORE PLAYING.</span
+        ><span>Made for the people in the room. ✳</span>
+        <a href="/credits">Artwork, fonts & sound credits</a>
+      </footer>
+    </main>
+    <details class="party-extras">
+      <summary>Make it your party</summary>
+      <div class="extras-content">
+        <label
+          >Play a playlist<select id="party-playlist">
+            <option value="">One game at a time</option>
+            <option value="quick">Quick party · Stars, bubbles, slicing</option>
+            <option value="sports">Sports club · Golf, tennis, fencing</option>
+            <option value="race">
+              Race day · Kart Rush, Neon Drift, Time Trial
+            </option>
+          </select></label
+        ><label
+          >Sound volume
+          <input
+            id="party-volume"
+            type="range"
+            min="0"
+            max="100"
+            value="70" /></label
+        ><label
+          ><input id="reduced-effects" type="checkbox" />Gentle effects</label
+        ><a
+          id="open-display"
+          class="secondary-button"
+          target="_blank"
+          rel="noopener"
+          >Open another screen ↗</a
+        ><a href="/self-test" class="text-button" target="_blank" rel="noopener"
+          >Check this setup ↗</a
+        >
+        <label
+          >Recent rounds<select id="record-history">
+            <option value="">No completed rounds yet</option>
+          </select></label
+        ><button id="save-history" class="secondary-button" disabled>
+          Save selected round ↓
+        </button>
+        <p>
+          Other screens can watch everyone or follow a player. Keep this host
+          screen open.
+        </p>
+      </div>
+    </details>
+    <section id="arena" class="arena" hidden>
+      <div class="arena-top">
+        <button id="back" class="secondary-button">← Game room</button>
+        <div>
+          <span id="phase-label" class="step-label">PRACTICE ROUND</span>
+          <h1 id="arena-title">Star Catch</h1>
+        </div>
+        <div id="timer" class="timer">60<span>SECONDS</span></div>
+      </div>
+      <div class="arena-instruction">
+        <strong id="instruction">Tilt to catch.</strong
+        ><span id="instruction-detail"
+          >Catch the stars. Dodge the pink comets.</span
+        >
+      </div>
+      <div id="scoreboard" class="scoreboard"></div>
+      <div class="canvas-wrap">
+        <canvas id="game-canvas" aria-label="Live multiplayer game"></canvas>
+        <div id="countdown" class="countdown" hidden></div>
+        <div id="connection-overlay" class="connection-overlay" hidden>
+          Reconnecting to your party…
+        </div>
+      </div>
+      <div class="arena-bottom">
+        <span id="round-status">A quick warm-up. Find your rhythm.</span
+        ><span>YOUR COLOR. YOUR LANE.</span
+        ><a class="text-button" href="/classic.html">Try with keyboard ↗</a
+        ><button id="invite" class="text-button">Invite a friend ↗</button>
+      </div>
+    </section>
+    <section id="classic-stage" class="classic-stage" hidden>
+      <div class="classic-toolbar">
+        <button id="classic-back" class="secondary-button">← Game room</button>
+        <div class="classic-now">
+          <strong id="classic-title"></strong><span id="classic-players"></span>
+        </div>
+        <button id="next-player" class="secondary-button" hidden>
+          Next player ↻
+        </button>
+        <button id="pause-game" class="secondary-button">Pause</button
+        ><button id="classic-invite" class="text-button">
+          Invite a friend ↗
+        </button>
+      </div>
+      <div class="classic-frame-wrap">
+        <iframe
+          id="classic-frame"
+          title="Original game"
+          allow="autoplay; fullscreen"
+          allowfullscreen
+        ></iframe>
+        <div id="classic-loading" class="classic-loading" role="status">
+          Warming up the game…<span>Your phone is already connected.</span>
+        </div>
+      </div>
+    </section>
+    <dialog id="results" class="results-dialog">
+      <span class="eyebrow">A LITTLE FRIENDLY COMPETITION</span>
+      <div class="results-star">✷</div>
+      <h2 id="winner">Nicely played!</h2>
+      <p id="result-subtitle">Same crew. One more round?</p>
+      <div id="rankings"></div>
+      <p id="crew-standings"></p>
+      <p id="result-verification"></p>
+      <button id="save-result" class="text-button">Save round record ↓</button>
+      <div class="result-actions">
+        <button id="again" class="primary-button">Run it back ↻</button
+        ><button id="choose-game" class="secondary-button">
+          Choose a game
+        </button>
+      </div>
+      <p id="next-round" class="subtle"></p>
+    </dialog>
+    <dialog id="invite-dialog" class="invite-dialog">
+      <button
+        id="close-invite"
+        class="icon-button dialog-close"
+        aria-label="Close invite"
+      >
+        ×
+      </button>
+      <h2>There’s room for you.</h2>
+      <p>Scan to join the next round.</p>
+      <img
+        id="invite-qr"
+        alt="Join the next round QR code"
+        width="220"
+        height="220"
+      /><strong id="invite-code"></strong>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/party/host.js"></script>
+  </body>
+</html>
