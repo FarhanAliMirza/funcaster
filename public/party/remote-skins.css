@@ -1,0 +1,79 @@
+/* The supplied controller face recoloured with the build-06 skin tokens. */
+.phone-page {
+  --bg: #0a58d6;
+  --body-hi: #6aa6ff;
+  --body-mid: #3a82f2;
+  --body-lo: #1f5fcf;
+  --edge: #144aa8;
+  --btn-hi: #ffffff;
+  --btn-lo: #dce8ff;
+  --ink-icon: #0a3a8c;
+  --power: #e0314b;
+  --home-hi: #3fa13f;
+  --home-lo: #1f7a1f;
+  --trigger-hi: #2a5fb8;
+  --trigger-lo: #1a438a;
+  --lamp-on: #ffd84a;
+  --gate-btn: #0a58d6;
+  --remote-highlight: #ffffff;
+  --remote-shadow: #000000;
+  --screen-bg: #0e192c;
+  --screen-ink: #fff1d6;
+  --screen-muted: #c4d3e8;
+  --remote-wordmark: #ffffff;
+  background: var(--bg);
+}
+.phone-page[data-skin="cream"] {
+  --bg: #0d1424;
+  --body-hi: #fdfdfe;
+  --body-mid: #eef1f5;
+  --body-lo: #e2e7ed;
+  --edge: #cfd6de;
+  --btn-hi: #ffffff;
+  --btn-lo: #e9eef4;
+  --ink-icon: #55708e;
+  --power: #e0314b;
+  --home-hi: #4a5560;
+  --home-lo: #39424c;
+  --trigger-hi: #a7b0ba;
+  --trigger-lo: #8a939d;
+  --lamp-on: #45c1ff;
+  --gate-btn: #2f7de1;
+  --remote-wordmark: #425976;
+}
+.phone-page[data-skin="taxi"] {
+  --bg: #111111;
+  --body-hi: #ffd84a;
+  --body-mid: #f7c600;
+  --body-lo: #e0b000;
+  --edge: #111111;
+  --btn-hi: #222222;
+  --btn-lo: #111111;
+  --ink-icon: #f7c600;
+  --power: #e0314b;
+  --home-hi: #111111;
+  --home-lo: #000000;
+  --trigger-hi: #444444;
+  --trigger-lo: #222222;
+  --lamp-on: #ffffff;
+  --gate-btn: #111111;
+  --remote-wordmark: #111111;
+}
+.phone-page[data-skin="classic"] {
+  --bg: #008080;
+  --body-hi: #e6e6e6;
+  --body-mid: #d4d0c8;
+  --body-lo: #c0bcb2;
+  --edge: #808080;
+  --btn-hi: #ffffff;
+  --btn-lo: #d4d0c8;
+  --ink-icon: #000000;
+  --power: #c62f3b;
+  --home-hi: #808080;
+  --home-lo: #606060;
+  --trigger-hi: #a0a0a0;
+  --trigger-lo: #808080;
+  --lamp-on: #00ff00;
+  --gate-btn: #000080;
+  --remote-wordmark: #000080;
+}

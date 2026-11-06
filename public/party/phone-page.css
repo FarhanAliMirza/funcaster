@@ -1,0 +1,199 @@
+/* Loaded last: the page stays fixed; only explicitly marked content can scroll. */
+html:has(body.phone-page),
+body.phone-page {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.phone-page .phone-shell {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: max(24px, env(safe-area-inset-top))
+    max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
+    max(24px, env(safe-area-inset-left));
+}
+.phone-page :is(button, .remote) {
+  touch-action: manipulation;
+}
+.phone-page :is(.pad, #motion-pad, #gas, #brake, #boost, #touch-steer) {
+  touch-action: none;
+}
+.phone-page [data-scroll] {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+.phone-page :is(.phone-view, .code-form) {
+  flex: 1;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+.phone-page :is(.phone-view, .code-form) > * {
+  flex-shrink: 0;
+}
+.phone-page dialog[data-scroll] {
+  max-width: calc(
+    100vw - max(24px, env(safe-area-inset-left)) -
+      max(24px, env(safe-area-inset-right))
+  );
+  max-height: calc(
+    100dvh - max(24px, env(safe-area-inset-top)) -
+      max(24px, env(safe-area-inset-bottom))
+  );
+}
+.phone-page :is(input, textarea) {
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
+}
+.phone-page
+  :is(input:not([type="range"]):not([type="checkbox"]), select, textarea) {
+  font-size: 16px;
+}
+.phone-page
+  :is(
+    .phone-status,
+    .player-chip,
+    .phone-score,
+    .permission-note,
+    .inline-message,
+    .safety-note,
+    .phone-view > p,
+    .play-copy > p,
+    .phone-tools button,
+    .phone-foot,
+    .phone-foot > span:last-child,
+    .settings-dialog p,
+    .settings-dialog label,
+    .settings-dialog .settings-note,
+    .code-form label,
+    .join-actions > .text-button,
+    .driver-choices,
+    .touch-steer,
+    .rotate-phone small,
+    .range-labels,
+    .settings-dialog .eyebrow,
+    .phone-view .eyebrow
+  ) {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.phone-page
+  :is(#pad-caption, .pedal small, .pedal .boost-stock, .steering-meter) {
+  font-size: 12px;
+  letter-spacing: 0.025em;
+}
+.phone-page .phone-top {
+  flex-shrink: 0;
+  padding-block: 0 12px;
+}
+.phone-page .roof-lamp {
+  flex-shrink: 0;
+}
+.phone-page .phone-tools {
+  flex-wrap: wrap;
+}
+.phone-page .phone-tools button {
+  flex: 1 1 110px;
+  min-height: 48px;
+  min-width: 0;
+  padding: 6px;
+}
+.phone-page .play-view {
+  padding-bottom: 6px;
+}
+.phone-page .phone-illustration {
+  flex-shrink: 1;
+  min-height: 90px;
+}
+.phone-page .phone-foot {
+  flex-wrap: wrap;
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .phone-page.wheel-mode .phone-shell {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .phone-page.wheel-mode .phone-top {
+    min-height: 36px;
+    padding: 0;
+  }
+  .phone-page.wheel-mode .phone-tools {
+    flex-wrap: nowrap;
+  }
+  .phone-page.wheel-mode .play-copy h1 {
+    font-size: 20px;
+  }
+  .phone-page.wheel-mode .roof-lamp {
+    letter-spacing: 2px;
+    font-size: 12px;
+  }
+}
+@media (orientation: portrait) and (max-height: 700px) {
+  .phone-page .code-form {
+    gap: 10px;
+    padding-top: 16px;
+  }
+  .phone-page .code-form h1 {
+    font-size: 30px;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .phone-page .code-form p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .phone-page .code-form input {
+    min-height: 48px;
+    padding: 12px;
+    font-size: 22px;
+    letter-spacing: 6px;
+  }
+  .phone-page .code-form button {
+    min-height: 64px;
+    margin: 0;
+    padding: 12px;
+    font-size: 20px;
+  }
+  .phone-page .phone-illustration {
+    display: none;
+  }
+  .phone-page .phone-top {
+    padding-bottom: 8px;
+  }
+  .phone-page .phone-view h1 {
+    font-size: 28px;
+    margin: 12px 0 8px;
+  }
+  .phone-page .play-copy > p {
+    min-height: 0;
+  }
+  .phone-page .motion-pad {
+    height: 120px;
+    min-height: 120px;
+  }
+}
+
+/* Outer safe area belongs to the page; the component CSS remains scoped. */
+.phone-page #stage {
+  width: 100%;
+  height: 100%;
+  padding: max(24px, env(safe-area-inset-top))
+    max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
+    max(24px, env(safe-area-inset-left));
+  display: flex;
+  overflow: hidden;
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" fill="none">
+<defs><linearGradient id="s" x2="0" y2="1"><stop stop-color="#18223b"/><stop offset="1" stop-color="#51314d"/></linearGradient><pattern id="w" width="28" height="32" patternUnits="userSpaceOnUse"><rect x="5" y="5" width="6" height="12" fill="#ffad42" opacity=".6"/><rect x="17" y="5" width="6" height="12" fill="#4de2df" opacity=".3"/></pattern></defs>
+<path fill="url(#s)" d="M0 0h1100v480H0z"/><circle cx="835" cy="92" r="59" fill="#f7c600" opacity=".8"/>
+<g fill="#18233c"><path d="M0 260h70V150h88v200h36V211h100v139h28V125h120v220h40V170h70v180h33V110h50v235h90V184h65v160h35V140h70v220h98V245h90v160H0z"/><path d="M344 125V94h18V67h24v27h20v31M617 110V70h14v40"/></g>
+<g stroke="#4de2df" stroke-width="3" opacity=".6"><path d="M15 330Q250 420 454 317T845 298T1100 331M38 317Q250 391 452 298T845 279T1100 312"/><path d="M233 230v160m16-180v184M677 176v200m18-220v226"/></g>
+<g fill="#101827" stroke="#ed799e" stroke-width="2"><path d="M714 395V281h20v-17h92v17h20v114h-38v-69q-28-38-56 0v69z"/><path d="M705 282h150M728 262h103M744 264v-17h67v17M745 247l34-28 34 28"/></g>
+<g fill="#192139" stroke="#52617a" stroke-width="2"><path d="M15 480V312h188v168zM220 480V287h147v193zM415 480V334h204v146zM892 480V306h196v174z"/></g>
+<g fill="url(#w)"><path d="M30 336h152v99H30zM239 308h108v127H239zM437 357h157v78H437zM914 330h152v105H914z"/></g>
+<path d="M212 342h166v45H212z" fill="#f7c600"/><text x="295" y="371" text-anchor="middle" font-family="monospace" font-size="24" font-weight="bold" fill="#111">PLAY LOCAL</text>
+<path d="M0 451h1100v29H0z" fill="#090f1c"/><path d="M0 471h1100" stroke="#f7c600" stroke-width="3" stroke-dasharray="36 32"/>
+<g transform="translate(650 396)"><path d="M0 30h14l18-26h59l22 26h20v38H0z" fill="#f7c600"/><path d="M32 30l10-18h40l15 18z" fill="#14253f"/><path d="M51 1v-8h25v8M0 47h132" stroke="#111" stroke-width="6"/><circle cx="26" cy="67" r="12" fill="#090f1c"/><circle cx="106" cy="67" r="12" fill="#090f1c"/><circle cx="26" cy="67" r="5" fill="#fff1d6"/><circle cx="106" cy="67" r="5" fill="#fff1d6"/></g>
+</svg>

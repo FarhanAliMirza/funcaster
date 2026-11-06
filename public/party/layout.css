@@ -1,0 +1,535 @@
+/* Layout contracts shared by the lobby, remotes and utility screens. */
+:where(button, a, input, select, textarea) {
+  max-width: 100%;
+}
+:where(button, .primary-button, .secondary-button, .text-button) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+a:is(.primary-button, .secondary-button, .text-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+}
+:where(input, select, textarea) {
+  min-width: 0;
+  font: inherit;
+}
+.primary-button:hover:not(:disabled) {
+  background: #ffdc43;
+  color: var(--kaali);
+}
+.secondary-button:hover:not(:disabled) {
+  background: #304461;
+}
+.text-button:hover:not(:disabled) {
+  color: var(--peeli);
+}
+.party-extras {
+  color: var(--cream);
+  border-radius: 16px;
+  padding: 0 24px 24px;
+  margin: 24px auto;
+  width: min(1200px, calc(100% - 40px));
+}
+.party-extras summary {
+  display: list-item;
+  padding: 18px 0;
+}
+.extras-content {
+  background: transparent;
+  color: var(--cream);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px;
+  align-items: end;
+}
+.extras-content label {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+  font-size: 14px;
+}
+.extras-content label:has(input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+  min-height: 48px;
+}
+.extras-content :is(input, select) {
+  width: 100%;
+}
+.extras-content input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+  flex: none;
+}
+.extras-content :is(p, form, h3, ol, pre, .admin-remote-list) {
+  grid-column: 1 / -1;
+}
+.extras-content p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.arcade-tools .extras-content {
+  display: grid;
+}
+.arcade-tools form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 16px;
+}
+.arcade-tools label {
+  margin: 0;
+}
+.arcade-tools h3 {
+  margin: 8px 0 0;
+}
+.arcade-tools ol {
+  margin: 0;
+  padding-left: 24px;
+  line-height: 1.8;
+}
+.arcade-tools pre:empty,
+.admin-message:empty {
+  display: none;
+}
+.admin-remote-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.admin-remote-row > span {
+  flex: 1 1 200px;
+}
+.host-consent {
+  flex-wrap: wrap;
+  width: min(540px, calc(100% - 32px));
+  gap: 12px;
+}
+.host-consent > span {
+  flex: 1 1 220px;
+}
+.host-consent button {
+  flex: 1 1 180px;
+}
+dialog {
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 28px;
+}
+dialog .dialog-close {
+  top: 12px;
+  right: 12px;
+}
+dialog:has(.dialog-close) {
+  padding-top: 64px;
+}
+dialog h2 {
+  overflow-wrap: anywhere;
+}
+.results-dialog {
+  background: var(--night-raised);
+  color: var(--cream);
+}
+.results-star {
+  color: var(--peeli);
+  font-size: 64px;
+}
+.results-dialog h2 {
+  font-size: clamp(26px, 7vw, 38px);
+}
+.results-dialog :is(p, .subtle),
+#crew-standings {
+  color: var(--muted);
+}
+.ranking {
+  gap: 8px 16px;
+  text-align: left;
+  align-items: center;
+}
+.ranking .result-stats {
+  color: var(--muted);
+  font-weight: 400;
+  line-height: 1.6;
+}
+.result-actions {
+  flex-wrap: wrap;
+}
+.result-actions button {
+  flex: 1 1 160px;
+}
+.classic-stage {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.classic-toolbar {
+  flex: none;
+  flex-wrap: wrap;
+  min-height: 0;
+  gap: 8px 16px;
+  padding: 10px 16px;
+  background: var(--night);
+}
+.classic-toolbar button {
+  min-height: 44px;
+}
+.classic-now {
+  min-width: 120px;
+}
+.classic-frame-wrap {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  width: 100%;
+}
+.classic-loading {
+  background: var(--night);
+  color: var(--cream);
+  padding: 24px;
+  text-align: center;
+}
+.classic-loading span {
+  color: var(--muted);
+}
+.phone-top {
+  min-width: 0;
+}
+.phone-top .brand {
+  flex: none;
+}
+.phone-status {
+  max-width: 45%;
+  text-align: right;
+  justify-content: end;
+  overflow-wrap: anywhere;
+}
+.phone-view,
+.play-copy,
+.wheel-controls {
+  min-width: 0;
+}
+.phone-tools {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.phone-tools > button {
+  flex: 1 1 120px;
+}
+.phone-page .settings-dialog input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+}
+.settings-dialog label:has(input[type="checkbox"]) {
+  justify-content: start;
+  gap: 14px;
+  text-align: left;
+  font-size: 14px;
+}
+.settings-dialog label:has(select) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+.settings-dialog :is(input:not([type="checkbox"]), select, textarea) {
+  width: 100%;
+}
+.settings-dialog > :is(a, button:not(.dialog-close)) {
+  display: flex;
+  width: 100%;
+  margin: 12px 0 0;
+  min-height: 48px;
+  justify-content: center;
+  align-items: center;
+}
+.settings-dialog #reset-sensitivity {
+  margin-bottom: 24px;
+}
+.settings-dialog .settings-note {
+  line-height: 1.6;
+}
+.admin-dialog {
+  max-width: min(620px, calc(100vw - 24px));
+}
+.admin-dialog .primary-button {
+  min-height: 56px;
+  font-size: 17px;
+}
+.admin-dialog .admin-game-grid button {
+  padding: 12px;
+  min-width: 0;
+}
+.admin-options textarea {
+  min-height: 100px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--night);
+  color: var(--cream);
+  border: 1px solid var(--border);
+}
+.admin-person > span {
+  flex-basis: 100%;
+}
+.admin-person > button {
+  flex: 1 1 120px;
+}
+.utility-page main {
+  width: min(100%, 920px);
+  margin: 0 auto;
+  padding: clamp(20px, 5vw, 48px);
+}
+.utility-page h1 {
+  font-size: clamp(28px, 5vw, 46px);
+  line-height: 1.15;
+}
+.utility-page p,
+.utility-page li {
+  line-height: 1.7;
+}
+.utility-page :is(textarea, pre) {
+  max-width: 100%;
+  overflow: auto;
+  background: var(--night-raised);
+  color: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.utility-page #sensor-note {
+  background: var(--night-raised);
+  color: var(--cream);
+  border: 1px solid var(--border);
+}
+.utility-page iframe {
+  display: block;
+  margin-top: 24px;
+  max-height: 70dvh;
+}
+.utility-page .setup-fields label {
+  min-width: min(100%, 180px);
+}
+@media (max-width: 480px) {
+  .party-extras {
+    width: calc(100% - 24px);
+    padding: 0 18px 18px;
+  }
+  dialog {
+    padding: 24px 18px;
+  }
+  .setup-fields label {
+    min-width: 100%;
+  }
+  .how-to {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .how-to > span {
+    width: 44px;
+    height: 44px;
+    flex: none;
+  }
+  .how-to strong {
+    font-size: 17px;
+  }
+  .host-page footer {
+    flex-wrap: wrap;
+    gap: 12px;
+    line-height: 1.7;
+  }
+  .phone-shell {
+    border-radius: 0;
+    border-inline: 0;
+    padding-inline: max(16px, env(safe-area-inset-left));
+  }
+  .phone-top .brand {
+    font-size: 22px;
+  }
+  .phone-status {
+    font-size: 11px;
+  }
+  .pedal small {
+    font-size: 10px;
+    overflow-wrap: anywhere;
+  }
+  .pedal {
+    padding-inline: 6px;
+  }
+  .classic-now {
+    order: -1;
+    flex-basis: 100%;
+  }
+  .classic-toolbar {
+    gap: 6px;
+  }
+  .classic-toolbar button {
+    flex: 1 1 90px;
+    padding: 8px;
+    font-size: 11px;
+  }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .wheel-mode .phone-shell {
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr;
+    padding-inline: max(12px, env(safe-area-inset-left));
+  }
+  .wheel-mode .phone-top {
+    min-height: 42px;
+  }
+  .wheel-mode .roof-lamp {
+    position: static;
+    transform: none;
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: center;
+    align-self: center;
+    margin: 0;
+    pointer-events: none;
+  }
+  .wheel-mode .phone-top {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .wheel-mode .play-view {
+    min-height: 0;
+    gap: 4px;
+  }
+  .wheel-mode .play-copy h1 {
+    font-size: 18px;
+  }
+  .wheel-mode .play-copy p {
+    font-size: 12px;
+  }
+  .wheel-mode .phone-tools {
+    flex-wrap: nowrap;
+  }
+  .wheel-mode .phone-tools button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 6px;
+    font-size: 12px;
+  }
+  .wheel-mode .pedal {
+    min-height: 90px;
+  }
+  .wheel-mode .pedal strong {
+    font-size: clamp(15px, 2.8vw, 20px);
+  }
+  .wheel-mode .pedal small {
+    font-size: 10px;
+  }
+  .wheel-mode .driver-choices {
+    min-height: 48px;
+  }
+  .wheel-mode .phone-status {
+    max-width: 25%;
+  }
+}
+
+/* Seat labels have their own space between the corner HUDs. */
+.view-name {
+  bottom: auto;
+  transform: translateX(-50%);
+  color: #101827;
+}
+@media (orientation: portrait) and (max-height: 700px) {
+  .phone-page:not(.wheel-mode) .phone-top {
+    padding-block: 8px;
+  }
+  .phone-page:not(.wheel-mode) .roof-lamp {
+    font-size: 16px;
+    padding: 5px 16px;
+  }
+  .phone-page:not(.wheel-mode) .play-view {
+    gap: 6px;
+    padding-top: 6px;
+  }
+  .phone-page:not(.wheel-mode) .play-view .player-chip {
+    padding: 8px;
+  }
+  .phone-page:not(.wheel-mode) .play-copy h1 {
+    font-size: 25px;
+    margin: 6px 0;
+  }
+  .phone-page:not(.wheel-mode) .play-copy p {
+    font-size: 12px;
+    min-height: 0;
+  }
+  .phone-page:not(.wheel-mode) .play-copy .eyebrow {
+    display: none;
+  }
+  .phone-page:not(.wheel-mode) .motion-pad {
+    height: 140px;
+    min-height: 140px;
+    width: min(75vw, 230px);
+  }
+  .phone-page:not(.wheel-mode) .pad-ring {
+    width: 110px;
+    height: 110px;
+  }
+  .phone-page:not(.wheel-mode) .classic-action,
+  .phone-page:not(.wheel-mode) .pulse-button {
+    min-height: 64px;
+    font-size: 18px;
+    padding: 12px;
+  }
+  .phone-page:not(.wheel-mode) .phone-tools {
+    flex-wrap: nowrap;
+  }
+  .phone-page:not(.wheel-mode) .phone-tools button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 6px;
+    font-size: 11px;
+  }
+  .phone-page:not(.wheel-mode) .phone-foot {
+    display: none;
+  }
+}
+
+.utility-page h1 {
+  margin: 24px 0 16px;
+}
+.utility-page p {
+  margin: 16px 0;
+}
+.utility-page #sensor-note {
+  margin: 20px 0;
+}
+.utility-page label[for="source"] {
+  display: block;
+  margin: 24px 0 8px;
+}
+
+.arena-bottom {
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+@media (min-width: 900px) and (min-height: 600px) {
+  .arena {
+    height: calc(100dvh - 90px);
+    display: flex;
+    flex-direction: column;
+    padding-block: 16px;
+  }
+  .arena > :not(.canvas-wrap) {
+    flex: none;
+  }
+  .arena .canvas-wrap {
+    flex: 1;
+    min-height: 160px;
+    height: auto;
+  }
+}
