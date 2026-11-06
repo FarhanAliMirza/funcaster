@@ -1,0 +1,434 @@
+{
+  "id": "luna",
+  "wallpaper": {
+    "1080": "wallpaper/mumbai-1080.webp",
+    "2160": "wallpaper/mumbai-2160.webp"
+  },
+  "sprites": "ui/luna-sprites.css",
+  "atlas": "theme/atlas.json",
+  "tokens": "theme/tokens.css",
+  "icons": {
+    "sheet48": "icons/WinIcons_48.png",
+    "sheet32": "icons/WinIcons_32.png",
+    "sheet16": "icons/WinIcons_16.png",
+    "cell": 48,
+    "cols": 20,
+    "roles": {
+      "folder.my-games": [
+        9,
+        1
+      ],
+      "players.crew": [
+        0,
+        5
+      ],
+      "invite.network": [
+        7,
+        17
+      ],
+      "settings": [
+        7,
+        18
+      ],
+      "help": [
+        19,
+        10
+      ],
+      "records.history": [
+        8,
+        3
+      ],
+      "leaderboard": [
+        14,
+        11
+      ],
+      "playlists.media": [
+        16,
+        5
+      ],
+      "diagnostics": [
+        0,
+        18
+      ],
+      "recycle.empty": [
+        9,
+        10
+      ],
+      "recycle.full": [
+        9,
+        13
+      ],
+      "power.shutdown": [
+        9,
+        4
+      ],
+      "lock": [
+        11,
+        0
+      ],
+      "volume.speaker": [
+        1,
+        3
+      ],
+      "msg.error": [
+        7,
+        4
+      ],
+      "msg.info": [
+        19,
+        12
+      ],
+      "msg.question": [
+        19,
+        10
+      ],
+      "qr.camera": [
+        4,
+        5
+      ],
+      "remote.screen": [
+        18,
+        0
+      ],
+      "phone.controller": [
+        4,
+        7
+      ]
+    },
+    "files": {
+      "folder.my-games": "icons/folder.my-games.png",
+      "players.crew": "icons/players.crew.png",
+      "invite.network": "icons/invite.network.png",
+      "settings": "icons/settings.png",
+      "help": "icons/help.png",
+      "records.history": "icons/records.history.png",
+      "leaderboard": "icons/leaderboard.png",
+      "playlists.media": "icons/playlists.media.png",
+      "diagnostics": "icons/diagnostics.png",
+      "recycle.empty": "icons/recycle.empty.png",
+      "recycle.full": "icons/recycle.full.png",
+      "power.shutdown": "icons/power.shutdown.png",
+      "lock": "icons/lock.png",
+      "volume.speaker": "icons/volume.speaker.png",
+      "msg.error": "icons/msg.error.png",
+      "msg.info": "icons/msg.info.png",
+      "msg.question": "icons/msg.question.png",
+      "qr.camera": "icons/qr.camera.png",
+      "remote.screen": "icons/remote.screen.png",
+      "phone.controller": "icons/phone.controller.png"
+    }
+  },
+  "games": {
+    "iconSource": "artwork(id)",
+    "cropMap": "/os/icon-crop.js"
+  },
+  "cursors": {
+    "arrow": [
+      "cursors/arrow.png",
+      3,
+      6
+    ],
+    "help": [
+      "cursors/help.png",
+      3,
+      6
+    ],
+    "appstarting": [
+      "cursors/appstarting.png",
+      3,
+      6
+    ],
+    "busy": [
+      "cursors/busy.png",
+      16,
+      16
+    ],
+    "link": [
+      "cursors/link.png",
+      8,
+      1
+    ],
+    "text": [
+      "cursors/text.png",
+      14,
+      15
+    ],
+    "move": [
+      "cursors/move.png",
+      16,
+      16
+    ],
+    "resize-ns": [
+      "cursors/resize-ns.png",
+      16,
+      16
+    ],
+    "resize-we": [
+      "cursors/resize-we.png",
+      15,
+      16
+    ],
+    "resize-nesw": [
+      "cursors/resize-nesw.png",
+      16,
+      16
+    ],
+    "resize-nwse": [
+      "cursors/resize-nwse.png",
+      15,
+      16
+    ],
+    "no": [
+      "cursors/no.png",
+      16,
+      15
+    ],
+    "cross": [
+      "cursors/cross.png",
+      15,
+      16
+    ],
+    "pen": [
+      "cursors/pen.png",
+      3,
+      4
+    ],
+    "up-arrow": [
+      "cursors/up-arrow.png",
+      14,
+      5
+    ],
+    "scroll-n": [
+      "cursors/scroll-n.png",
+      15,
+      10
+    ],
+    "scroll-s": [
+      "cursors/scroll-s.png",
+      15,
+      20
+    ],
+    "scroll-e": [
+      "cursors/scroll-e.png",
+      20,
+      15
+    ],
+    "scroll-w": [
+      "cursors/scroll-w.png",
+      10,
+      15
+    ],
+    "scroll-ns": [
+      "cursors/scroll-ns.png",
+      15,
+      15
+    ],
+    "scroll-ew": [
+      "cursors/scroll-ew.png",
+      15,
+      15
+    ],
+    "scroll-all": [
+      "cursors/scroll-all.png",
+      15,
+      15
+    ],
+    "scroll-ne": [
+      "cursors/scroll-ne.png",
+      19,
+      12
+    ],
+    "scroll-nw": [
+      "cursors/scroll-nw.png",
+      12,
+      12
+    ],
+    "scroll-se": [
+      "cursors/scroll-se.png",
+      19,
+      19
+    ],
+    "scroll-sw": [
+      "cursors/scroll-sw.png",
+      12,
+      19
+    ],
+    "area-select-box": [
+      "cursors/area-select-box.png",
+      10,
+      10
+    ],
+    "person-select": [
+      "cursors/person-select.png",
+      6,
+      1
+    ],
+    "location-select": [
+      "cursors/location-select.png",
+      6,
+      1
+    ],
+    "disc-busy": [
+      "cursors/disc-busy.png",
+      11,
+      12
+    ],
+    "glove": [
+      "cursors/glove.png",
+      40.96,
+      11.52
+    ]
+  },
+  "sounds": {
+    "startup": {
+      "ogg": "sounds/startup.ogg",
+      "mp3": "sounds/startup.mp3",
+      "gainDb": -0.679
+    },
+    "shutdown": {
+      "ogg": "sounds/shutdown.ogg",
+      "mp3": "sounds/shutdown.mp3",
+      "gainDb": -0.915
+    },
+    "logon": {
+      "ogg": "sounds/logon.ogg",
+      "mp3": "sounds/logon.mp3",
+      "gainDb": 4.037
+    },
+    "logoff": {
+      "ogg": "sounds/logoff.ogg",
+      "mp3": "sounds/logoff.mp3",
+      "gainDb": 4.388
+    },
+    "click": {
+      "ogg": "sounds/click.ogg",
+      "mp3": "sounds/click.mp3",
+      "gainDb": 12
+    },
+    "launch": {
+      "ogg": "sounds/launch.ogg",
+      "mp3": "sounds/launch.mp3",
+      "gainDb": 12
+    },
+    "minimise": {
+      "ogg": "sounds/minimise.ogg",
+      "mp3": "sounds/minimise.mp3",
+      "gainDb": 12
+    },
+    "restore": {
+      "ogg": "sounds/restore.ogg",
+      "mp3": "sounds/restore.mp3",
+      "gainDb": 12
+    },
+    "error": {
+      "ogg": "sounds/error.ogg",
+      "mp3": "sounds/error.mp3",
+      "gainDb": 0.983
+    },
+    "critical": {
+      "ogg": "sounds/critical.ogg",
+      "mp3": "sounds/critical.mp3",
+      "gainDb": -2.804
+    },
+    "warning": {
+      "ogg": "sounds/warning.ogg",
+      "mp3": "sounds/warning.mp3",
+      "gainDb": 10.415
+    },
+    "ding": {
+      "ogg": "sounds/ding.ogg",
+      "mp3": "sounds/ding.mp3",
+      "gainDb": 5.743
+    },
+    "notify": {
+      "ogg": "sounds/notify.ogg",
+      "mp3": "sounds/notify.mp3",
+      "gainDb": 12
+    },
+    "balloon": {
+      "ogg": "sounds/balloon.ogg",
+      "mp3": "sounds/balloon.mp3",
+      "gainDb": 12
+    },
+    "recycle": {
+      "ogg": "sounds/recycle.ogg",
+      "mp3": "sounds/recycle.mp3",
+      "gainDb": 11.063
+    },
+    "joined": {
+      "ogg": "sounds/joined.ogg",
+      "mp3": "sounds/joined.mp3",
+      "gainDb": 8.905
+    },
+    "left": {
+      "ogg": "sounds/left.ogg",
+      "mp3": "sounds/left.mp3",
+      "gainDb": 9.554
+    },
+    "failed": {
+      "ogg": "sounds/failed.ogg",
+      "mp3": "sounds/failed.mp3",
+      "gainDb": 6.979
+    },
+    "denied": {
+      "ogg": "sounds/denied.ogg",
+      "mp3": "sounds/denied.mp3",
+      "gainDb": 7.98
+    },
+    "finished": {
+      "ogg": "sounds/finished.ogg",
+      "mp3": "sounds/finished.mp3",
+      "gainDb": 12
+    },
+    "invite": {
+      "ogg": "sounds/invite.ogg",
+      "mp3": "sounds/invite.mp3",
+      "gainDb": 12
+    },
+    "invite-sent": {
+      "ogg": "sounds/invite-sent.ogg",
+      "mp3": "sounds/invite-sent.mp3",
+      "gainDb": 12
+    },
+    "edge": {
+      "ogg": "sounds/edge.ogg",
+      "mp3": "sounds/edge.mp3",
+      "gainDb": 3.769
+    },
+    "open": {
+      "ogg": "sounds/click.ogg",
+      "mp3": "sounds/click.mp3",
+      "gainDb": 12
+    },
+    "close": {
+      "ogg": "sounds/click.ogg",
+      "mp3": "sounds/click.mp3",
+      "gainDb": 12
+    },
+    "menu": {
+      "ogg": "sounds/click.ogg",
+      "mp3": "sounds/click.mp3",
+      "gainDb": 12
+    },
+    "countdown": {
+      "synth": "countdown"
+    },
+    "go": {
+      "synth": "go"
+    },
+    "win": {
+      "synth": "win"
+    },
+    "lose": {
+      "synth": "lose"
+    }
+  },
+  "fonts": {
+    "ui": "fonts/tahoma-latin.woff2",
+    "logo": "fonts/framdit-latin.woff2",
+    "css": "fonts/fonts.css"
+  },
+  "mascot": "mascot/clippit.json",
+  "pets": "pets/pets.json",
+  "avatars": "avatars/avatars.json"
+}

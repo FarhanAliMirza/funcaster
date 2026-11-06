@@ -1,0 +1,2523 @@
+{
+  "size": [
+    1024,
+    1024
+  ],
+  "sprites": {
+    "window.frame.active": {
+      "x": 12,
+      "y": 42,
+      "w": 66,
+      "h": 66,
+      "slice": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "notes": "Full 4-sided frame, 5px border, fill #efeee0. Left border outer->inner: 0019cf 0831d9 1254e7 166aee 0855dd; top outer->inner 00138c..0048f1; bottom/right mirror. No inactive version (see window.border.*.inactive).",
+      "file": "ui/window.frame.active.png"
+    },
+    "window.frame.opentop": {
+      "x": 12,
+      "y": 122,
+      "w": 66,
+      "h": 66,
+      "slice": [
+        5,
+        0,
+        5,
+        5
+      ],
+      "notes": "Same frame without top border (sits under a title bar).",
+      "file": "ui/window.frame.opentop.png"
+    },
+    "window.title.active": {
+      "x": 83,
+      "y": 393,
+      "w": 66,
+      "h": 29,
+      "slice": [
+        8,
+        10,
+        8,
+        10
+      ],
+      "notes": "top corners rounded (r~5), bottom square: the standard XP title bar. Horizontal 3-slice; diagonal sheen means middle is not perfectly flat, scale X only. Height fixed 29.",
+      "file": "ui/window.title.active.png"
+    },
+    "window.title.inactive": {
+      "x": 83,
+      "y": 422,
+      "w": 66,
+      "h": 29,
+      "slice": [
+        8,
+        10,
+        8,
+        10
+      ],
+      "notes": "top corners rounded (r~5), bottom square: the standard XP title bar. Horizontal 3-slice; diagonal sheen means middle is not perfectly flat, scale X only. Height fixed 29.",
+      "file": "ui/window.title.inactive.png"
+    },
+    "window.title.rounded.active": {
+      "x": 14,
+      "y": 393,
+      "w": 66,
+      "h": 29,
+      "slice": [
+        8,
+        10,
+        8,
+        10
+      ],
+      "notes": "all four corners rounded: floating / tool caption. Horizontal 3-slice; diagonal sheen means middle is not perfectly flat, scale X only. Height fixed 29.",
+      "file": "ui/window.title.rounded.active.png"
+    },
+    "window.title.rounded.inactive": {
+      "x": 14,
+      "y": 422,
+      "w": 66,
+      "h": 29,
+      "slice": [
+        8,
+        10,
+        8,
+        10
+      ],
+      "notes": "all four corners rounded: floating / tool caption. Horizontal 3-slice; diagonal sheen means middle is not perfectly flat, scale X only. Height fixed 29.",
+      "file": "ui/window.title.rounded.inactive.png"
+    },
+    "window.title.flat.active": {
+      "x": 152,
+      "y": 393,
+      "w": 66,
+      "h": 29,
+      "slice": [
+        8,
+        10,
+        8,
+        10
+      ],
+      "notes": "no rounded corners: maximised caption. Horizontal 3-slice; diagonal sheen means middle is not perfectly flat, scale X only. Height fixed 29.",
+      "file": "ui/window.title.flat.active.png"
+    },
+    "window.title.flat.inactive": {
+      "x": 152,
+      "y": 422,
+      "w": 66,
+      "h": 29,
+      "slice": [
+        8,
+        10,
+        8,
+        10
+      ],
+      "notes": "no rounded corners: maximised caption. Horizontal 3-slice; diagonal sheen means middle is not perfectly flat, scale X only. Height fixed 29.",
+      "file": "ui/window.title.flat.inactive.png"
+    },
+    "window.border.left.active": {
+      "x": 221,
+      "y": 393,
+      "w": 5,
+      "h": 31,
+      "slice": null,
+      "notes": "5px-wide side border strip (tile vertically). Inactive is 5x28 at (221,424). Mirror (scaleX(-1)) for right side.",
+      "file": "ui/window.border.left.active.png"
+    },
+    "window.border.bottom.active": {
+      "x": 229,
+      "y": 393,
+      "w": 49,
+      "h": 5,
+      "slice": [
+        5,
+        0,
+        0,
+        0
+      ],
+      "notes": "Bottom border strip, 49x5; first 5px = bottom-left corner (mirror for right). Top row is the light inner edge. Inactive at (229,398).",
+      "file": "ui/window.border.bottom.active.png"
+    },
+    "titlebtn.min.normal": {
+      "x": 375,
+      "y": 236,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.normal.png"
+    },
+    "titlebtn.min.hover": {
+      "x": 375,
+      "y": 257,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.hover.png"
+    },
+    "titlebtn.min.pressed": {
+      "x": 375,
+      "y": 278,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.pressed.png"
+    },
+    "titlebtn.min.disabled": {
+      "x": 375,
+      "y": 299,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.disabled.png"
+    },
+    "titlebtn.min.inactive": {
+      "x": 375,
+      "y": 320,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.inactive.png"
+    },
+    "titlebtn.min.inactive.hover": {
+      "x": 375,
+      "y": 341,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.inactive.hover.png"
+    },
+    "titlebtn.min.inactive.pressed": {
+      "x": 375,
+      "y": 362,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.inactive.pressed.png"
+    },
+    "titlebtn.min.inactive.disabled": {
+      "x": 375,
+      "y": 383,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=375, y=236..487.",
+      "file": "ui/titlebtn.min.inactive.disabled.png"
+    },
+    "titlebtn.max.normal": {
+      "x": 399,
+      "y": 236,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.normal.png"
+    },
+    "titlebtn.max.hover": {
+      "x": 399,
+      "y": 257,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.hover.png"
+    },
+    "titlebtn.max.pressed": {
+      "x": 399,
+      "y": 278,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.pressed.png"
+    },
+    "titlebtn.max.disabled": {
+      "x": 399,
+      "y": 299,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.disabled.png"
+    },
+    "titlebtn.max.inactive": {
+      "x": 399,
+      "y": 320,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.inactive.png"
+    },
+    "titlebtn.max.inactive.hover": {
+      "x": 399,
+      "y": 341,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.inactive.hover.png"
+    },
+    "titlebtn.max.inactive.pressed": {
+      "x": 399,
+      "y": 362,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.inactive.pressed.png"
+    },
+    "titlebtn.max.inactive.disabled": {
+      "x": 399,
+      "y": 383,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=399, y=236..487.",
+      "file": "ui/titlebtn.max.inactive.disabled.png"
+    },
+    "titlebtn.restore.normal": {
+      "x": 423,
+      "y": 236,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.normal.png"
+    },
+    "titlebtn.restore.hover": {
+      "x": 423,
+      "y": 257,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.hover.png"
+    },
+    "titlebtn.restore.pressed": {
+      "x": 423,
+      "y": 278,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.pressed.png"
+    },
+    "titlebtn.restore.disabled": {
+      "x": 423,
+      "y": 299,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.disabled.png"
+    },
+    "titlebtn.restore.inactive": {
+      "x": 423,
+      "y": 320,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.inactive.png"
+    },
+    "titlebtn.restore.inactive.hover": {
+      "x": 423,
+      "y": 341,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.inactive.hover.png"
+    },
+    "titlebtn.restore.inactive.pressed": {
+      "x": 423,
+      "y": 362,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.inactive.pressed.png"
+    },
+    "titlebtn.restore.inactive.disabled": {
+      "x": 423,
+      "y": 383,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=423, y=236..487.",
+      "file": "ui/titlebtn.restore.inactive.disabled.png"
+    },
+    "titlebtn.close.normal": {
+      "x": 447,
+      "y": 236,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.normal.png"
+    },
+    "titlebtn.close.hover": {
+      "x": 447,
+      "y": 257,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.hover.png"
+    },
+    "titlebtn.close.pressed": {
+      "x": 447,
+      "y": 278,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.pressed.png"
+    },
+    "titlebtn.close.disabled": {
+      "x": 447,
+      "y": 299,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.disabled.png"
+    },
+    "titlebtn.close.inactive": {
+      "x": 447,
+      "y": 320,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.inactive.png"
+    },
+    "titlebtn.close.inactive.hover": {
+      "x": 447,
+      "y": 341,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.inactive.hover.png"
+    },
+    "titlebtn.close.inactive.pressed": {
+      "x": 447,
+      "y": 362,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.inactive.pressed.png"
+    },
+    "titlebtn.close.inactive.disabled": {
+      "x": 447,
+      "y": 383,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=447, y=236..487.",
+      "file": "ui/titlebtn.close.inactive.disabled.png"
+    },
+    "titlebtn.help.normal": {
+      "x": 471,
+      "y": 236,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.normal.png"
+    },
+    "titlebtn.help.hover": {
+      "x": 471,
+      "y": 257,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.hover.png"
+    },
+    "titlebtn.help.pressed": {
+      "x": 471,
+      "y": 278,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.pressed.png"
+    },
+    "titlebtn.help.disabled": {
+      "x": 471,
+      "y": 299,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.disabled.png"
+    },
+    "titlebtn.help.inactive": {
+      "x": 471,
+      "y": 320,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.inactive.png"
+    },
+    "titlebtn.help.inactive.hover": {
+      "x": 471,
+      "y": 341,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.inactive.hover.png"
+    },
+    "titlebtn.help.inactive.pressed": {
+      "x": 471,
+      "y": 362,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.inactive.pressed.png"
+    },
+    "titlebtn.help.inactive.disabled": {
+      "x": 471,
+      "y": 383,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "21x21 pitch 21. Rows 0-7 as listed; rows 8-11 (y=404..487) repeat the inactive states (help column row 8 is a bright \"?\"). Whole column x=471, y=236..487.",
+      "file": "ui/titlebtn.help.inactive.disabled.png"
+    },
+    "titlebtn.blank.blue": {
+      "x": 398,
+      "y": 37,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.png"
+    },
+    "titlebtn.blank.red": {
+      "x": 422,
+      "y": 37,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.png"
+    },
+    "closebtn.mini.normal": {
+      "x": 94,
+      "y": 42,
+      "w": 17,
+      "h": 18,
+      "slice": null,
+      "notes": "Small cream/orange X close button (tooltip/balloon style), 3 states pitch 18.",
+      "file": "ui/closebtn.mini.normal.png"
+    },
+    "button.normal": {
+      "x": 375,
+      "y": 37,
+      "w": 20,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Push button, pitch 23. Visible body 18x21 at (+1,+1) with 1px #003c74 outline and r=3 corners; outer 1px is soft shadow; bottom row white glow. Disabled has no outline (cream f5f4ea / c9c7ba). Default = blue inner glow ring.",
+      "file": "ui/button.normal.png"
+    },
+    "button.hover": {
+      "x": 375,
+      "y": 60,
+      "w": 20,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Push button, pitch 23. Visible body 18x21 at (+1,+1) with 1px #003c74 outline and r=3 corners; outer 1px is soft shadow; bottom row white glow. Disabled has no outline (cream f5f4ea / c9c7ba). Default = blue inner glow ring.",
+      "file": "ui/button.hover.png"
+    },
+    "button.pressed": {
+      "x": 375,
+      "y": 83,
+      "w": 20,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Push button, pitch 23. Visible body 18x21 at (+1,+1) with 1px #003c74 outline and r=3 corners; outer 1px is soft shadow; bottom row white glow. Disabled has no outline (cream f5f4ea / c9c7ba). Default = blue inner glow ring.",
+      "file": "ui/button.pressed.png"
+    },
+    "button.disabled": {
+      "x": 375,
+      "y": 106,
+      "w": 20,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Push button, pitch 23. Visible body 18x21 at (+1,+1) with 1px #003c74 outline and r=3 corners; outer 1px is soft shadow; bottom row white glow. Disabled has no outline (cream f5f4ea / c9c7ba). Default = blue inner glow ring.",
+      "file": "ui/button.disabled.png"
+    },
+    "button.default": {
+      "x": 375,
+      "y": 129,
+      "w": 20,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Push button, pitch 23. Visible body 18x21 at (+1,+1) with 1px #003c74 outline and r=3 corners; outer 1px is soft shadow; bottom row white glow. Disabled has no outline (cream f5f4ea / c9c7ba). Default = blue inner glow ring.",
+      "file": "ui/button.default.png"
+    },
+    "checkbox.unchecked.normal": {
+      "x": 144,
+      "y": 42,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.unchecked.normal.png"
+    },
+    "checkbox.unchecked.hover": {
+      "x": 144,
+      "y": 55,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.unchecked.hover.png"
+    },
+    "checkbox.unchecked.pressed": {
+      "x": 144,
+      "y": 68,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.unchecked.pressed.png"
+    },
+    "checkbox.unchecked.disabled": {
+      "x": 144,
+      "y": 81,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.unchecked.disabled.png"
+    },
+    "checkbox.checked.normal": {
+      "x": 144,
+      "y": 94,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.checked.normal.png"
+    },
+    "checkbox.checked.hover": {
+      "x": 144,
+      "y": 107,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.checked.hover.png"
+    },
+    "checkbox.checked.pressed": {
+      "x": 144,
+      "y": 120,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.checked.pressed.png"
+    },
+    "checkbox.checked.disabled": {
+      "x": 144,
+      "y": 133,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.checked.disabled.png"
+    },
+    "checkbox.mixed.normal": {
+      "x": 144,
+      "y": 146,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.mixed.normal.png"
+    },
+    "checkbox.mixed.hover": {
+      "x": 144,
+      "y": 159,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.mixed.hover.png"
+    },
+    "checkbox.mixed.pressed": {
+      "x": 144,
+      "y": 172,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.mixed.pressed.png"
+    },
+    "checkbox.mixed.disabled": {
+      "x": 144,
+      "y": 185,
+      "w": 13,
+      "h": 13,
+      "slice": null,
+      "notes": "DEFAULT 13px XP-accurate set (border #1c5180, orange hover ring), cells touch, pitch 13. 12 cells: unchecked/checked/mixed x normal/hover/pressed/disabled. Mixed = filled green square (usable as radio-on proxy). NO round radio sprites exist.",
+      "file": "ui/checkbox.mixed.disabled.png"
+    },
+    "checkbox16.unchecked.normal": {
+      "x": 160,
+      "y": 42,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.unchecked.normal.png"
+    },
+    "checkbox16.unchecked.hover": {
+      "x": 160,
+      "y": 58,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.unchecked.hover.png"
+    },
+    "checkbox16.unchecked.pressed": {
+      "x": 160,
+      "y": 74,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.unchecked.pressed.png"
+    },
+    "checkbox16.unchecked.disabled": {
+      "x": 160,
+      "y": 90,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.unchecked.disabled.png"
+    },
+    "checkbox16.checked.normal": {
+      "x": 160,
+      "y": 106,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.checked.normal.png"
+    },
+    "checkbox16.checked.hover": {
+      "x": 160,
+      "y": 122,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.checked.hover.png"
+    },
+    "checkbox16.checked.pressed": {
+      "x": 160,
+      "y": 138,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.checked.pressed.png"
+    },
+    "checkbox16.checked.disabled": {
+      "x": 160,
+      "y": 154,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.checked.disabled.png"
+    },
+    "checkbox16.mixed.normal": {
+      "x": 160,
+      "y": 170,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.mixed.normal.png"
+    },
+    "checkbox16.mixed.hover": {
+      "x": 160,
+      "y": 186,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.mixed.hover.png"
+    },
+    "checkbox16.mixed.pressed": {
+      "x": 160,
+      "y": 202,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.mixed.pressed.png"
+    },
+    "checkbox16.mixed.disabled": {
+      "x": 160,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16px version, pitch 16, same 12-cell order.",
+      "file": "ui/checkbox16.mixed.disabled.png"
+    },
+    "checkbox25.unchecked.normal": {
+      "x": 179,
+      "y": 42,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.unchecked.normal.png"
+    },
+    "checkbox25.unchecked.hover": {
+      "x": 179,
+      "y": 67,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.unchecked.hover.png"
+    },
+    "checkbox25.unchecked.pressed": {
+      "x": 179,
+      "y": 92,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.unchecked.pressed.png"
+    },
+    "checkbox25.unchecked.disabled": {
+      "x": 179,
+      "y": 117,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.unchecked.disabled.png"
+    },
+    "checkbox25.checked.normal": {
+      "x": 179,
+      "y": 142,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.checked.normal.png"
+    },
+    "checkbox25.checked.hover": {
+      "x": 179,
+      "y": 167,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.checked.hover.png"
+    },
+    "checkbox25.checked.pressed": {
+      "x": 179,
+      "y": 192,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.checked.pressed.png"
+    },
+    "checkbox25.checked.disabled": {
+      "x": 179,
+      "y": 217,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.checked.disabled.png"
+    },
+    "checkbox25.mixed.normal": {
+      "x": 179,
+      "y": 242,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.mixed.normal.png"
+    },
+    "checkbox25.mixed.hover": {
+      "x": 179,
+      "y": 267,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.mixed.hover.png"
+    },
+    "checkbox25.mixed.pressed": {
+      "x": 179,
+      "y": 292,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.mixed.pressed.png"
+    },
+    "checkbox25.mixed.disabled": {
+      "x": 179,
+      "y": 317,
+      "w": 25,
+      "h": 25,
+      "slice": null,
+      "notes": "25px version, pitch 25, same 12-cell order.",
+      "file": "ui/checkbox25.mixed.disabled.png"
+    },
+    "checkbox13s.unchecked.normal": {
+      "x": 125,
+      "y": 42,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.unchecked.normal.png"
+    },
+    "checkbox13s.unchecked.hover": {
+      "x": 125,
+      "y": 58,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.unchecked.hover.png"
+    },
+    "checkbox13s.unchecked.pressed": {
+      "x": 125,
+      "y": 74,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.unchecked.pressed.png"
+    },
+    "checkbox13s.unchecked.disabled": {
+      "x": 125,
+      "y": 90,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.unchecked.disabled.png"
+    },
+    "checkbox13s.checked.normal": {
+      "x": 125,
+      "y": 106,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.checked.normal.png"
+    },
+    "checkbox13s.checked.hover": {
+      "x": 125,
+      "y": 122,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.checked.hover.png"
+    },
+    "checkbox13s.checked.pressed": {
+      "x": 125,
+      "y": 138,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.checked.pressed.png"
+    },
+    "checkbox13s.checked.disabled": {
+      "x": 125,
+      "y": 154,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.checked.disabled.png"
+    },
+    "checkbox13s.mixed.normal": {
+      "x": 125,
+      "y": 170,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.mixed.normal.png"
+    },
+    "checkbox13s.mixed.hover": {
+      "x": 125,
+      "y": 186,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.mixed.hover.png"
+    },
+    "checkbox13s.mixed.pressed": {
+      "x": 125,
+      "y": 202,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.mixed.pressed.png"
+    },
+    "checkbox13s.mixed.disabled": {
+      "x": 125,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "13px version with 3px soft shadow: sprite 13x13 at top-left of a 16x16 pitch cell (x=125); darker border #003b74; same 12-cell order.",
+      "file": "ui/checkbox13s.mixed.disabled.png"
+    },
+    "scrollbar.button.v": {
+      "x": 14,
+      "y": 521,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical scrollbar end-button background, no glyph. Group y=521..588; identical copy y=589..656 (use for down).",
+      "file": "ui/scrollbar.button.v.png"
+    },
+    "scrollbar.button.h": {
+      "x": 14,
+      "y": 657,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal end-button background; two identical groups y=657..724 and y=725..792. Whole column x=14..30, y=521..792 = 16 cells of 17x17.",
+      "file": "ui/scrollbar.button.h.png"
+    },
+    "scrollbar.arrow.left": {
+      "x": 119,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16x16 cells with own bg: normal bg #ebebe4 black arrow; hover bg #c7dcf6 border #6f89b0; pressed bg #9db9d9 white arrow; disabled arrow #cacab7.",
+      "file": "ui/scrollbar.arrow.left.png"
+    },
+    "scrollbar.arrow.right": {
+      "x": 183,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "Mirror of arrow.left. Up/down arrows are NOT in the sheet: rotate these 90deg.",
+      "file": "ui/scrollbar.arrow.right.png"
+    },
+    "scrollbar.thumb.v": {
+      "x": 34,
+      "y": 521,
+      "w": 15,
+      "h": 22,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical thumb, pitch 22 (normal c6d6fd, hover d8e8ff, pressed a8c0fb, disabled efefe9). White outline + 1px 7c9fd3 border + shadow. No grip texture.",
+      "file": "ui/scrollbar.thumb.v.png"
+    },
+    "scrollbar.thumb.h": {
+      "x": 250,
+      "y": 521,
+      "w": 22,
+      "h": 15,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal thumb, pitch 15.",
+      "file": "ui/scrollbar.thumb.h.png"
+    },
+    "scrollbar.track.h": {
+      "x": 52,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "UNCERTAIN: 4 flat 16x16 cells white (c1c1bb border) / light-blue aac9eb / mid-blue 9db9d9 / beige f4f4f0; probably track normal/hover/pressed/disabled. Real track bg #ebebe4.",
+      "file": "ui/scrollbar.track.h.png"
+    },
+    "taskbar.bar": {
+      "x": 375,
+      "y": 519,
+      "w": 50,
+      "h": 28,
+      "slice": [
+        0,
+        3,
+        0,
+        2
+      ],
+      "notes": "Horizontal taskbar tile (tile in X). Top 3 rows highlight 3168d5/3888e9/4993e6, body 2259d7->2663e0, bottom 1e50c4/1941a5.",
+      "file": "ui/taskbar.bar.png"
+    },
+    "taskbar.bar.vertical": {
+      "x": 428,
+      "y": 519,
+      "w": 28,
+      "h": 41,
+      "slice": [
+        3,
+        0,
+        2,
+        0
+      ],
+      "notes": "Vertical-dock taskbar tile (rotated bar): left 5px highlight, body 235bdd, right 2px dark.",
+      "file": "ui/taskbar.bar.vertical.png"
+    },
+    "taskbar.task.normal": {
+      "x": 460,
+      "y": 519,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set A, 6 cells touching, pitch 23. normal 4085f5, hover brighter 5a99f4, active/pressed dark 164dbc. Cells 3-5 are flatter alternates (205ede/164dbc/205ede).",
+      "file": "ui/taskbar.task.normal.png"
+    },
+    "taskbar.task.hover": {
+      "x": 460,
+      "y": 542,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set A, 6 cells touching, pitch 23. normal 4085f5, hover brighter 5a99f4, active/pressed dark 164dbc. Cells 3-5 are flatter alternates (205ede/164dbc/205ede).",
+      "file": "ui/taskbar.task.hover.png"
+    },
+    "taskbar.task.active": {
+      "x": 460,
+      "y": 565,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set A, 6 cells touching, pitch 23. normal 4085f5, hover brighter 5a99f4, active/pressed dark 164dbc. Cells 3-5 are flatter alternates (205ede/164dbc/205ede).",
+      "file": "ui/taskbar.task.active.png"
+    },
+    "taskbar.task.normal2": {
+      "x": 460,
+      "y": 588,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set A, 6 cells touching, pitch 23. normal 4085f5, hover brighter 5a99f4, active/pressed dark 164dbc. Cells 3-5 are flatter alternates (205ede/164dbc/205ede).",
+      "file": "ui/taskbar.task.normal2.png"
+    },
+    "taskbar.task.active2": {
+      "x": 460,
+      "y": 611,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set A, 6 cells touching, pitch 23. normal 4085f5, hover brighter 5a99f4, active/pressed dark 164dbc. Cells 3-5 are flatter alternates (205ede/164dbc/205ede).",
+      "file": "ui/taskbar.task.active2.png"
+    },
+    "taskbar.task.normal3": {
+      "x": 460,
+      "y": 634,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set A, 6 cells touching, pitch 23. normal 4085f5, hover brighter 5a99f4, active/pressed dark 164dbc. Cells 3-5 are flatter alternates (205ede/164dbc/205ede).",
+      "file": "ui/taskbar.task.normal3.png"
+    },
+    "taskbar.taskB.normal": {
+      "x": 490,
+      "y": 522,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set B: same 6 states, pitch 28 with transparent gaps, rounder corners + darker left edge. Alternative skin.",
+      "file": "ui/taskbar.taskB.normal.png"
+    },
+    "taskbar.slot": {
+      "x": 519,
+      "y": 519,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.png"
+    },
+    "taskbar.chevron.double": {
+      "x": 95,
+      "y": 131,
+      "w": 8,
+      "h": 5,
+      "slice": null,
+      "notes": "Black >> glyph, 6 pixel-identical copies. Quick-launch \"more\" chevron.",
+      "file": "ui/taskbar.chevron.double.png"
+    },
+    "taskbar.chevron.down": {
+      "x": 107,
+      "y": 128,
+      "w": 9,
+      "h": 6,
+      "slice": null,
+      "notes": "Down chevron #4d6185 (normal=hover=pressed identical), disabled #c9c9c2.",
+      "file": "ui/taskbar.chevron.down.png"
+    },
+    "start.normal": {
+      "x": 497,
+      "y": 37,
+      "w": 97,
+      "h": 31,
+      "slice": [
+        6,
+        6,
+        14,
+        6
+      ],
+      "notes": "Green Start pill, no label/logo (draw \"start\" text + logo). Pitch 33. Left edge nearly straight, right end rounded with 2px lip.",
+      "file": "ui/start.normal.png"
+    },
+    "start.hover": {
+      "x": 497,
+      "y": 70,
+      "w": 97,
+      "h": 31,
+      "slice": [
+        6,
+        6,
+        14,
+        6
+      ],
+      "notes": "Green Start pill, no label/logo (draw \"start\" text + logo). Pitch 33. Left edge nearly straight, right end rounded with 2px lip.",
+      "file": "ui/start.hover.png"
+    },
+    "start.pressed": {
+      "x": 497,
+      "y": 103,
+      "w": 97,
+      "h": 31,
+      "slice": [
+        6,
+        6,
+        14,
+        6
+      ],
+      "notes": "Green Start pill, no label/logo (draw \"start\" text + logo). Pitch 33. Left edge nearly straight, right end rounded with 2px lip.",
+      "file": "ui/start.pressed.png"
+    },
+    "start.logo": {
+      "x": 599,
+      "y": 37,
+      "w": 20,
+      "h": 18,
+      "slice": null,
+      "notes": "Tiny Windows flag icon (core 602,39 17x16).",
+      "file": "ui/start.logo.png"
+    },
+    "go.arrow.normal": {
+      "x": 626,
+      "y": 37,
+      "w": 16,
+      "h": 24,
+      "slice": null,
+      "notes": "Green play-triangle (Go button). Second is the bright hover.",
+      "file": "ui/go.arrow.normal.png"
+    },
+    "go.arrow.hover": {
+      "x": 645,
+      "y": 37,
+      "w": 16,
+      "h": 24,
+      "slice": null,
+      "notes": "Green play-triangle (Go button). Second is the bright hover.",
+      "file": "ui/go.arrow.hover.png"
+    },
+    "window.border.left.inactive": {
+      "x": 221,
+      "y": 424,
+      "w": 5,
+      "h": 31,
+      "slice": null,
+      "notes": "5px-wide side border strip (tile vertically). Inactive is 5x28 at (221,424). Mirror (scaleX(-1)) for right side.",
+      "file": "ui/window.border.left.inactive.png"
+    },
+    "window.border.bottom.inactive": {
+      "x": 229,
+      "y": 398,
+      "w": 49,
+      "h": 5,
+      "slice": [
+        5,
+        0,
+        0,
+        0
+      ],
+      "notes": "Bottom border strip, 49x5; first 5px = bottom-left corner (mirror for right). Top row is the light inner edge. Inactive at (229,398).",
+      "file": "ui/window.border.bottom.inactive.png"
+    },
+    "titlebtn.blank.blue.hover": {
+      "x": 398,
+      "y": 58,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.hover.png"
+    },
+    "titlebtn.blank.blue.pressed": {
+      "x": 398,
+      "y": 79,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.pressed.png"
+    },
+    "titlebtn.blank.blue.disabled": {
+      "x": 398,
+      "y": 100,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.disabled.png"
+    },
+    "titlebtn.blank.blue.inactive": {
+      "x": 398,
+      "y": 121,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.inactive.png"
+    },
+    "titlebtn.blank.blue.inactive.hover": {
+      "x": 398,
+      "y": 142,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.inactive.hover.png"
+    },
+    "titlebtn.blank.blue.inactive.pressed": {
+      "x": 398,
+      "y": 163,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.inactive.pressed.png"
+    },
+    "titlebtn.blank.blue.inactive.disabled": {
+      "x": 398,
+      "y": 184,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty blue button base (no glyph). 8 rows, same state order as titlebtn.*",
+      "file": "ui/titlebtn.blank.blue.inactive.disabled.png"
+    },
+    "titlebtn.blank.red.hover": {
+      "x": 422,
+      "y": 58,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.hover.png"
+    },
+    "titlebtn.blank.red.pressed": {
+      "x": 422,
+      "y": 79,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.pressed.png"
+    },
+    "titlebtn.blank.red.disabled": {
+      "x": 422,
+      "y": 100,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.disabled.png"
+    },
+    "titlebtn.blank.red.inactive": {
+      "x": 422,
+      "y": 121,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.inactive.png"
+    },
+    "titlebtn.blank.red.inactive.hover": {
+      "x": 422,
+      "y": 142,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.inactive.hover.png"
+    },
+    "titlebtn.blank.red.inactive.pressed": {
+      "x": 422,
+      "y": 163,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.inactive.pressed.png"
+    },
+    "titlebtn.blank.red.inactive.disabled": {
+      "x": 422,
+      "y": 184,
+      "w": 21,
+      "h": 21,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Empty red close-button base (no glyph). 8 rows.",
+      "file": "ui/titlebtn.blank.red.inactive.disabled.png"
+    },
+    "closebtn.mini.hover": {
+      "x": 94,
+      "y": 60,
+      "w": 17,
+      "h": 18,
+      "slice": null,
+      "notes": "Small cream/orange X close button (tooltip/balloon style), 3 states pitch 18.",
+      "file": "ui/closebtn.mini.hover.png"
+    },
+    "closebtn.mini.pressed": {
+      "x": 94,
+      "y": 78,
+      "w": 17,
+      "h": 18,
+      "slice": null,
+      "notes": "Small cream/orange X close button (tooltip/balloon style), 3 states pitch 18.",
+      "file": "ui/closebtn.mini.pressed.png"
+    },
+    "scrollbar.button.v.hover": {
+      "x": 14,
+      "y": 538,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical scrollbar end-button background, no glyph. Group y=521..588; identical copy y=589..656 (use for down).",
+      "file": "ui/scrollbar.button.v.hover.png"
+    },
+    "scrollbar.button.v.pressed": {
+      "x": 14,
+      "y": 555,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical scrollbar end-button background, no glyph. Group y=521..588; identical copy y=589..656 (use for down).",
+      "file": "ui/scrollbar.button.v.pressed.png"
+    },
+    "scrollbar.button.v.disabled": {
+      "x": 14,
+      "y": 572,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical scrollbar end-button background, no glyph. Group y=521..588; identical copy y=589..656 (use for down).",
+      "file": "ui/scrollbar.button.v.disabled.png"
+    },
+    "scrollbar.button.h.hover": {
+      "x": 14,
+      "y": 674,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal end-button background; two identical groups y=657..724 and y=725..792. Whole column x=14..30, y=521..792 = 16 cells of 17x17.",
+      "file": "ui/scrollbar.button.h.hover.png"
+    },
+    "scrollbar.button.h.pressed": {
+      "x": 14,
+      "y": 691,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal end-button background; two identical groups y=657..724 and y=725..792. Whole column x=14..30, y=521..792 = 16 cells of 17x17.",
+      "file": "ui/scrollbar.button.h.pressed.png"
+    },
+    "scrollbar.button.h.disabled": {
+      "x": 14,
+      "y": 708,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal end-button background; two identical groups y=657..724 and y=725..792. Whole column x=14..30, y=521..792 = 16 cells of 17x17.",
+      "file": "ui/scrollbar.button.h.disabled.png"
+    },
+    "scrollbar.arrow.left.hover": {
+      "x": 135,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16x16 cells with own bg: normal bg #ebebe4 black arrow; hover bg #c7dcf6 border #6f89b0; pressed bg #9db9d9 white arrow; disabled arrow #cacab7.",
+      "file": "ui/scrollbar.arrow.left.hover.png"
+    },
+    "scrollbar.arrow.left.pressed": {
+      "x": 151,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16x16 cells with own bg: normal bg #ebebe4 black arrow; hover bg #c7dcf6 border #6f89b0; pressed bg #9db9d9 white arrow; disabled arrow #cacab7.",
+      "file": "ui/scrollbar.arrow.left.pressed.png"
+    },
+    "scrollbar.arrow.left.disabled": {
+      "x": 167,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "16x16 cells with own bg: normal bg #ebebe4 black arrow; hover bg #c7dcf6 border #6f89b0; pressed bg #9db9d9 white arrow; disabled arrow #cacab7.",
+      "file": "ui/scrollbar.arrow.left.disabled.png"
+    },
+    "scrollbar.arrow.right.hover": {
+      "x": 199,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "Mirror of arrow.left. Up/down arrows are NOT in the sheet: rotate these 90deg.",
+      "file": "ui/scrollbar.arrow.right.hover.png"
+    },
+    "scrollbar.arrow.right.pressed": {
+      "x": 215,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "Mirror of arrow.left. Up/down arrows are NOT in the sheet: rotate these 90deg.",
+      "file": "ui/scrollbar.arrow.right.pressed.png"
+    },
+    "scrollbar.arrow.right.disabled": {
+      "x": 231,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "Mirror of arrow.left. Up/down arrows are NOT in the sheet: rotate these 90deg.",
+      "file": "ui/scrollbar.arrow.right.disabled.png"
+    },
+    "scrollbar.thumb.v.hover": {
+      "x": 34,
+      "y": 543,
+      "w": 15,
+      "h": 22,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical thumb, pitch 22 (normal c6d6fd, hover d8e8ff, pressed a8c0fb, disabled efefe9). White outline + 1px 7c9fd3 border + shadow. No grip texture.",
+      "file": "ui/scrollbar.thumb.v.hover.png"
+    },
+    "scrollbar.thumb.v.pressed": {
+      "x": 34,
+      "y": 565,
+      "w": 15,
+      "h": 22,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical thumb, pitch 22 (normal c6d6fd, hover d8e8ff, pressed a8c0fb, disabled efefe9). White outline + 1px 7c9fd3 border + shadow. No grip texture.",
+      "file": "ui/scrollbar.thumb.v.pressed.png"
+    },
+    "scrollbar.thumb.v.disabled": {
+      "x": 34,
+      "y": 587,
+      "w": 15,
+      "h": 22,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Vertical thumb, pitch 22 (normal c6d6fd, hover d8e8ff, pressed a8c0fb, disabled efefe9). White outline + 1px 7c9fd3 border + shadow. No grip texture.",
+      "file": "ui/scrollbar.thumb.v.disabled.png"
+    },
+    "scrollbar.thumb.h.hover": {
+      "x": 250,
+      "y": 536,
+      "w": 22,
+      "h": 15,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal thumb, pitch 15.",
+      "file": "ui/scrollbar.thumb.h.hover.png"
+    },
+    "scrollbar.thumb.h.pressed": {
+      "x": 250,
+      "y": 551,
+      "w": 22,
+      "h": 15,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal thumb, pitch 15.",
+      "file": "ui/scrollbar.thumb.h.pressed.png"
+    },
+    "scrollbar.thumb.h.disabled": {
+      "x": 250,
+      "y": 566,
+      "w": 22,
+      "h": 15,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Horizontal thumb, pitch 15.",
+      "file": "ui/scrollbar.thumb.h.disabled.png"
+    },
+    "scrollbar.track.h.hover": {
+      "x": 68,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "UNCERTAIN: 4 flat 16x16 cells white (c1c1bb border) / light-blue aac9eb / mid-blue 9db9d9 / beige f4f4f0; probably track normal/hover/pressed/disabled. Real track bg #ebebe4.",
+      "file": "ui/scrollbar.track.h.hover.png"
+    },
+    "scrollbar.track.h.pressed": {
+      "x": 84,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "UNCERTAIN: 4 flat 16x16 cells white (c1c1bb border) / light-blue aac9eb / mid-blue 9db9d9 / beige f4f4f0; probably track normal/hover/pressed/disabled. Real track bg #ebebe4.",
+      "file": "ui/scrollbar.track.h.pressed.png"
+    },
+    "scrollbar.track.h.disabled": {
+      "x": 100,
+      "y": 521,
+      "w": 16,
+      "h": 16,
+      "slice": null,
+      "notes": "UNCERTAIN: 4 flat 16x16 cells white (c1c1bb border) / light-blue aac9eb / mid-blue 9db9d9 / beige f4f4f0; probably track normal/hover/pressed/disabled. Real track bg #ebebe4.",
+      "file": "ui/scrollbar.track.h.disabled.png"
+    },
+    "taskbar.taskB.hover": {
+      "x": 490,
+      "y": 550,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set B: same 6 states, pitch 28 with transparent gaps, rounder corners + darker left edge. Alternative skin.",
+      "file": "ui/taskbar.taskB.hover.png"
+    },
+    "taskbar.taskB.active": {
+      "x": 490,
+      "y": 578,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set B: same 6 states, pitch 28 with transparent gaps, rounder corners + darker left edge. Alternative skin.",
+      "file": "ui/taskbar.taskB.active.png"
+    },
+    "taskbar.taskB.normal2": {
+      "x": 490,
+      "y": 606,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set B: same 6 states, pitch 28 with transparent gaps, rounder corners + darker left edge. Alternative skin.",
+      "file": "ui/taskbar.taskB.normal2.png"
+    },
+    "taskbar.taskB.active2": {
+      "x": 490,
+      "y": 634,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set B: same 6 states, pitch 28 with transparent gaps, rounder corners + darker left edge. Alternative skin.",
+      "file": "ui/taskbar.taskB.active2.png"
+    },
+    "taskbar.taskB.normal3": {
+      "x": 490,
+      "y": 662,
+      "w": 26,
+      "h": 23,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "Task button set B: same 6 states, pitch 28 with transparent gaps, rounder corners + darker left edge. Alternative skin.",
+      "file": "ui/taskbar.taskB.normal3.png"
+    },
+    "taskbar.slot.cell1": {
+      "x": 519,
+      "y": 536,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell1.png"
+    },
+    "taskbar.slot.cell2": {
+      "x": 519,
+      "y": 553,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell2.png"
+    },
+    "taskbar.slot.cell3": {
+      "x": 519,
+      "y": 570,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell3.png"
+    },
+    "taskbar.slot.cell4": {
+      "x": 519,
+      "y": 587,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell4.png"
+    },
+    "taskbar.slot.cell5": {
+      "x": 519,
+      "y": 604,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell5.png"
+    },
+    "taskbar.slot.cell6": {
+      "x": 519,
+      "y": 621,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell6.png"
+    },
+    "taskbar.slot.cell7": {
+      "x": 519,
+      "y": 638,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell7.png"
+    },
+    "taskbar.slot.cell8": {
+      "x": 519,
+      "y": 655,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell8.png"
+    },
+    "taskbar.slot.cell9": {
+      "x": 519,
+      "y": 672,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell9.png"
+    },
+    "taskbar.slot.cell10": {
+      "x": 519,
+      "y": 689,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell10.png"
+    },
+    "taskbar.slot.cell11": {
+      "x": 519,
+      "y": 706,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell11.png"
+    },
+    "taskbar.slot.cell12": {
+      "x": 519,
+      "y": 723,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell12.png"
+    },
+    "taskbar.slot.cell13": {
+      "x": 519,
+      "y": 740,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell13.png"
+    },
+    "taskbar.slot.cell14": {
+      "x": 519,
+      "y": 757,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell14.png"
+    },
+    "taskbar.slot.cell15": {
+      "x": 519,
+      "y": 774,
+      "w": 17,
+      "h": 17,
+      "slice": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "notes": "16 stacked 17x17 inset square buttons (likely 4 variants x [normal,hover,pressed,flat]); intended use unknown (tray / quick-launch / toolbar). Colours 1944cd..3869f7.",
+      "file": "ui/taskbar.slot.cell15.png"
+    },
+    "taskbar.chevron.double.copy1": {
+      "x": 95,
+      "y": 140,
+      "w": 8,
+      "h": 5,
+      "slice": null,
+      "notes": "Black >> glyph, 6 pixel-identical copies. Quick-launch \"more\" chevron.",
+      "file": "ui/taskbar.chevron.double.copy1.png"
+    },
+    "taskbar.chevron.double.copy2": {
+      "x": 95,
+      "y": 149,
+      "w": 8,
+      "h": 5,
+      "slice": null,
+      "notes": "Black >> glyph, 6 pixel-identical copies. Quick-launch \"more\" chevron.",
+      "file": "ui/taskbar.chevron.double.copy2.png"
+    },
+    "taskbar.chevron.double.copy3": {
+      "x": 95,
+      "y": 158,
+      "w": 8,
+      "h": 5,
+      "slice": null,
+      "notes": "Black >> glyph, 6 pixel-identical copies. Quick-launch \"more\" chevron.",
+      "file": "ui/taskbar.chevron.double.copy3.png"
+    },
+    "taskbar.chevron.double.copy4": {
+      "x": 95,
+      "y": 167,
+      "w": 8,
+      "h": 5,
+      "slice": null,
+      "notes": "Black >> glyph, 6 pixel-identical copies. Quick-launch \"more\" chevron.",
+      "file": "ui/taskbar.chevron.double.copy4.png"
+    },
+    "taskbar.chevron.double.copy5": {
+      "x": 95,
+      "y": 176,
+      "w": 8,
+      "h": 5,
+      "slice": null,
+      "notes": "Black >> glyph, 6 pixel-identical copies. Quick-launch \"more\" chevron.",
+      "file": "ui/taskbar.chevron.double.copy5.png"
+    },
+    "taskbar.chevron.down.hover": {
+      "x": 107,
+      "y": 135,
+      "w": 9,
+      "h": 6,
+      "slice": null,
+      "notes": "Down chevron #4d6185 (normal=hover=pressed identical), disabled #c9c9c2.",
+      "file": "ui/taskbar.chevron.down.hover.png"
+    },
+    "taskbar.chevron.down.pressed": {
+      "x": 107,
+      "y": 142,
+      "w": 9,
+      "h": 6,
+      "slice": null,
+      "notes": "Down chevron #4d6185 (normal=hover=pressed identical), disabled #c9c9c2.",
+      "file": "ui/taskbar.chevron.down.pressed.png"
+    },
+    "taskbar.chevron.down.disabled": {
+      "x": 107,
+      "y": 149,
+      "w": 9,
+      "h": 6,
+      "slice": null,
+      "notes": "Down chevron #4d6185 (normal=hover=pressed identical), disabled #c9c9c2.",
+      "file": "ui/taskbar.chevron.down.disabled.png"
+    }
+  },
+  "baseRoles": [
+    "window.frame.active",
+    "window.frame.opentop",
+    "window.title.active",
+    "window.title.inactive",
+    "window.title.rounded.active",
+    "window.title.rounded.inactive",
+    "window.title.flat.active",
+    "window.title.flat.inactive",
+    "window.border.left.active",
+    "window.border.bottom.active",
+    "titlebtn.min.normal",
+    "titlebtn.min.hover",
+    "titlebtn.min.pressed",
+    "titlebtn.min.disabled",
+    "titlebtn.min.inactive",
+    "titlebtn.min.inactive.hover",
+    "titlebtn.min.inactive.pressed",
+    "titlebtn.min.inactive.disabled",
+    "titlebtn.max.normal",
+    "titlebtn.max.hover",
+    "titlebtn.max.pressed",
+    "titlebtn.max.disabled",
+    "titlebtn.max.inactive",
+    "titlebtn.max.inactive.hover",
+    "titlebtn.max.inactive.pressed",
+    "titlebtn.max.inactive.disabled",
+    "titlebtn.restore.normal",
+    "titlebtn.restore.hover",
+    "titlebtn.restore.pressed",
+    "titlebtn.restore.disabled",
+    "titlebtn.restore.inactive",
+    "titlebtn.restore.inactive.hover",
+    "titlebtn.restore.inactive.pressed",
+    "titlebtn.restore.inactive.disabled",
+    "titlebtn.close.normal",
+    "titlebtn.close.hover",
+    "titlebtn.close.pressed",
+    "titlebtn.close.disabled",
+    "titlebtn.close.inactive",
+    "titlebtn.close.inactive.hover",
+    "titlebtn.close.inactive.pressed",
+    "titlebtn.close.inactive.disabled",
+    "titlebtn.help.normal",
+    "titlebtn.help.hover",
+    "titlebtn.help.pressed",
+    "titlebtn.help.disabled",
+    "titlebtn.help.inactive",
+    "titlebtn.help.inactive.hover",
+    "titlebtn.help.inactive.pressed",
+    "titlebtn.help.inactive.disabled",
+    "titlebtn.blank.blue",
+    "titlebtn.blank.red",
+    "closebtn.mini.normal",
+    "button.normal",
+    "button.hover",
+    "button.pressed",
+    "button.disabled",
+    "button.default",
+    "checkbox.unchecked.normal",
+    "checkbox.unchecked.hover",
+    "checkbox.unchecked.pressed",
+    "checkbox.unchecked.disabled",
+    "checkbox.checked.normal",
+    "checkbox.checked.hover",
+    "checkbox.checked.pressed",
+    "checkbox.checked.disabled",
+    "checkbox.mixed.normal",
+    "checkbox.mixed.hover",
+    "checkbox.mixed.pressed",
+    "checkbox.mixed.disabled",
+    "checkbox16.unchecked.normal",
+    "checkbox16.unchecked.hover",
+    "checkbox16.unchecked.pressed",
+    "checkbox16.unchecked.disabled",
+    "checkbox16.checked.normal",
+    "checkbox16.checked.hover",
+    "checkbox16.checked.pressed",
+    "checkbox16.checked.disabled",
+    "checkbox16.mixed.normal",
+    "checkbox16.mixed.hover",
+    "checkbox16.mixed.pressed",
+    "checkbox16.mixed.disabled",
+    "checkbox25.unchecked.normal",
+    "checkbox25.unchecked.hover",
+    "checkbox25.unchecked.pressed",
+    "checkbox25.unchecked.disabled",
+    "checkbox25.checked.normal",
+    "checkbox25.checked.hover",
+    "checkbox25.checked.pressed",
+    "checkbox25.checked.disabled",
+    "checkbox25.mixed.normal",
+    "checkbox25.mixed.hover",
+    "checkbox25.mixed.pressed",
+    "checkbox25.mixed.disabled",
+    "checkbox13s.unchecked.normal",
+    "checkbox13s.unchecked.hover",
+    "checkbox13s.unchecked.pressed",
+    "checkbox13s.unchecked.disabled",
+    "checkbox13s.checked.normal",
+    "checkbox13s.checked.hover",
+    "checkbox13s.checked.pressed",
+    "checkbox13s.checked.disabled",
+    "checkbox13s.mixed.normal",
+    "checkbox13s.mixed.hover",
+    "checkbox13s.mixed.pressed",
+    "checkbox13s.mixed.disabled",
+    "scrollbar.button.v",
+    "scrollbar.button.h",
+    "scrollbar.arrow.left",
+    "scrollbar.arrow.right",
+    "scrollbar.thumb.v",
+    "scrollbar.thumb.h",
+    "scrollbar.track.h",
+    "taskbar.bar",
+    "taskbar.bar.vertical",
+    "taskbar.task.normal",
+    "taskbar.task.hover",
+    "taskbar.task.active",
+    "taskbar.task.normal2",
+    "taskbar.task.active2",
+    "taskbar.task.normal3",
+    "taskbar.taskB.normal",
+    "taskbar.slot",
+    "taskbar.chevron.double",
+    "taskbar.chevron.down",
+    "start.normal",
+    "start.hover",
+    "start.pressed",
+    "start.logo",
+    "go.arrow.normal",
+    "go.arrow.hover"
+  ]
+}

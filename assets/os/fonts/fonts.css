@@ -1,0 +1,3 @@
+@font-face { font-family: "Tahoma XP"; src: url("./tahoma-latin.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Franklin Gothic XP"; src: url("./framdit-latin.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Tahoma XP Fallback"; src: url("/fonts/hind-f8a983f122.woff2") format("woff2"); font-display: swap; size-adjust: 108.002%; ascent-override: 92.636%; descent-override: 19.124%; line-gap-override: 0%; }

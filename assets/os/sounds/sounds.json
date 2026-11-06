@@ -1,0 +1,144 @@
+{
+  "startup": {
+    "ogg": "sounds/startup.ogg",
+    "mp3": "sounds/startup.mp3",
+    "gainDb": -0.679
+  },
+  "shutdown": {
+    "ogg": "sounds/shutdown.ogg",
+    "mp3": "sounds/shutdown.mp3",
+    "gainDb": -0.915
+  },
+  "logon": {
+    "ogg": "sounds/logon.ogg",
+    "mp3": "sounds/logon.mp3",
+    "gainDb": 4.037
+  },
+  "logoff": {
+    "ogg": "sounds/logoff.ogg",
+    "mp3": "sounds/logoff.mp3",
+    "gainDb": 4.388
+  },
+  "click": {
+    "ogg": "sounds/click.ogg",
+    "mp3": "sounds/click.mp3",
+    "gainDb": 12
+  },
+  "launch": {
+    "ogg": "sounds/launch.ogg",
+    "mp3": "sounds/launch.mp3",
+    "gainDb": 12
+  },
+  "minimise": {
+    "ogg": "sounds/minimise.ogg",
+    "mp3": "sounds/minimise.mp3",
+    "gainDb": 12
+  },
+  "restore": {
+    "ogg": "sounds/restore.ogg",
+    "mp3": "sounds/restore.mp3",
+    "gainDb": 12
+  },
+  "error": {
+    "ogg": "sounds/error.ogg",
+    "mp3": "sounds/error.mp3",
+    "gainDb": 0.983
+  },
+  "critical": {
+    "ogg": "sounds/critical.ogg",
+    "mp3": "sounds/critical.mp3",
+    "gainDb": -2.804
+  },
+  "warning": {
+    "ogg": "sounds/warning.ogg",
+    "mp3": "sounds/warning.mp3",
+    "gainDb": 10.415
+  },
+  "ding": {
+    "ogg": "sounds/ding.ogg",
+    "mp3": "sounds/ding.mp3",
+    "gainDb": 5.743
+  },
+  "notify": {
+    "ogg": "sounds/notify.ogg",
+    "mp3": "sounds/notify.mp3",
+    "gainDb": 12
+  },
+  "balloon": {
+    "ogg": "sounds/balloon.ogg",
+    "mp3": "sounds/balloon.mp3",
+    "gainDb": 12
+  },
+  "recycle": {
+    "ogg": "sounds/recycle.ogg",
+    "mp3": "sounds/recycle.mp3",
+    "gainDb": 11.063
+  },
+  "joined": {
+    "ogg": "sounds/joined.ogg",
+    "mp3": "sounds/joined.mp3",
+    "gainDb": 8.905
+  },
+  "left": {
+    "ogg": "sounds/left.ogg",
+    "mp3": "sounds/left.mp3",
+    "gainDb": 9.554
+  },
+  "failed": {
+    "ogg": "sounds/failed.ogg",
+    "mp3": "sounds/failed.mp3",
+    "gainDb": 6.979
+  },
+  "denied": {
+    "ogg": "sounds/denied.ogg",
+    "mp3": "sounds/denied.mp3",
+    "gainDb": 7.98
+  },
+  "finished": {
+    "ogg": "sounds/finished.ogg",
+    "mp3": "sounds/finished.mp3",
+    "gainDb": 12
+  },
+  "invite": {
+    "ogg": "sounds/invite.ogg",
+    "mp3": "sounds/invite.mp3",
+    "gainDb": 12
+  },
+  "invite-sent": {
+    "ogg": "sounds/invite-sent.ogg",
+    "mp3": "sounds/invite-sent.mp3",
+    "gainDb": 12
+  },
+  "edge": {
+    "ogg": "sounds/edge.ogg",
+    "mp3": "sounds/edge.mp3",
+    "gainDb": 3.769
+  },
+  "open": {
+    "ogg": "sounds/click.ogg",
+    "mp3": "sounds/click.mp3",
+    "gainDb": 12
+  },
+  "close": {
+    "ogg": "sounds/click.ogg",
+    "mp3": "sounds/click.mp3",
+    "gainDb": 12
+  },
+  "menu": {
+    "ogg": "sounds/click.ogg",
+    "mp3": "sounds/click.mp3",
+    "gainDb": 12
+  },
+  "countdown": {
+    "synth": "countdown"
+  },
+  "go": {
+    "synth": "go"
+  },
+  "win": {
+    "synth": "win"
+  },
+  "lose": {
+    "synth": "lose"
+  }
+}
